@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html;charset=ISO-8859-1" http-equiv="Content-Type">
+  <title>JPlate How To</title>
+</head>
+<body>
+<div style="text-align: center;">
+<h1 align="center">JPlate @keros-project.release.VERSION@</h1>
+<h1>"How To"</h1>
+<div style="text-align: left;">
+<h2>How To</h2>
+This section describes how to use portions of <a
+ href="http://sourceforge.net/projects/jplate">JPlate.</a>
+<h2><a name="Include_Jars"></a>Include Jars<br>
+</h2>
+To utilize the <a href="http://sourceforge.net/projects/jplate">JPlate</a>
+include all jar files found in the release
+lib directory as part of the classpath.&nbsp; For example, assume <a
+ href="http://sourceforge.net/projects/jplate">JPlate</a> 0.1 has been
+downloaded and installed to
+/shared/jplate-0.1 on a Linux platform:<br>
+<span style="font-family: Courier New,Courier,monospace;"><br>
+</span><small><span style="font-family: Courier New,Courier,monospace;">JPLATE_HOME=</span><span
+ style="font-family: Courier New,Courier,monospace;">/shared/jplate-0.1<br>
+JPLATE_LIB_HOME=</span><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_HOME}/lib<br>
+<br>
+</span><span style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=${</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_JAR_FILE}<br>
+</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}:</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}/avalon-framework.jar</span></small><br>
+<small><span style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}:</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}/commons-logging.jar<br>
+</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}:</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}/jplate-0.1.jar</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;"><br>
+</span><span style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}</span><span
+ style="font-family: Courier New,Courier,monospace;">/log4.jar<br>
+</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}</span><span
+ style="font-family: Courier New,Courier,monospace;">/logkit.jar<br>
+</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">${JPLATE_LIB_HOME}</span><span
+ style="font-family: Courier New,Courier,monospace;">/servlet-api.jar</span></small><small><span
+ style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;"><br>
+<br>
+CLASSPATH=</span><span
+ style="font-family: Courier New,Courier,monospace;"></span><span
+ style="font-family: Courier New,Courier,monospace;">${</span><span
+ style="font-family: Courier New,Courier,monospace;">JPLATE_</span><span
+ style="font-family: Courier New,Courier,monospace;">CLASSPATH}:</span><span
+ style="font-family: Courier New,Courier,monospace;">${CLASSPATH}</span></small><br>
+<h2><a name="Building"></a>Building (if desired)<br>
+</h2>
+If you wish to build <a href="http://sourceforge.net/projects/jplate">JPlate</a>
+from source, either checkout the source (from the Subversion) or
+download the source.&nbsp; You will also need <a
+ href="http://ant.apache.org/">Ant 1.7.1</a>.<br>
+<h3>Checkout the source</h3>
+<h4>Latest Source<br>
+</h4>
+<div style="margin-left: 40px;">
+<div style="text-align: left;"><small><span
+ style="font-family: Courier New,Courier,monospace;">svn co
+https://jplate.svn.sourceforge.net/svnroot/jplate/trunk<br>
+cd trunk</span></small><br>
+<small><span style="font-family: Courier New,Courier,monospace;"></span></small></div>
+</div>
+<h4>This release</h4>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: Courier New,Courier,monospace;">svn co
+https://jplate.svn.sourceforge.net/svnroot/jplate/branches/jplate-@keros-project.release.VERSION@<br>
+cd </span></small><small><span
+ style="font-family: Courier New,Courier,monospace;">jplate-@keros-project.release.VERSION@</span></small><br>
+</div>
+<h3>Download the source</h3>
+Simply download the source and unpack it (either bunzip/tar xvf,
+gunzip/tar xvf or unzip).&nbsp; Once unpacked, change directories to
+the unpacked directory.<br>
+<h3>Build the source</h3>
+Once you have a copy of the code (and have <a
+ href="http://ant.apache.org/">Ant 1.7.1</a> installed properly),
+execute the following command:<br>
+<br>
+<div style="margin-left: 40px;"><small><span
+ style="font-family: Courier New,Courier,monospace;">ant<br>
+</span></small></div>
+<h3>Results</h3>
+After building, you should find an <small><span
+ style="font-family: Courier New,Courier,monospace;">assembly/release
+</span></small>directory containing various things such as a jar file
+(for example the <a href="http://sourceforge.net/projects/jplate">JPlate</a>
+0.1 release produces <small><span
+ style="font-family: Courier New,Courier,monospace;">jplate-0.1.jar</span></small>)
+and other files normally associated with a <a
+ href="http://sourceforge.net/projects/jplate">JPlate</a> release.<br>
+<h2>Examples</h2>
+This section illustrates how to quickly make use of <a
+ href="http://sourceforge.net/projects/jplate">JPlate</a>.&nbsp;
+However, remember that this is simply a
+"quick start" and does not explain how to use the complete
+library.&nbsp; <span style="font-style: italic;">Please look to
+individual classes for
+more specific information on class utilization.</span><span
+ style="font-family: Courier;"></span><br>
+<h3><a name="Foundation"></a>Foundation</h3>
+Foundation provides "core" Java functionality that is utilized
+elsewhere in JPlate:&nbsp; KVP and Tabular (listed below).&nbsp; This
+section is a "work in progress" - examples will be added at a later
+date.<br>
+<h3><a name="KVP"></a>KVP</h3>
+KVP provides key/value pair functionality - much like
+java.util.Properties including a parser.&nbsp; There is a <a
+ href="java/org/jplate/kvp/util/KvpUtil.html">utility
+class</a> that makes use of default implentations to create list/maps
+from files, input streams, readers and strings.&nbsp; By
+examining the source code for <a
+ href="java/org/jplate/kvp/util/KvpUtil.html">this
+class</a>,
+one can extrapolate how to extend or use the rest of the project.
+<ul>
+  <li>Key/value pairs contained in a file to be consumed as a
+java.util.List:</li>
+</ul>
+<span style="font-family: Courier;"><small>import java.io.File;<br>
+<br>
+import java.util.List;<br>
+</small></span><span style="font-family: Courier;"><small><br>
+import org.jplate.kvp.KvpIfc;</small></span><br>
+<span style="font-family: Courier;"><small><br>
+import org.jplate.kvp.util.KvpUtil;<br>
+<br>
+...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final File kvpFile = new File ( "SomeFile.kvp" );<br>
+<br>
+&nbsp;&nbsp;&nbsp; final List &lt;KvpIfc&gt; KvpUtil.getAsList ( </small></span><span
+ style="font-family: Courier;"><small>kvpFile</small></span><span
+ style="font-family: Courier;"><small> );<br>
+<br>
+...</small></span><br>
+<ul>
+  <li>Keys and values streamed from a socket to be consumed as
+a java.util.Map:<br>
+  </li>
+</ul>
+<span style="font-family: Courier;"><small>import java.net.Socket;<br>
+<br>
+import java.util.Map;<br>
+</small></span><span style="font-family: Courier;"><small><br>
+import org.jplate.kvp.KvpIfc;</small></span><br>
+<span style="font-family: Courier;"><small>
+<br>
+import org.jplate.kvp.util.KvpUtil;</small></span><span
+ style="font-family: Courier;"></span><br>
+<span style="font-family: Courier;"><small><br>
+...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final Socket kvpSocket = // Create socket in some
+fashion...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final Map &lt;String, String&gt; KvpUtil.getAsMap ( </small></span><span
+ style="font-family: Courier;"><small>kvpSocket.getInputStream ()</small></span><span
+ style="font-family: Courier;"><small> );<br>
+<br>
+...</small></span><br>
+<h3><a name="Tabular"></a>Tabular</h3>
+Tabular provides tabular related functionality.&nbsp; Here
+"tabular" refers to data organized into tables of records and
+fields, where each has a fixed delimiter:&nbsp; for example, records
+delimited by "new lines" and fields delimited by commas.<br>
+<h4>Parsers<br>
+</h4>
+<p style="margin-bottom: 0in;">There are three included parsers:<br>
+</p>
+<ul>
+  <li>Colon Delimited Values (CDV):&nbsp; fields separated by colons
+and records by newlines.</li>
+  <li>Comma Separated Values (CSV):&nbsp; fields separated by commas
+and records by newlines.</li>
+  <li>Tab Delimeted Values (TDV):&nbsp; fields separated by tabs and
+records by new lines.</li>
+</ul>
+<span style="font-weight: bold;"></span>As a side note, CSV includes
+two parsers - one strictly adheres to <a
+ href="http://www.rfc-editor.org/rfc/rfc4180.txt">RFC 4180</a>, while
+the other is a more lax version similar to both the CDV and TDV
+parsers.<br>
+<ul>
+  <li>Comma separated values contained in a file to be consumed as a
+java.util.List:</li>
+</ul>
+<span style="font-family: Courier;"><small>import java.io.File;<br>
+<br>
+import java.util.List;<br>
+<br>
+import org.jplate.tabular.util.JPlateCsvUtil;<br>
+<br>
+...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final File csvFile = new File ( "SomeFile.csv" );<br>
+<br>
+&nbsp;&nbsp;&nbsp; final List &lt;List &lt;String&gt;&gt;
+JPlateCsvUtil.getAsList ( csvFile );<br>
+<br>
+...</small></span><br>
+<ul>
+  <li>Tabbed delimited values streamed from a socket to be consumed as
+an org.jplate.tabular.TableIfc:</li>
+</ul>
+<span style="font-family: Courier;"><small>import java.net.Socket;<br>
+<br>
+import org.jplate.tabular.TableIfc;<br>
+<br>
+import org.jplate.tabular.util.TdvUtil;<br>
+<br>
+...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final Socket tdvSocket = // Create socket in some
+fashion...<br>
+<br>
+&nbsp;&nbsp;&nbsp; final TableIfc table = TdvUtil.getAsTable ( </small></span><span
+ style="font-family: Courier;"><small>tdvSocket.getInputStream ()</small></span><span
+ style="font-family: Courier;"><small> );<br>
+<br>
+...</small></span><br>
+</div>
+<br>
+</div>
+<br>
+</body>
+</html>

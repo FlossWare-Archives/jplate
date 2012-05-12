@@ -1,0 +1,9 @@
+<!ELEMENT default         (#PCDATA)>
+<!ELEMENT context         (#PCDATA)>
+
+<!ELEMENT factory-context (factory-mgr+)>
+<!ELEMENT factory-mgr     (context+,default?)>
+
+<!ATTLIST factory-mgr class CDATA #REQUIRED>
+<!ATTLIST context     class CDATA #REQUIRED>
+

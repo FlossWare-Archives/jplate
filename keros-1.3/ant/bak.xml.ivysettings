@@ -1,0 +1,9 @@
+<ivysettings>
+    <settings  defaultResolver="chain-example"/>
+    <resolvers>
+        <url  name = "repo1" m2compatible="yes">
+            <artifact  pattern = "http://repo1.maven.org/maven2/[module]/[revision]/[artifact]-[revision].[ext]"/>
+        </url>
+    </resolvers>
+</ivysettings>
+

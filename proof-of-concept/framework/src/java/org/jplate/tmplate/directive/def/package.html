@@ -1,0 +1,30 @@
+<body>
+    This package provides the implementation of the named directive definition
+    as well as functionality to create instances.  A named directive definition
+    simply associates a textual name (<code>java.lang.String</code>) with a
+    named directive (a 1 to 1 mapping).
+
+    <p>
+    <b>Usage</b>
+
+    <p>
+    To create an instance of
+    <code>org.jplate.tmplate.directive.NamedDirectiveDefIfc</code>, please do
+    the following (assume klass, name and namedDirective have been
+    instantiated):
+
+<pre>
+    //
+    // Assume klass, name and namedDirective instantiated before this point...
+    //
+    final NamedDirectiveDefFactoryMgrIfc factoryMgr =
+        NamedDirectiveDefFactoryMgrIfc.getSingleton ();
+
+    final NamedDirectiveDefFactoryIfc factory = factoryMgr.getFactory ( klass );
+
+    final NamedDirectiveDefIfc namedDirectiveDef =
+        factory.createNamedDirectiveDef ( name, namedDirective );
+</pre>
+
+    @see org.jplate.tmplate.directive.NamedDirectiveDefIfc
+</body>

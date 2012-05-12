@@ -1,0 +1,30 @@
+<ivy-module  version = "2.0">
+    <info  organisation = "Keros"  module = "main"/>
+    <dependencies>
+        <dependency  org = "ant-contrib"          name = "ant-contrib"             rev = "1.0b2"/>
+
+        <dependency  org = "bsf"                  name = "bsf"                     rev = "2.4.0"/>
+        <dependency  org = "bsh"                  name = "bsh"                     rev = "2.0b4"/>
+
+        <!--
+        <dependency  org = "findbugs"             name = "findbugs"                rev = "1.0.0"/>
+
+        <dependency  org = "net.java.dev.javacc"  name = "javacc"                  rev = "4.0"/>
+
+
+        <dependency  org = "org.codehaus.castor"  name = "castor"           rev = "1.2"/>
+        <dependency  org = "org.codehaus.castor"  name = "castor-anttasks"  rev = "1.2"/>
+
+        <dependency  org = "velocity"             name = "velocity-dep"     rev = "1.4-rc1"/>
+        -->
+
+
+        <!--
+        <dependency  org = "org.codehaus.castor"  name = "castor"                  rev = "1.2"/>
+        <dependency  org = "org.codehaus.castor"  name = "castor-anttasks"         rev = "1.2"/>
+        <dependency  org = "org.codehaus.castor"  name = "castor-codegen-anttask"  rev = "1.1-M3"/>
+        <dependency  org = "org.codehaus.castor"  name = "castor-xml"              rev = "1.3rc1"/>
+        <dependency  org = "org.codehaus.castor"  name = "castor-xml-schema"       rev = "1.3rc1"/>
+        -->
+    </dependencies>
+</ivy-module>

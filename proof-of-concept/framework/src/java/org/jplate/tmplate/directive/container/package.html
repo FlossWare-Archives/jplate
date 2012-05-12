@@ -1,0 +1,46 @@
+<body>
+    This package provides the implementation of directive containers as well as
+    functionality to create instances.  A directive container acts as a
+    container of <code>org.jplate.directive.DirectiveContainerIfc</code>'s (both
+    a parent and many children), a 
+    <code>org.jplate.directive.DirectiveIfc</code> (for translation), a
+    <code>org.jplate.directive.DirectiveCacheIfc</code> (repository for named
+    directives), and a <code>org.jplate.util.environment.EnvironmentIfc</code>
+    (to contain attributes and/or key/object pairs).
+    
+    <p>
+    As mentioned, when translating the directive container uses a
+    <code>org.jplate.directive.DirectiveIfc</code> for translation.  The
+    directive container will present itself to the directive for which it
+    can gather data to aid in translation for the container.  By structuring the
+    code in this fashion, the directive container is able to do what it does
+    best:  containment.  Allowing the container to use a directive for
+    translation is an example of the <i>Strategy Pattern</i>.
+
+    <p>
+    <b>Usage</b>
+
+    <p>
+    To create an instance of
+    <code>org.jplate.tmplate.directive.DirectiveContainerIfc</code>, please do
+    the following (assume klass has been instantiated):
+
+<pre>
+    //
+    // Assume klass instantiated before this point...
+    //
+    final DirectiveContainerFactoryMgrIfc factoryMgr =
+        DirectiveContainerFactoryMgrIfc.getSingleton ();
+
+    final DirectiveContainerFactoryIfc factory =
+        factoryMgr.getFactory ( klass );
+
+    final DirectiveContainerIfc directiveContainer =
+        factory.createDirectiveContainer ();
+</pre>
+
+    @see org.jplate.tmplate.directive.DirectiveCacheIfc
+    @see org.jplate.tmplate.directive.DirectiveContainerIfc
+    @see org.jplate.tmplate.directive.DirectiveIfc
+    @see org.jplate.util.environment.EnvironmentIfc
+</body>

@@ -1,0 +1,35 @@
+<body>
+Provides functionality to retrieve resources as input streams.
+
+<p>
+The classes in this package really do little more than
+<code>getClass().getResourceAsStream ( &lt;some resource name&gt; )</code>.
+However, using this package allows one set of classes to control where resources
+are located and how they should be loaded - thus providing consistency.
+
+<p>
+<b>Please note:</b>  This package does not preclude loading resource
+arbitrarily.  Doing so requires managing resources, their location and
+distribution.
+
+<p>
+<b>Useage</b>
+
+<p>
+To retrieve a resource manager, do the following:
+
+<pre>
+    ResourceMgrIfc resourceMgr = ResourceMgr.getSingleton ();
+</pre>
+
+To retrieve a resource for resource <code>Foo.txt</code>, do the following:
+
+<pre>
+   InputStream fooIS = resourceMgr.getResource ( "Foo.txt" );
+</pre>
+
+<b>Please note:</b>  If the resource is not found, <code>null</code> will be
+returned.
+
+@see org.jplate.util.resourcemgr.ResourceMgrIfc#RESOURCE_HOME
+</body>

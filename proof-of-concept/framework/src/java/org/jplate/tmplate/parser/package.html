@@ -1,0 +1,133 @@
+<body>
+    Provides the parser functionality for the JPlate Template Engine.
+
+    The syntax for the Template Engine contains parsed characer data (raw data)
+    and named directives.  The notation is hierarchical and very similar to XML
+    without some of the restrictions placed upon XML documents to be well
+    formed.
+
+    <p>
+    <b>Definitions</b>
+
+    <p>
+    The following define the contents of a JPlate Template:
+
+    <ul>
+        <li>
+            Parsed Character Data (PCData):  is raw data.  It is not translated
+            and can exist in any form.
+        </li>
+
+        <li>
+            Directives:  specially "tagged" areas enclosed in ${  }.
+
+            <p>
+            Internally within ${  } the rules are similar to XML:
+
+            <ul>
+                <li>
+                    Directive name:  a letter followed by zero or more
+                    letters/numbers.  This is mandatory.
+                </li>
+
+                <li>
+                    Name/value pairs:
+
+                    <ul>
+                        <li>
+                            Name:  a letter followed by zero or more
+                            letters/numbers.  This is optional.
+                        </li>
+
+                        <li>
+                            Value:  an equals sign followed by a double quote
+                            followed by any characters and finally followed by
+                            a double quote.  This is optional.
+                        </li>
+                    </ul>
+
+                    <p>
+                    <b>Please note:</b>  There can be any number of name/value
+                    pairs or none.  A name may have an optional value.
+                </li>
+            </ul>
+
+            Directives come in two flavors:
+
+            <ul>
+                <li>
+                    Stand alone:  a directive that contains no child
+                    elements and is denoted using ${  /} (this is similar to
+                    a childless XML element.
+
+                    <p>
+                    The following are some stand alone directives:
+
+<pre>
+    ${Foo/}
+
+    ${Bar start end="12:00"/}
+
+    ${zeta5 singularity="true" multiverse"=False"/}
+</pre>
+                </li>
+
+                <li>
+                    Hierarchical:  a directive that is denoted by start and
+                    end tags:
+                    
+                    <ul>
+                        <li>
+                            Start tag:  ${  }
+                        </li>
+
+                        <li>
+                            End tag:  ${/  }
+                        </li>
+                    </ul>
+
+                    PCData or additional directives can be contained between
+                    the directive start and end tags.  The following are some
+                    hierarchical directives:
+
+<pre>
+    ${Foo}
+        This is the contents of directive, Foo...
+    ${/Foo}
+
+    ${Bar start}
+        This is the contents of directive, Bar...
+    ${/Bar}
+
+    ${GrandParent}
+        Some data
+
+        ${Parent first="Scot" last="Floess"
+            I am so great
+
+            ${Child nickname="Tabbi" female}
+                My daughter
+
+                ${Pet animal="Rabbit" name="Jack"/}
+            ${/Child}
+
+            No more data
+        {$/Parent}
+
+        ${Date today/}
+    ${/GrandParent}
+</pre>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+    <p>
+    <b>Please note:</b>  the template engine does no data organization
+    whatsoever.  Data organization is up to implementations of
+    <code>org.jplate.tmplate.parser.JPlateParserStrategyIfc</code> - and is
+    required to parse.  The interface is an example of the Design Pattern
+    <I>Strategy</I>.  Structuring the parser in this fashion keeps it simple as
+    well as allowing implementations to decide the correct "meaning" of the
+    JPlate data.
+</body>

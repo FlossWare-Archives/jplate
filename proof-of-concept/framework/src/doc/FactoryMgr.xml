@@ -1,0 +1,9 @@
+<factory-definitions>
+    <factorymgr class="org.jpim.bar.BarFactoryMgr">
+	<context class="org.jpim.a.Object"> org.jpim.bar.decorator.trace.TraceFactory </context>
+	<context class="org.jpim.b.Object"> org.jpim.bar.decorator.timing.TimingFactory </context>
+	<context class="org.jpim.bar.decorator.timing.TimingFactory"> org.jpim.bar.decorator.trace.TraceFactory </context>
+
+	<default> org.jpim.bar.BarFactory </default>
+    </factorymgr>
+</factory-definitions>

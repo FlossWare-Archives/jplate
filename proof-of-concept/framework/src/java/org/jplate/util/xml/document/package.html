@@ -1,0 +1,41 @@
+<body>
+This package provides the functionality to create a
+<code>org.w3c.dom.Document</code> from a resource name.  One can create
+validating documents (those defined via a DTD and are well formed) or those that
+are well formed but not necessarily defined via a DTD.
+
+<p>
+<b>Useage:</b>
+
+To retrieve a document factory perform the following:
+
+<pre>
+    final DocumentFactoryIfc documentFactory = DocumentFactory.getSingleton ();
+</pre>
+
+To create a valid document (meaning defined via a DTD) whose XML is defined via
+the resource name <code>foo.xml</code>, perform the following:
+
+<pre>
+    final Document document =
+        documentFactory.createValidatingDocument ( "foo.xml" );
+</pre>
+
+To create a document whose contents are simply well-formed and whose XML is
+defined via <code>bar.txt</code>, perform the following:
+
+<pre>
+final Document document = documentFactory.createDocuemtn ( "bar.xml" );
+</pre>
+
+<b>Please note:</b>  If the resource name presented cannot be found, both
+create methods will return <code>null</code>.
+
+<p>
+<b>Also note:</b>  In resolving system resources, <code>DocumentFactory</code>
+uses <code>DTDEntityResolver</code> to find resources via the class
+<code>org.jplate.util.resource.ResourceMgr</code>.
+
+@see org.w3c.dom.Document
+@see org.jplate.util.resourcemgr
+</body>

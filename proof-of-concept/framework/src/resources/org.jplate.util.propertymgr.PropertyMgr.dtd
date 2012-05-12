@@ -1,0 +1,9 @@
+<!ELEMENT default      (#PCDATA)>
+<!ELEMENT property     (#PCDATA)>
+
+<!ELEMENT property-mgr (properties+)>
+<!ELEMENT properties   (property+,default?)>
+
+<!ATTLIST properties class CDATA #REQUIRED>
+<!ATTLIST property   name  CDATA #REQUIRED>
+

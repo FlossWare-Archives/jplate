@@ -1,0 +1,32 @@
+<body>
+    This package provides useful implementations of
+    <code>org.jplate.tmplate.directive.NamedDirectiveIfc</code>.  It is
+    important to note that when a directive container requests a named directive
+    to translate, the named directive has the "ultimate say" as to what that
+    translation becomes.  One can examine the contents of the directive
+    container and operate upon the contents or it can do something completely
+    different.  Some good examples are:
+
+    <ul>
+        <li>
+            <code>org.jplate.tmplate.directive.named.AliasDirective</code>:
+            when translating it names a directive (ie creates a new named
+            directive) whose contents are those defined within the alias
+            directive block.  Essentially it takes the contents of its'
+            directive container, creates a new named directive who will
+            return those contents when asked to translate.
+        </li>
+        <li>
+            <code>org.jplate.tmplate.directive.named.DateDirective</code>:  when
+            translating it simply computes the date/time based upon a
+            filtering string.
+        </li>
+    </ul>
+
+    <p>
+    Please refer to individual classes for descriptions/usage as this package
+    encompasses varied functionality.
+
+    @see org.jplate.tmplate.directive.DirectiveContainerIfc
+    @see org.jplate.tmplate.directive.NamedDirectiveIfc
+</body>

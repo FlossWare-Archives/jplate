@@ -1,0 +1,318 @@
+/** 
+ *
+ * This parser deals with a source file which contains object refs.
+ *
+ */
+PARSER_BEGIN ( JPlateParser )
+
+package org.jplate.tmplate.parser;
+
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.Reader;
+
+import org.jplate.JPlateException;
+
+public class JPlateParser
+{
+    /**
+     *
+     * This represents a message stating our reader is null.
+     *
+     */
+    public static final String RAW_JPLATE_IS_NULL_MSG = "rawJPlate == null";
+
+    /**
+     *
+     * This represents a message stating our strategy is null.
+     *
+     */
+    public static final String STRATEGY_IS_NULL_MSG = "strategy == null";
+
+    /**
+     *
+     * This method will parse jplate templates.
+     *
+     * @param rawJPlate represents a reader who contains JPlate template that
+     *        should be processed.
+     *
+     * @param strategy represents the object who will be called as items are
+     *        parsed.
+     *
+     * @throws JPlateException if strategy has issue with parsing.
+     *
+     */
+    public static void parseJPlate
+        ( final Reader rawJPlate, final JPlateParserStrategyIfc strategy )
+            throws JPlateException
+    {
+        if ( rawJPlate == null )
+        {
+            throw new NullPointerException ( RAW_JPLATE_IS_NULL_MSG );
+        }
+        else if ( strategy == null )
+        {
+            throw new NullPointerException ( STRATEGY_IS_NULL_MSG );
+        }
+
+        try
+        {
+            final JPlateParser jpp = new JPlateParser ( rawJPlate );
+
+            jpp.parse ( strategy );
+        }
+
+        catch ( final Exception exception )
+        {
+            throw new JPlateException ( exception );
+        }
+    }
+
+    /**
+     *
+     * This method will parse jplate templates.
+     *
+     * @param rawJPlate represents a reader who contains JPlate template that
+     *        should be processed.
+     *
+     * @param strategy represents the object who will be called as items are
+     *        parsed.
+     *
+     * @throws JPlateException if strategy has issue with parsing.
+     *
+     */
+    public static void parseJPlate
+        ( final InputStream rawJPlate, final JPlateParserStrategyIfc strategy )
+            throws JPlateException
+    {
+        if ( rawJPlate == null )
+        {
+            throw new NullPointerException ( RAW_JPLATE_IS_NULL_MSG );
+        }
+        else if ( strategy == null )
+        {
+            throw new NullPointerException ( STRATEGY_IS_NULL_MSG );
+        }
+
+        try
+        {
+            final JPlateParser jpp = new JPlateParser ( rawJPlate );
+
+            jpp.parse ( strategy );
+        }
+
+        catch ( final Exception exception )
+        {
+            throw new JPlateException ( exception );
+        }
+    }
+
+}
+
+PARSER_END ( JPlateParser )
+
+TOKEN:
+{
+        <  DOLLAR_LCURLY_SLASH:         ( "${/" ) > : JPLATE_TOKEN
+    |
+        <  DOLLAR_LCURLY:               ( "${" ) > : JPLATE_TOKEN
+    |
+        <  PC_DATA:                     ( ( ~[ "$" ] )+ | "$" ) > 
+}
+
+<JPLATE_TOKEN> SKIP:
+{
+    "\t" | "\n" | "\r" | " "
+}
+
+
+<JPLATE_TOKEN> TOKEN:
+{
+        < #DIGIT:           ( [ "0" - "9" ] )                >
+    |
+        < #LETTER:          ( [ "A" - "Z", "a" - "z" ] )     >
+    |
+        < #VALID_IDENTS:    (  "." | "_" | "-" | <LETTER> | <DIGIT> )    >
+    |
+        <  JPLATE_IDENT:    ( <LETTER> ( <VALID_IDENTS> )* ) >
+    |
+        <  SLASH_RCURLY:    ( "/}" ) > : DEFAULT
+    |
+        <  RCURLY:          ( "}" ) > : DEFAULT
+    |
+        <  EQUALS_QUOTE:    "=\"" > : VALUE_TOKEN
+}
+
+<VALUE_TOKEN> TOKEN:
+{
+        <  QUOTE:           "\"" > : JPLATE_TOKEN
+    |
+        <  VALUE:           ( ~[ "\"" ] )+ >
+}
+
+void parse ( final JPlateParserStrategyIfc strategy )
+    throws IOException, ParseException, JPlateException:
+{
+    Token pcData;
+    Token eofToken;
+    strategy.processParseStart ();
+}
+
+{
+    (
+        processJPlate ( strategy )
+
+        |
+        
+        (
+            pcData = <PC_DATA>
+            {
+                strategy.processPCData
+                (
+                    pcData.image, pcData.beginLine, pcData.beginColumn,
+                    pcData.endLine, pcData.endColumn
+                );
+            }
+        )
+    )+
+
+    eofToken = <EOF>
+    {
+        strategy.processParseEnd ( eofToken.endLine, eofToken.endColumn );
+    }
+}
+
+void processJPlate ( final JPlateParserStrategyIfc strategy )
+    throws IOException, ParseException, JPlateException:
+{
+    Token directiveToken;
+}
+
+{
+    (
+        directiveToken = <DOLLAR_LCURLY_SLASH> 
+        {
+            strategy.processDirectiveEndContent
+            (
+                directiveToken.image, directiveToken.beginLine,
+                directiveToken.beginColumn, directiveToken.endLine,
+                directiveToken.endColumn
+            );
+        }
+
+        processDirective ( strategy )
+
+        directiveToken = <RCURLY>
+        {
+            strategy.processDirectiveEnd
+            (
+                directiveToken.image, directiveToken.beginLine,
+                directiveToken.beginColumn, directiveToken.endLine,
+                directiveToken.endColumn
+            );
+        }
+    )
+    |
+    (
+    	directiveToken = <DOLLAR_LCURLY>
+        {
+            strategy.processDirectiveStart
+            (
+                directiveToken.image, directiveToken.beginLine,
+                directiveToken.beginColumn, directiveToken.endLine,
+                directiveToken.endColumn
+            );
+        }
+
+        processDirective ( strategy )
+   
+        (
+            directiveToken = <RCURLY>
+            {
+                strategy.processDirectiveStartContent
+                (
+                    directiveToken.image, directiveToken.beginLine,
+                    directiveToken.beginColumn, directiveToken.endLine,
+                    directiveToken.endColumn
+                );
+            }
+            |
+            directiveToken = <SLASH_RCURLY>
+            {
+                strategy.processDirectiveEnd
+                (
+                    directiveToken.image, directiveToken.beginLine,
+                    directiveToken.beginColumn, directiveToken.endLine,
+                    directiveToken.endColumn
+                );
+            }
+        )
+    )
+}
+
+void processDirective ( final JPlateParserStrategyIfc strategy )
+    throws IOException, ParseException, JPlateException:
+{
+    Token directive;
+}
+
+{
+    directive = <JPLATE_IDENT>
+    {
+        strategy.processDirective
+        (
+            directive.image, directive.beginLine, directive.beginColumn,
+            directive.endLine, directive.endColumn
+        );
+    }
+
+    processAttribute ( strategy )
+}
+
+void processAttribute ( final JPlateParserStrategyIfc strategy )
+    throws IOException, ParseException, JPlateException:
+{
+    Token attributeName;
+}
+
+{
+    (
+        attributeName = <JPLATE_IDENT>
+        {
+            strategy.processAttributeName
+            (
+                attributeName.image, attributeName.beginLine,
+                attributeName.beginColumn, attributeName.endLine,
+                attributeName.endColumn
+            );
+        }
+
+        processValue ( strategy )
+    )*
+}
+
+void processValue ( final JPlateParserStrategyIfc strategy )
+    throws IOException, ParseException, JPlateException:
+{
+    Token value;
+}
+
+{
+    (
+        <EQUALS_QUOTE>
+
+        (
+            value = <VALUE> 
+            {
+                strategy.processAttributeValue
+                (
+                    value.image, value.beginLine, value.beginColumn,
+                    value.endLine, value.endColumn
+                );
+            }
+        )?
+
+        <QUOTE>
+    )*
+}
+

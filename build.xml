@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    Build script for the Foundation project.
+
+    Modifications:
+        $Date: 2009-02-11 14:40:29 -0500 (Wed, 11 Feb 2009) $
+        $Revision: 500 $
+        $Author: sfloess $
+        $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/build.xml $
+
+-->
+<project
+    name                     = "JPlate"
+    default                  = "all"
+    xmlns:ivy                = "antlib:org.apache.ivy.ant"
+    xmlns:keros              = "http://keros.sourceforge.net"
+    xmlns:jplate-development = "http://jplate.sourceforge.net/development" >
+
+    <!--
+
+        Define Keros project properties specific to the foundation.
+
+    -->
+    <property  name = "keros-base-project.lib.HOME"           value = "lib"/>
+
+    <property  name = "jplate.keros.dir.NAME"                 value = "keros-1.3"/>
+    <property  name = "jplate.keros.HOME"                     value = "${jplate.keros.dir.NAME}"/>
+
+    <property  name = "jplate.javacc.dir.NAME"                value = "javacc"/>
+    <property  name = "jplate.javacc.src.HOME"                value = "src/dev/${jplate.javacc.dir.NAME}"/>
+    <property  name = "jplate.javacc.generated.HOME"          value = "assembly/generated/${jplate.javacc.dir.NAME}"/>
+    <property  name = "keros-base-project.java.src.PATH"      value = "${jplate.javacc.generated.HOME}"/>
+    <property  name = "keros.javacc.HOME"                     value = "lib"/>
+    <property  name = "keros-base-project.sub-projects.SKIP"  value = "true"/>
+
+    <import  file = "${jplate.keros.HOME}/ant/keros.xml"  description = "Need Keros for building"/>
+
+
+    <!--
+
+        Use Ivy to download...
+
+    -->
+    <ivy:resolve   type = "jar"  file = "ivy.xml"/>
+    <ivy:retrieve  type = "jar"  file = "ivy.xml"  pattern = "lib/[artifact].[ext]"/>
+
+
+    <!--
+
+        Release information.
+
+    -->
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.VERSION"       value = "0.2"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.svn.REV_START"         value = "499"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.svn.REV_END"           value = "HEAD"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.PREFIX"        value = "jplate-"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.src.release.BASE_DIR"  value = "jplate-${keros-base-project.release.VERSION}"/>
+
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.source.FILE_NAME"    value = "jplate-src-${keros-base-project.release.VERSION}"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.lib.FILE_NAME"       value = "jplate-lib-${keros-base-project.release.VERSION}"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.document.FILE_NAME"  value = "jplate-doc-${keros-base-project.release.VERSION}"/>
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.release.FILE_NAME"           value = "jplate-${keros-base-project.release.VERSION}"/>
+
+    <keros:set-property  is-warnable = "false"  property = "keros-java-project.jar.FILE_NAME"          value = "jplate-${keros-base-project.release.VERSION}.jar"/>
+
+    <keros:set-property  is-warnable = "false"  property = "keros-base-project.ant.document.INCLUDES"       value = "build.xml"/>
+
+
+    <import  file = "${jplate.keros.HOME}/ant/projects/keros-javacc-project.xml"    description = "Need Keros for building"/>
+    <import  file = "${jplate.keros.HOME}/ant/projects/keros-document-project.xml"  description = "For generating documentation"/>
+
+
+    <!--
+        Add to source path - to include Keros itself.
+    -->
+    <!--
+    <path  id = "jplate.release.source.path.REF_ID"  description = "Source path for JPlate..">
+        <path  refid = "keros-base-project.release.source.path.REF_ID"/>
+        <pathelement  location = "${jplate.keros.HOME}"/>
+    </path>
+
+    <keros:set-property  property = "keros-base-project.release.source.PATH"  value = "jplate.release.source.path.REF_ID"/>
+    -->
+
+
+    <!--
+
+        Called to create a release of the documentation.
+
+    -->
+    <target  name = "keros-document-project.generate"  description = "Create environment documentation release.">
+        <delete  dir = "${keros-document-project.release.generated.HOME}"/>
+        <mkdir   dir = "${keros-document-project.release.generated.HOME}"/>
+
+        <keros:NavDef  main-file = "${keros-document-project.release.generated.HOME}/index.html"  toc-file = "toc.html"  toc-title = "JPlate @keros-base-project.release.VERSION@"  default-content = "summary.html">
+            <keros:HtmlHeader     file = "${keros-document-project.release.generated.HOME}/toc.html"  number = "1"  text = "JPlate"/>
+            <keros:HtmlHeader     file = "${keros-document-project.release.generated.HOME}/toc.html"  number = "2"  text = "Table of Contents"/>
+
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Summary"         href = "summary.html"/>
+
+            <keros:HtmlBreak      file     = "${keros-document-project.release.generated.HOME}/toc.html"/>
+
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "How To"        href = "how-to.html"/>
+            <keros:NavItemIndent  toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Include Jars"  href = "how-to.html#Include_Jars"/>
+            <keros:NavItemIndent  toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Building"      href = "how-to.html#Building"/>
+            <keros:NavItemIndent  toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Foundation"    href = "how-to.html#Foundation"/>
+            <keros:NavItemIndent  toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "KVP"           href = "how-to.html#KVP"/>
+            <keros:NavItemIndent  toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Tabular"       href = "how-to.html#Tabular"/>
+
+            <keros:HtmlBreak      file     = "${keros-document-project.release.generated.HOME}/toc.html"/>
+
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Build Script"    href = "ant/build.html"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Java Doc"        href = "java/index.html"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Subversion Log"  href = "svn/svn-log.html"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Past Releases"   href = "past-releases.html"/>
+
+            <keros:HtmlHeader     file     = "${keros-document-project.release.generated.HOME}/toc.html"  number = "2"  text = "Project Links"/>
+
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Sourceforge Project Page"      href = "http://sourceforge.net/projects/jplate"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Browse Subversion Repository"  href = "http://jplate.svn.sourceforge.net/viewvc/jplate"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Downloads"                     href = "http://sourceforge.net/project/showfiles.php?group_id=52550"/>
+            <keros:NavItem        toc-file = "${keros-document-project.release.generated.HOME}/toc.html"  text = "Mailing Lists"                 href = "http://sourceforge.net/mail/?group_id=52550"/>
+        </keros:NavDef>
+
+        <!--
+        <keros:release  dir = "${keros-document-project.release.generated.HOME}"  stage-dir = "${keros-base-project.release.HOME}"  base-file = "${keros-base-project.release.document.FILE_NAME}" base-dir="${keros-base-project.release.FILE_NAME}">
+            <keros:release-fileset>
+                <fileset dir = "${keros-document-project.src.HOME}"  includes = "**/*.html, **/*.css" excludes = "${keros-base-project.src.release.EXCLUDES}"/>
+                <fileset  dir = "${keros-document-project.generated.HOME}"/>
+            </keros:release-fileset>
+
+            <keros:post-stage-processing>
+                <keros:conditional-set-property  name = "keros-base-project.create.document.release.VERSION"  property = "keros-base-project.release.VERSION"  set = "${keros-base-project.release.VERSION}"  unset = ""  is-warnable = "false"/>
+                <replace  dir = "${keros-document-project.release.generated.HOME}"  token = "@keros-base-project.release.VERSION@"  value = "${keros-base-project.create.document.release.VERSION}"/>
+            </keros:post-stage-processing>
+        </keros:release>
+        -->
+    </target>
+
+
+    <!--
+
+        Called to create a release.
+    -->
+    <target  name = "all"  depends = "keros-base-project.all"/>
+</project>
+

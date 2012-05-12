@@ -1,0 +1,389 @@
+<body>
+
+Provides the framework/template for definining factories to be used when classes
+are presented as the context in which the factory is to be used.
+
+<p>
+This family of classes exemplifies the Design Patterns concept of the Factory
+Method, <i>"provide an interface for creating an object, but let subclasses
+decide which class to instantiate."</i>  The important difference between this
+definition and the factory context package is that a class context dictates the
+factory to instantiate.
+
+<p>
+<b>Definitions/Concepts</b>
+
+<p>
+To exploit this package one should define a contract (interface)/implementation,
+factory interface/implementation, and factory manager:
+
+<ul>
+    <li>
+        <b>Contract (interface)/implementations:</b>  The contract is simply an
+        interface.  It defines the "contract" (API) that an object will support.
+        The implementations should have package protected constructors and live
+        in the same package as the factory implementations (so that it cannot be
+        created by classes outside of its package).  As will be seen later, a
+        great deal of power can be achieved utilizing factories for
+        instantiation.
+    </li>
+
+    <li>
+        <b>Factory interface/implementation:</b>  The factory interface should
+        have create() method(s) that return implementations of the contract
+        defined above.  Factory implementations should be public classes who
+        implement the factory interface.  Due to the dynamic nature of
+        FactoryContext (i.e. using <code>Class.forName </code> the classes must
+        be public).
+    </li>
+
+    <li>
+        <b>Factory manager:</b>   The factory manager will return instances of
+        the factory interface and should utilize FactoryContext in returning the
+        se implementations of the interface.  It is important to note that a
+        <code> java.lang.Class</code> should be presented to the factory manager
+        as that is used in finding implementations of
+        <code>org.jplate.factory.FactoryIfc</code>.  Also of importance is that
+        the factory manager implement </code>org.jplate.factory.FactoryMgrIfc
+        </code> as FactoryContext keys off this interface in finding all the
+        factories defined.
+    </li>
+</ul>
+
+<p>
+<b>Please note:</b>  <code>org.jplate.factory.FactoryIfc</code> and 
+<code>org.jplate.factory.FactoryMgrIfc</code> are simply marker interfaces. 
+Although they contain no methods, it provides a trivial contract ensuring
+factories are used.
+
+<p><p>
+In summary:  to retrieve a factory, one should use a factory manager and
+present the factory manager with a class when requesting a factory interface.
+
+<p>
+<b>Please note:</b>  FactoryContext uses an XML file containing class names that
+map to factory class names.  Also definable is a default factory - which is
+shorthand for "if the class provided is not defined, return the default
+factory."  Please scroll to the end to see the XML file structure.
+
+<p>
+All of this is extremely powerful.  By utilizing this functionality as a
+template for factories, one can dictate at runtime, what implementation of a
+factory should be returned to any class.  If one utilizes the factory paradigm
+then it is possible to do things like enable tracing for a given type based
+upon the class requesting a factory.
+
+<p>
+It is encouraged that all factory manager/factory interface/factory
+implementations use the factory context package to simplify the aforementioned
+fucntionality.
+
+<p>
+<b>Examples</b>
+
+</p>
+The following is a simplified example of how to retrieve a factory based upon a
+some object's <code>getClass()</code>
+
+<pre>
+//
+// Assume factoryMgr has been assigned some FactoryMgrIfc...
+//
+FactoryContextIfc factoryContext = FactoryContext.getSingleton ();
+
+FactoryIfc factory = 
+  factoryContext.getFactoryContext ( factoryMgr, getClass () );
+
+//
+// Use factory to create objects...
+//
+</pre>
+
+Ideally, the above functionality will be wrapped in actual implementations.  For
+instance, assume one works with Foo's and wants to support factory contexts to
+gain robust functionality:
+
+<pre>
+
+//
+// The foo interface...albeit trivial...
+//
+public interface FooIfc
+{
+    public void setX ( int x );
+    public int getX ();
+}
+
+//
+// The foo implementation.  Notice it is package protected and should be created
+// using a factory.
+//
+final class Foo implements FooIfc
+{
+    private int _x;
+
+    Foo ()
+    {
+    }
+
+    public void setX ( final int x )
+    {
+        _x = x;
+    }
+    
+    public int getX ()
+    {
+        return _x;
+    }
+}
+
+//
+// This is the factory definition to create Foo's...
+//
+public interface FooFactoryIfc extends org.jplate.factory.FactoryIfc
+{
+    public FooIfc createFoo ();
+}
+
+//
+// The foo factory implementation.
+//
+public final class FooFactory implements FooFactoryIfc
+{
+    public FooFactory ()
+    {
+    }
+
+    public FooIfc createFoo ()
+    {
+        return new Foo ();
+    }
+}
+
+//
+// This is the foo factory manager who manages an implementation of the foo
+// factory interface.
+//
+public class FooFactoryMgr implements org.jplate.factory.FactoryMgrIfc
+{
+    private final FooFactoryIfc _defaultFactory;
+
+    public FooFactoryMgr ()
+    {
+        final org.jplate.util.factorycontext.FactoryContext factoryContext =
+            org.jplate.util.factorycontext.FactoryContext.getSingleton ();
+
+        _defaultFactory =
+            ( FooFactoryIfc ) factoryContext.getDefaultFactory ( this );
+    }
+
+    public FooFactoryIfc getDefaultFactory ()
+    {
+        return _defaultFactory;
+    }
+
+    public FooFactoryIfc getFactory ( final Class classContext )
+    {
+        final org.jplate.util.factorycontext.FactoryContext factoryContext =
+            org.jplate.util.factorycontext.FactoryContext.getSingleton ();
+
+        FooFactoryIfc factory =
+            ( FooFactoryIfc )
+                factoryContext.getFactoryForContext ( this, classContext );
+
+        return factory != null ? factory : _defaultFactory;
+    }
+}
+</pre>
+
+Consider the above a template to structuring code using the factory context
+family of classes.  This may not appear overly powerful, but consider the
+situation where it is now desirable to add tracing capabilities to foo's.  Of
+course it is possible to add checks to Foo.java to see if tracing is enabled and
+if so trace, but that detracts from Foo's initial requirements.
+
+<p>
+The following illustrates how tracing can be added for Foo.java without
+changing the code.  Please note that this is an example of the
+<i>Decorator Pattern</i>.
+
+<pre>
+//
+// This class acts as a Decorator for a FooIfc adding System.out functionality
+//
+final class TraceableFoo implements FooIfc
+{
+    final FooIfc _foo;
+
+    private TraceableFoo ()
+    {
+    }
+
+    TraceableFoo ( final FooIfc foo )
+    {
+        _foo = foo;
+    }
+
+    public void setX ( final int x )
+    {
+        System.out.println ( "Setting x = <" + x + ">" );
+        _foo.setX ( x );
+    }
+
+    public int getX ()
+    {
+        final int x = _foo.getX ();
+
+        System.out.println ( "Returning x = <" + x + ">" );
+
+        return retVal;
+    }
+}
+
+//
+// The traceable foo factory implementation.
+//
+public final class TraceableFooFactory implements FooFactoryIfc
+{
+    //
+    // We need to create some kind of Foo.  Since any class can have
+    // a foo factory defined for it, it is reasonable that one was set
+    // for self.
+    //
+    private final FooFactoryIfc _myFooFactory;
+
+    public TraceableFooFactory ()
+    {
+        final FooFactoryMgr fooFactoryMgr = new FooFactoryMgr ();
+
+        _myFooFactory = fooFactoryMgr.getFactory ( getClass () );
+    }
+
+    public FooIfc createFoo ()
+    {
+        return new TraceableFoo ( _myFooFactory.createFoo () );
+    }
+}
+</pre>
+
+As can be seen above, it is now a simple matter to enable tracing for any
+foo.  The above could also have been written as:
+
+<pre>
+//
+// This class acts as a Decorator for a FooIfc adding System.out functionality
+//
+final class TraceableFoo implements FooIfc
+{
+    final FooIfc _foo;
+
+    private TraceableFoo ()
+    {
+        //
+        // We need to create some kind of Foo.  Since any class can have
+        // a foo factory defined for it, it is reasonable that one was set
+        // for self.
+        //
+        final FooFactoryMgr fooFactoryMgr = new FooFactoryMgr ();
+
+        final FooFactoryIfc myFooFactory =
+            fooFactoryMgr.getFactory ( getClass () );
+
+        _foo = myFooFactory.createFoo ();
+    }
+
+    public void setX ( final int x )
+    {
+        System.out.println ( "Setting x = <" + x + ">" );
+        _foo.setX ( x );
+    }
+
+    public int getX ()
+    {
+        final int x = _foo.getX ();
+
+        System.out.println ( "Returning x = <" + x + ">" );
+
+        return retVal;
+    }
+}
+
+//
+// The traceable foo factory implementation.
+//
+public final class TraceableFooFactory implements FooFactoryIfc
+{
+    public TraceableFooFactory ()
+    {
+    }
+
+    public FooIfc createFoo ()
+    {
+        return new TraceableFoo ();
+    }
+}
+</pre>
+
+Since the factory context family of classes is used above, it is now trivial
+to decide which foo factory should be returned from the foo factory manager
+based upon a class.  For instance, one can enable foo tracing if a Bar class
+is using foo's.  Or, one could enable tracing by default and enable standard
+foo functionality only for Bar classes.
+
+<p><p>
+<b>The XML File</b>
+
+<p>
+FactoryContext defines classes using the org.jplate.util.propertymgr family of
+classes.  As such, the XML file structure is the same, but its content is
+pertenant to <code>org.jplate.factory.FactoryMgr</code>'s and
+<code>org.jplate.factory.FactoryIfc</code>'s.  The following uses some
+pseudonames to illustrate:
+
+<pre>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE factory-context SYSTEM "org.jplate.util.factorycontext.FactoryContext.dtd"&gt;
+
+&lt;factory-context&gt;
+    &lt;factory-mgr class="factory-mgr-class-name"&gt;
+        &lt;context class="class-context"&gt;factory-class-name&gt;/context&gt;
+        
+        ...
+
+        &lt;default&gt;default-factory-class-name&gt;/default&gt;
+    &lt;factory-mgr&gt;
+
+    ...
+
+&lt;/factory-context&gt;
+</pre>
+
+Using the above example code, the following illustrates how to define foo
+factories in terms of a Bar:
+
+<pre>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE factory-context SYSTEM "org.jplate.util.factorycontext.FactoryContext.dtd"&gt;
+
+&lt;factory-context&gt;
+    &lt;factory-mgr class="FooFactoryMgr"&gt;
+        &lt;context class="Bar"&gt;TraceableFooFactory&gt;/context&gt;
+
+        &lt;default&gt;FooFactory&gt;/default&gt;
+    &lt;factory-mgr&gt;
+&lt;/factory-context&gt;
+</pre>
+
+<b>Please note:</b>  The above examples do not use packages.  However, in order
+to work properly one must use fully qualified class names if the classes used
+belong to packages!  This is no different than attempting to perform a
+<code>Class.forName ( ... ).newInstance ()</code>
+
+<p>
+<b> You may define as many classes/factories as needed in the XML file...</b>
+
+<p>
+@see org.jplate.factory
+@see org.jplate.util.propertymgr
+
+</body>

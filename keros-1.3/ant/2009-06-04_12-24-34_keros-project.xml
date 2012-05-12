@@ -1,0 +1,1515 @@
+<!--
+
+    A vanilla project script.
+
+    Modifications:
+        $Date: 2009-05-18 12:58:37 -0400 (Mon, 18 May 2009) $
+        $Revision: 161 $
+        $Author: sfloess $
+        $HeadURL: https://keros.svn.sourceforge.net/svnroot/keros/trunk/src/dev/ant/keros-project.xml $
+        
+-->
+<project
+    name                = "keros-project"
+    default             = "keros-project.all"
+    
+    xmlns:ant-contrib   = "http://ant-contrib.sourceforge.net" 
+    xmlns:ivy           = "antlib:org.apache.ivy.ant"
+    xmlns:keros-project = "http://keros.sourceforge.net/project"
+    xmlns:keros         = "http://keros.sourceforge.net">
+
+
+    <description>
+        Keros common re-usable build functionality
+    </description>
+
+
+    <!--
+
+        Imports...
+
+    -->
+    <import  file = "keros.xml"  description = "Contains Keros functionality."/>
+
+    <keros:compute-locale  property = "keros-project.locale.HOME"/>
+
+    <import  file = "${keros.resources.HOME}/${keros-project.locale.HOME}/keros-project-messages.xml"  description = "Import local specific messages."/>
+
+
+    <!--
+
+      ========================================================================
+                                   Core Properties
+      ========================================================================
+      
+    -->
+    <dirname  file = "${ant.file}"                property = "keros-project.ant.HOME"      description = "Directory where build.xml exists"/>
+    <dirname  file = "${ant.file.keros-project}"  property = "keros-project.ant.src.HOME"  description = "Directory where keros-project.xml exists"/>
+
+
+    <!--
+
+        Any state we may need to maintain will be stored relative
+        to ${keros-project.state.HOME}.
+
+    -->
+    <keros:auto-property  property = "keros-project.state.HOME"  default = "${keros.VERSION_HOME}/keros-project"/>
+
+
+    <!--
+
+        We will set keros-project.project.HOME to the envrionment keros-project.project.HOME
+        if the system property keros-project.project.HOME is not set AND the
+        environment variable keros-project.project.HOME is set...
+
+    -->
+    <keros:auto-property  property = "keros-project.project.HOME"  default = "${keros-project.ant.HOME}"/>
+
+    <!--
+        
+        Sub-project properties...
+        
+    -->
+    <keros:auto-property  property = "keros-project.sub-project.HOME"      default = "${keros-project.ant.HOME}"/>
+    <keros:auto-property  property = "keros-project.sub-project.INCLUDES"  default = "**/build.xml"/>
+
+
+    <!--
+
+        Make sure we have a valid keros-project.project.HOME - meaning its not the same directory as
+        the ant scripts.
+
+    -->
+    <keros:assert-not-equal  str1 = "${keros-project.ant.src.HOME}"  str2 = "${keros-project.project.HOME}"  error-msg = "${keros-project.project.HOME.error-msg}"/>
+
+
+    <!--
+
+        Let's store the directory name of the project.
+
+    -->
+    <basename file = "${keros-project.project.HOME}"  property = "keros-project.project.DIR_NAME"/>
+
+
+    <!--
+
+        Try to load the build.properties files.
+
+    -->
+    <keros:auto-property  property = "keros-project.property.FILE_NAME"  default = "keros-project.properties"/>
+    <keros:auto-property  property = "keros-project.property.FILE"       default = "${keros-project.project.HOME}/${keros-project.property.FILE_NAME}"/>
+
+    <property  file = "${keros-project.property.FILE}"  description = "Load property file into Environment's properties"/>
+
+
+    <!--
+
+        Project level sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.assembly.DIR_NAME"   default = "assembly"/>
+    <keros:auto-property  property = "keros-project.assembly.HOME"       default = "${keros-project.project.HOME}/${keros-project.assembly.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.lib.DIR_NAME"        default = "lib"/>
+    <keros:auto-property  property = "keros-project.lib.HOME"            default = "${keros-project.project.HOME}/${keros-project.lib.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.resources.DIR_NAME"  default = "resources"/>
+    <keros:auto-property  property = "keros-project.resources.HOME"      default = "${keros-project.project.HOME}/${keros-project.resources.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.src.DIR_NAME"        default = "src"/>
+    <keros:auto-property  property = "keros-project.src.HOME"            default = "${keros-project.project.HOME}/${keros-project.src.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.dev.DIR_NAME"        default = "dev"/>
+    <keros:auto-property  property = "keros-project.dev.HOME"            default = "${keros-project.src.HOME}/${keros-project.dev.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.test.DIR_NAME"       default = "test"/>
+    <keros:auto-property  property = "keros-project.test.HOME"           default = "${keros-project.src.HOME}/${keros-project.test.DIR_NAME}"/>
+
+
+    <!--
+
+        Source sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.document.src.DIR_NAME"  default = "doc"/>
+    <keros:auto-property  property = "keros-project.document.src.HOME"      default = "${keros-project.dev.HOME}/${keros-project.document.src.DIR_NAME}"/>
+
+
+    <!--
+
+        Build sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.deploy.DIR_NAME"         default = "deploy"/>
+    <keros:auto-property  property = "keros-project.deploy.HOME"             default = "${keros-project.assembly.HOME}/${keros-project.deploy.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.generated.DIR_NAME"      default = "generated"/>
+    <keros:auto-property  property = "keros-project.generated.HOME"          default = "${keros-project.assembly.HOME}/${keros-project.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.release.DIR_NAME"        default = "release"/>
+    <keros:auto-property  property = "keros-project.release.HOME"            default = "${keros-project.assembly.HOME}/${keros-project.release.DIR_NAME}"/>
+
+
+    <!--
+
+        Generated sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.document.generated.DIR_NAME"          default = "doc"/>
+    <keros:auto-property  property = "keros-project.document.generated.HOME"              default = "${keros-project.generated.HOME}/${keros-project.document.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.release.generated.DIR_NAME"           default = "release"/>
+    <keros:auto-property  property = "keros-project.release.generated.HOME"               default = "${keros-project.generated.HOME}/${keros-project.release.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.app.release.generated.DIR_NAME"       default = "app"/>
+    <keros:auto-property  property = "keros-project.app.release.generated.HOME"           default = "${keros-project.release.generated.HOME}/${keros-project.app.release.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.document.release.generated.DIR_NAME"  default = "doc"/>
+    <keros:auto-property  property = "keros-project.document.release.generated.HOME"      default = "${keros-project.release.generated.HOME}/${keros-project.document.release.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.src.release.generated.DIR_NAME"       default = "src"/>
+    <keros:auto-property  property = "keros-project.src.release.generated.HOME"           default = "${keros-project.release.generated.HOME}/${keros-project.src.release.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.test.generated.DIR_NAME"              default = "test"/>
+    <keros:auto-property  property = "keros-project.test.generated.HOME"                  default = "${keros-project.generated.HOME}/${keros-project.test.generated.DIR_NAME}"/>
+
+
+    <!--
+
+        If a release version has been defined, we will set our default
+        release source name to be the project name PLUS the version
+        number...  otherwise its just the project directory name.
+
+    -->
+    <ant-contrib:if>
+        <not>
+            <isset  property = "keros-project.release.src.FILE_NAME"/>
+        </not>
+
+        <ant-contrib:then>
+            <keros:conditional-set-property  property = "keros-project.release.VERSION"  name = "keros-project.release.src.FILE_NAME"  set = "${keros-project.project.DIR_NAME}-src-${keros-project.release.VERSION}"  unset = "${keros-project.project.DIR_NAME}-src"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.PREFIX"   name = "keros-project.release.src.FILE_NAME"  set = "${keros-project.release.PREFIX}${keros-project.release.src.FILE_NAME}"  unset = "${keros-project.release.src.FILE_NAME}"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.POSTFIX"  name = "keros-project.release.src.FILE_NAME"  set = "${keros-project.release.src.FILE_NAME}${keros-project.release.POSTFIX}"  unset = "${keros-project.release.src.FILE_NAME}"/>
+        </ant-contrib:then>
+    </ant-contrib:if>
+
+
+    <!--
+
+        If a release version has been defined, we will set our default
+        release source name to be the project name PLUS the version
+        number...  otherwise its just the project directory name.
+
+    -->
+    <ant-contrib:if>
+        <not>
+            <isset  property = "keros-project.release.lib.FILE_NAME"/>
+        </not>
+
+        <ant-contrib:then>
+            <keros:conditional-set-property  property = "keros-project.release.VERSION"  name = "keros-project.release.lib.FILE_NAME"  set = "${keros-project.project.DIR_NAME}-lib-${keros-project.release.VERSION}"      unset = "${keros-project.project.DIR_NAME}-lib"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.PREFIX"   name = "keros-project.release.lib.FILE_NAME"  set = "${keros-project.release.PREFIX}${keros-project.release.lib.FILE_NAME}"       unset = "${keros-project.release.lib.FILE_NAME}"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.POSTFIX"  name = "keros-project.release.lib.FILE_NAME"  set = "${keros-project.release.lib.FILE_NAME}${keros-project.release.POSTFIX}.jar"  unset = "${keros-project.release.lib.FILE_NAME}.jar"/>
+        </ant-contrib:then>
+    </ant-contrib:if>
+
+
+    <!--
+
+        If a release version has been defined, we will set our default
+        release document name to be the project name PLUS the version
+        number...  otherwise its just the project directory name.
+
+    -->
+    <ant-contrib:if>
+        <not>
+            <isset  property = "keros-project.release.lib.FILE_NAME"/>
+        </not>
+
+        <ant-contrib:then>
+            <keros:conditional-set-property  property = "keros-project.release.VERSION"  name = "keros-project.release.document.FILE_NAME"  set = "${keros-project.project.DIR_NAME}-doc-${keros-project.release.VERSION}"       unset = "${keros-project.project.DIR_NAME}-doc"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.PREFIX"   name = "keros-project.release.document.FILE_NAME"  set = "${keros-project.release.PREFIX}${keros-project.release.document.FILE_NAME}"   unset = "${keros-project.release.document.FILE_NAME}"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.POSTFIX"  name = "keros-project.release.document.FILE_NAME"  set = "${keros-project.release.document.FILE_NAME}${keros-project.release.POSTFIX}"  unset = "${keros-project.release.document.FILE_NAME}"/>
+        </ant-contrib:then>
+    </ant-contrib:if>
+
+
+    <!--
+
+        If a release version has been defined, we will set our default
+        release name to be the project name PLUS the version number...
+        otherwise its just the project directory name.
+
+    -->
+    <ant-contrib:if>
+        <not>
+            <isset  property = "keros-project.release.FILE_NAME"/>
+        </not>
+
+        <ant-contrib:then>
+            <keros:conditional-set-property  property = "keros-project.release.VERSION"  name = "keros-project.release.FILE_NAME"  set = "${keros-project.project.DIR_NAME}-${keros-project.release.VERSION}"  unset = "${keros-project.project.DIR_NAME}"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.PREFIX"   name = "keros-project.release.FILE_NAME"  set = "${keros-project.release.PREFIX}${keros-project.release.FILE_NAME}"   unset = "${keros-project.release.FILE_NAME}"/>
+
+            <keros:conditional-set-property  property = "keros-project.release.POSTFIX"  name = "keros-project.release.FILE_NAME"  set = "${keros-project.release.FILE_NAME}${keros-project.release.POSTFIX}"  unset = "${keros-project.release.FILE_NAME}"/>
+        </ant-contrib:then>
+    </ant-contrib:if>
+
+
+    <!--
+
+      ========================================================================
+                               Resources Properties
+      ========================================================================
+
+    -->
+
+    <keros:auto-property  property = "keros-project.resources.src.DIR_NAME"  default = "resources"/>
+    <keros:auto-property  property = "keros-project.resources.src.HOME"      default = "${keros-project.dev.HOME}/${keros-project.resources.src.DIR_NAME}"/>
+
+
+
+    <!--
+
+      ========================================================================
+                                      XSL Properties
+      ========================================================================
+
+    -->
+
+    <keros:auto-property  property = "keros-project.xsl.src.DIR_NAME"  default = "xsl"/>
+    <keros:auto-property  property = "keros-project.xsl.src.HOME"      default = "${keros-project.dev.HOME}/${keros-project.xsl.src.DIR_NAME}"/>
+
+
+
+    <!--
+
+      ========================================================================
+                                      XSD Properties
+      ========================================================================
+
+    -->
+
+    <keros:auto-property  property = "keros-project.xsd.src.DIR_NAME"  default = "xsd"/>
+    <keros:auto-property  property = "keros-project.xsd.SRC_HOME"      default = "${keros-project.dev.HOME}/${keros-project.xsd.src.DIR_NAME}"/>
+
+
+
+    <!--
+
+      ========================================================================
+                                      Ant Properties
+      ========================================================================
+
+    -->
+
+    <keros:auto-property  property = "keros-project.ant.src.DIR_NAME"                 default = "ant"/>
+    <keros:auto-property  property = "keros-project.ant.src.HOME"                     default = "${keros-project.dev.HOME}/${keros-project.ant.src.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.ant.document.generated.DIR_NAME"  default = "ant"/>
+    <keros:auto-property  property = "keros-project.ant.document.generated.HOME"      default = "${keros-project.document.generated.HOME}/${keros-project.ant.document.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.ant.document.INCLUDES"            default = "**/build.xml"/>
+
+
+    <!--
+
+        Lib includes.
+
+    -->
+    <keros:auto-property  property = "keros-project.lib.INCLUDES"  default = "**/*.jar, **/*.JAR, **/*.zip, **/*.ZIP"/>
+
+
+    <!--
+
+        Source release properties.
+
+    -->
+    <keros:auto-property  property = "keros-project.src.release.BASE_DIR"  default = "${keros-project.project.DIR_NAME}"/>
+    <keros:auto-property  property = "keros-project.src.release.EXCLUDES"  default = ".svn, .cvs"/>
+
+
+    <!--
+
+      ========================================================================
+                                      Java Properties
+      ========================================================================
+
+    -->
+
+    <keros:auto-property  property = "keros-project.java.project.NAME"          default = "Java Project"/>
+
+
+    <!--
+
+        Generated sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.java.classes.DIR_NAME"       default = "classes"/>
+    <keros:auto-property  property = "keros-project.java.classes.HOME"           default = "${keros-project.generated.HOME}/${keros-project.java.classes.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.java.test.classes.DIR_NAME"  default = "test-classes"/>
+    <keros:auto-property  property = "keros-project.java.test.classes.HOME"      default = "${keros-project.generated.HOME}/${keros-project.java.test.classes.DIR_NAME}"/>
+
+
+    <!--
+
+        Source sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.java.src.DIR_NAME"  default = "java"/>
+    <keros:auto-property  property = "keros-project.java.src.HOME"      default = "${keros-project.dev.HOME}/${keros-project.java.src.DIR_NAME}"/>
+
+    <keros:if-dir-exists  dir = "${keros-project.java.src.HOME}">
+        <keros:then>
+            <keros:conditional-set-property  name = "keros-project.java.src.PATH"  property = "keros-project.java.src.PATH"  set = "${keros-project.java.src.PATH}:${keros-project.java.src.HOME}"  unset = "${keros-project.java.src.HOME}"  is-warnable = "false"/>
+            <keros:set-property  property = "keros-project.java.IS_JAVA_PROJECT"  value = "true"  description = "Java directory is set, so set our flag denoting this scenario"/>
+        </keros:then>
+    </keros:if-dir-exists>
+
+
+    <!--
+
+        Java test source sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.java.test.src.DIR_NAME"  default = "java"/>
+    <keros:auto-property  property = "keros-project.java.test.src.HOME"      default = "${keros-project.test.HOME}/${keros-project.java.test.src.DIR_NAME}"/>
+
+
+    <!--
+
+        Lib includes.
+
+    -->
+    <keros:auto-property  property = "keros-project.lib.INCLUDES"  default = "**/*.jar, **/*.JAR, **/*.zip, **/*.ZIP"/>
+
+
+    <!--
+
+        Set-up java class path...
+
+    -->
+    <keros:if-dir-exists  dir = "${keros-project.lib.HOME}">
+        <keros:then>
+            <path  id = "keros-project.java.CLASS_PATH_REF_ID">
+                <pathelement  location = "${keros-project.java.classes.HOME}"/>
+
+                <fileset  dir = "${keros-project.lib.HOME}"  includes = "${keros-project.lib.INCLUDES}"/>
+            </path>
+        </keros:then>
+        <keros:else>
+            <path  id = "keros-project.java.CLASS_PATH_REF_ID">
+                <pathelement  location = "${keros-project.java.classes.HOME}"/>
+            </path>
+        </keros:else>
+    </keros:if-dir-exists>
+    
+
+    <!--
+
+        Set-up java test class path...
+
+    -->
+    <path  id = "keros-project.java.test.CLASS_PATH_REF_ID"  description = "Java test class path">
+        <path  refid = "keros-project.java.CLASS_PATH_REF_ID"/>
+
+        <pathelement  location = "${keros-project.java.test.classes.HOME}"/>
+    </path>
+
+
+    <!--
+
+        Java documentation properties.
+
+    -->
+    <keros:auto-property  property = "keros-project.java.document.generated.DIR_NAME"  default = "java"/>
+    <keros:auto-property  property = "keros-project.java.document.generated.HOME"      default = "${keros-project.document.generated.HOME}/${keros-project.java.document.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.java.document.PACKAGE_NAMES"       default = "*"/>
+
+    <keros:auto-property  property = "keros-project.java.document.OVERVIEW_FILE_NAME"  default = "overview.html"/>
+    <keros:auto-property  property = "keros-project.java.document.OVERVIEW_HOME"       default = "${keros-project.java.src.HOME}"/>
+    <keros:auto-property  property = "keros-project.java.document.OVERVIEW_FILE"       default = "${keros-project.java.document.OVERVIEW_HOME}/${keros-project.java.document.OVERVIEW_FILE_NAME}"/>
+
+
+    <!--
+
+      ========================================================================
+                             Global Properties
+      ========================================================================
+
+    -->
+
+    <!--
+
+        Documentation properties.
+
+    -->
+    <keros:auto-property  property = "keros-project.document.INDEX" default = "index.html"/>
+
+
+    <!--
+
+      ========================================================================
+                             Release Paths
+      ========================================================================
+
+    -->
+    <path  id = "keros-project.release.source.path.REF_ID"  description = "Default path for a source release.">
+        <fileset dir = "${keros-project.project.HOME}"  includes = "${keros-project.src.DIR_NAME}/**"   excludes = "${keros-project.src.release.EXCLUDES}"/>
+        <fileset dir = "${keros-project.project.HOME}"  includes = "${keros-project.test.DIR_NAME}/**"  excludes = "${keros-project.src.release.EXCLUDES}"/>
+        <fileset dir = "${keros-project.project.HOME}"  includes = "${keros-project.lib.DIR_NAME}/**"   excludes = "${keros-project.src.release.EXCLUDES}"/>
+        <fileset dir = "${keros-project.project.HOME}"  includes = "build.xml"/>
+        <fileset dir = "${keros-project.project.HOME}"  includes = "ivy.xml"/>
+    </path>
+
+    <keros:auto-property  property = "keros-project.release.source.PATH"  default = "keros-project.release.source.path.REF_ID"  description = "Property that holds the name of the source release's path ref id."/>
+
+
+    <path  id = "keros-project.release.document.path.REF_ID"  description = "Default path for a document release.">
+        <fileset dir = "${keros-project.document.src.HOME}"  excludes = "${keros-project.src.release.EXCLUDES}"/>
+        <fileset dir = "${keros-project.document.generated.HOME}"/>
+    </path>
+
+    <keros:auto-property  property = "keros-project.release.document.PATH"  default = "keros-project.release.document.path.REF_ID"  description = "Property that holds the name of the document release's path ref id."/>
+
+
+    <!--
+
+        Will print all properties to the console.
+
+    -->
+    <target  name = "keros-project.print.properties"  description = "Converts Ant scripts to HTML">
+        <echo>
+            ------------------------------------------------------------------
+
+                                KEROS ENVIRONMENT PROPERTIES
+
+            ------------------------------------------------------------------
+
+            keros-project.state.HOME                           =  ${keros.state.HOME}
+            
+            keros-project.ant.HOME                             =  ${keros-project.ant.HOME}
+            keros-project.ant.src.HOME                         =  ${keros-project.ant.src.HOME}
+            
+            keros-project.project.HOME                         =  ${keros-project.project.HOME}
+            keros-project.project.DIR_NAME                     =  ${keros-project.project.DIR_NAME}
+
+            keros-project.sub-project.HOME                     = ${keros-project.sub-project.HOME}
+            keros-project.sub-project.INCLUDES                 = ${keros-project.sub-project.INCLUDES}
+            
+            keros-project.property.FILE_NAME                   =  ${keros-project.property.FILE_NAME}
+            keros-project.property.FILE                        =  ${keros-project.property.FILE}
+
+            keros-project.assembly.DIR_NAME                    =  ${keros-project.assembly.DIR_NAME}
+            keros-project.assembly.HOME                        =  ${keros-project.assembly.HOME}
+
+            keros-project.lib.DIR_NAME                         =  ${keros-project.lib.DIR_NAME}
+            keros-project.lib.HOME                             =  ${keros-project.lib.HOME}
+
+            keros-project.resources.DIR_NAME                   =  ${keros-project.resources.DIR_NAME}
+            keros-project.resources.HOME                       =  ${keros-project.resources.HOME}
+
+            keros-project.src.DIR_NAME                         =  ${keros-project.src.DIR_NAME}
+            keros-project.src.HOME                             =  ${keros-project.src.HOME}
+
+            keros-project.dev.DIR_NAME                         =  ${keros-project.dev.DIR_NAME}
+            keros-project.dev.HOME                             =  ${keros-project.dev.HOME}
+
+            keros-project.test.DIR_NAME                        =  ${keros-project.test.DIR_NAME}
+            keros-project.test.HOME                            =  ${keros-project.test.HOME}
+
+            keros-project.document.src.DIR_NAME                =  ${keros-project.document.src.DIR_NAME}
+            keros-project.document.src.HOME                    =  ${keros-project.document.src.HOME}
+
+            keros-project.deploy.DIR_NAME                      =  ${keros-project.deploy.DIR_NAME}
+            keros-project.deploy.HOME                          =  ${keros-project.deploy.HOME}
+
+            keros-project.generated.DIR_NAME                   =  ${keros-project.generated.DIR_NAME}
+            keros-project.generated.HOME                       =  ${keros-project.generated.HOME}
+
+            keros-project.release.DIR_NAME                     =  ${keros-project.release.DIR_NAME}
+            keros-project.release.HOME                         =  ${keros-project.release.HOME}
+
+            keros-project.document.generated.DIR_NAME          =  ${keros-project.document.generated.DIR_NAME}
+            keros-project.document.generated.HOME              =  ${keros-project.document.generated.HOME}
+
+            keros-project.release.generated.DIR_NAME           =  ${keros-project.release.generated.DIR_NAME}
+            keros-project.release.generated.HOME               =  ${keros-project.release.generated.HOME}
+
+            keros-project.app.release.generated.DIR_NAME       =  ${keros-project.app.release.generated.DIR_NAME}
+            keros-project.app.release.generated.HOME           =  ${keros-project.app.release.generated.HOME}
+
+            keros-project.document.release.generated.DIR_NAME  =  ${keros-project.document.release.generated.DIR_NAME}
+            keros-project.document.release.generated.HOME      =  ${keros-project.document.release.generated.HOME}
+
+            keros-project.src.release.generated.DIR_NAME       =  ${keros-project.src.release.generated.DIR_NAME}
+            keros-project.src.release.generated.HOME           =  ${keros-project.src.release.generated.HOME}
+
+            keros-project.test.generated.DIR_NAME              =  ${keros-project.test.generated.DIR_NAME}
+            keros-project.test.generated.HOME                  =  ${keros-project.test.generated.HOME}
+
+            keros-project.release.VERSION                      =  ${keros-project.release.VERSION}
+            keros-project.release.PREFIX                       =  ${keros-project.release.PREFIX}
+            keros-project.release.POSTFIX                      =  ${keros-project.release.POSTFIX}
+
+            keros-project.resources.src.DIR_NAME               =  ${keros-project.resources.src.DIR_NAME}
+            keros-project.resources.src.HOME                   =  ${keros-project.resources.src.HOME}
+
+            keros-project.xsl.src.DIR_NAME                     =  ${keros-project.xsl.src.DIR_NAME}
+            keros-project.xsl.src.HOME                         =  ${keros-project.xsl.src.HOME}
+
+            keros-project.xsd.src.DIR_NAME                     =  ${keros-project.xsd.src.DIR_NAME}
+            keros-project.xsd.src.HOME                         =  ${keros-project.xsd.src.HOME}
+
+            keros-project.ant.src.DIR_NAME                     =  ${keros-project.ant.src.DIR_NAME}
+            keros-project.ant.src.HOME                         =  ${keros-project.ant.src.HOME}
+
+            keros-project.ant.document.generated.DIR_NAME      =  ${keros-project.ant.document.generated.DIR_NAME}
+            keros-project.ant.document.generated.HOME          =  ${keros-project.ant.document.generated.HOME}
+
+            keros-project.ant.document.INCLUDES                =  ${keros-project.ant.document.INCLUDES}
+
+            keros-project.svn.generated.DIR_NAME               =  ${keros-project.svn.generated.DIR_NAME}
+            keros-project.svn.generated.HOME                   =  ${keros-project.svn.generated.HOME}
+
+            keros-project.svn.document.generated.DIR_NAME      =  ${keros-project.svn.document.generated.DIR_NAME}
+            keros-project.svn.document.generated.HOME          =  ${keros-project.svn.document.generated.HOME}
+
+            keros-project.svn.src.DIR                          =  ${keros-project.svn.src.DIR}
+            keros-project.svn.DEST_DIR                         =  ${keros-project.svn.DEST_DIR}
+
+            keros-project.svn.LOG_FILE_NAME                    =  ${keros-project.svn.LOG_FILE_NAME}
+            keros-project.svn.LOG_FILE                         =  ${keros-project.svn.LOG_FILE}
+
+            keros-project.svn.document.INCLUDES                =  ${keros-project.svn.document.INCLUDES}
+
+            keros-project.svn.REV_START                        =  ${keros-project.svn.REV_START}
+            keros-project.svn.REV_END                          =  ${keros-project.svn.REV_END}
+
+            keros-project.java.project.NAME                    =  ${keros-project.java.project.NAME}
+
+            keros-project.java.classes.DIR_NAME                =  ${keros-project.java.classes.DIR_NAME}
+            keros-project.java.classes.HOME                    =  ${keros-project.java.classes.HOME}
+
+            keros-project.java.test.classes.DIR_NAME           =  ${keros-project.java.test.classes.DIR_NAME}
+            keros-project.java.test.classes.HOME               =  ${keros-project.java.test.classes.HOME}
+
+            keros-project.java.src.DIR_NAME                    =  ${keros-project.java.src.DIR_NAME}
+            keros-project.java.src.HOME                        =  ${keros-project.java.src.HOME}
+
+            keros-project.java.test.src.DIR_NAME               =  ${keros-project.java.test.src.DIR_NAME}
+            keros-project.java.test.src.HOME                   =  ${keros-project.java.test.src.HOME}
+
+            keros-project.javacc.IS_JAVACC_PROJECT             = ${keros-project.javacc.IS_JAVACC_PROJECT}
+
+            keros-project.javacc.src.DIR_NAME                  = ${keros-project.javacc.src.DIR_NAME}
+            keros-project.javacc.src.HOME                      = ${keros-project.javacc.src.HOME}
+
+            keros-project.javacc.generated.DIR_NAME            = ${keros-project.javacc.generated.DIR_NAME}
+            keros-project.javacc.generated.HOME                = ${keros-project.javacc.generated.HOME}
+
+            keros-project.javacc.STATIC                        = ${keros-project.javacc.STATIC}
+            keros-project.javacc.LISTFILES                     = ${keros-project.javacc.LISTFILES}
+
+            keros-project.lib.INCLUDES                         =  ${keros-project.lib.INCLUDES}
+
+            keros-project.jar.FILE_HOME                        =  ${keros-project.jar.FILE_HOME}
+            keros-project.jar.FILE_NAME                        =  ${keros-project.jar.FILE_NAME}
+
+            keros-project.jar.FILE                             =  ${keros-project.jar.FILE}
+
+            keros-project.src.release.BASE_DIR                 =  ${keros-project.src.release.BASE_DIR}
+            keros-project.src.release.EXCLUDE                  =  ${keros-project.src.release.EXCLUDE}
+
+            keros-project.java.document.generated.DIR_NAME     =  ${keros-project.java.document.generated.DIR_NAME}
+            keros-project.java.document.generated.HOME         =  ${keros-project.java.document.generated.HOME}
+
+            keros-project.java.document.PACKAGE_NAMES          =  ${keros-project.java.document.PACKAGE_NAMES}
+
+            keros-project.java.document.OVERVIEW_FILE_NAME     =  ${keros-project.java.document.OVERVIEW_FILE_NAME}
+            keros-project.java.document.OVERVIEW_HOME          =  ${keros-project.java.document.OVERVIEW_HOME}
+            keros-project.java.document.OVERVIEW_FILE          =  ${keros-project.java.document.OVERVIEW_FILE}
+
+            keros-project.java.IS_JAVA_PROJECT                 = ${keros-project.java.IS_JAVA_PROJECT}
+            keros-project.java.src.PATH                        =  ${keros-project.java.src.PATH}
+            keros-project.java.test.src.PATH                   =  ${keros-project.java.test.src.PATH}
+
+            keros-project.java.src.PATH                        =  ${keros-project.java.src.PATH}
+
+            keros-project.java.test.src.PATH                   =  ${keros-project.java.test.src.PATH}
+
+            keros-project.document.INDEX                       =  ${keros-project.document.INDEX}
+        </echo>
+    </target>
+
+    <!--
+
+      ========================================================================
+                               Resources Targets
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+      ========================================================================
+                                      XSL Targets
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+      ========================================================================
+                                      XSD Targets
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+      ========================================================================
+                                      Ant Targets
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+        Override for Ant document preprocessing...
+
+    -->
+    <target  name = "keros-project.document.ant.preprocess"  description = "Override for Ant document preprocessing"/>
+
+
+	<!--
+
+        This target will create HTML for all build scripts...
+
+	-->
+    <target  name = "keros-project.document.ant.process"  description = "Default logic for Ant document generation">
+        <keros:ant2html  basedir = "${keros-project.project.HOME}"  dest-dir = "${keros-project.ant.document.generated.HOME}"  includes = "${keros-project.ant.document.INCLUDES}"  version = "${keros-project.release.VERSION}"/>
+    </target>
+
+
+    <!--
+
+        Override for Ant document postprocessing...
+
+    -->
+    <target  name = "keros-project.document.ant.postprocess"  description = "Override for Ant document postprocessing"/>
+
+
+    <!--
+
+        Generates HTML for Ant scripts - including pre/post processing...
+
+    -->
+    <target  name = "keros-project.document.ant"  depends = "keros-project.document.svn.preprocess, keros-project.document.ant.process, keros-project.document.ant.postprocess"  unless = "keros-project.document.ant.SKIP"  description = "Create HTML for all Ant build scripts."/>
+
+    <!--
+
+      ========================================================================
+                                   Subversion 
+      ========================================================================
+
+    -->
+
+    <!-- ======================================================================== -->
+
+    <keros:auto-property  property = "keros-project.svn.generated.DIR_NAME"           default = "svn"/>
+    <keros:auto-property  property = "keros-project.svn.generated.HOME"               default = "${keros-project.generated.HOME}/${keros-project.svn.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.svn.document.generated.DIR_NAME"  default = "svn"/>
+    <keros:auto-property  property = "keros-project.svn.document.generated.HOME"      default = "${keros-project.document.generated.HOME}/${keros-project.svn.document.generated.DIR_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.svn.src.DIR"                      default = "${keros-project.project.HOME}"/>
+    <keros:auto-property  property = "keros-project.svn.DEST_DIR"                     default = "${keros-project.svn.document.generated.HOME}"/>
+
+    <keros:auto-property  property = "keros-project.svn.LOG_FILE_NAME"                default = "svn-log.xml"/>
+    <keros:auto-property  property = "keros-project.svn.LOG_FILE"                     default = "${keros-project.svn.generated.HOME}/${keros-project.svn.LOG_FILE_NAME}"/>
+
+    <keros:auto-property  property = "keros-project.svn.document.INCLUDES"            default = "**/*.xml"/>
+
+    <keros:auto-property  property = "keros-project.svn.REV_START"                    default = "0"/>
+    <keros:auto-property  property = "keros-project.svn.REV_END"                      default = "HEAD"/>
+
+        <!-- ======================================================================== -->
+
+    <!--
+
+        Override to handle any postprocessing logic when doucmenting Subversion logs...
+
+    -->
+    <target  name = "keros-project.document.svn.preprocess"  description = "Override to handle any postprocessing logic when doucmenting Subversion logs"/>
+
+
+    <!--
+
+        Default logic to document Subversion logs...
+
+    -->
+    <target  name = "keros-project.document.svn.process"  description = "Default logic to document Subversion logs">
+        <keros:svn2html  src-dir = "${keros-project.svn.src.DIR}"  dest-dir = "${keros-project.svn.DEST_DIR}"  log-file = "${keros-project.svn.LOG_FILE}"  rev-start = "${keros-project.svn.REV_START}"  rev-end = "${keros-project.svn.REV_END}"  version = "${keros-project.release.VERSION}"/>
+    </target>
+
+
+    <!--
+
+        Override to handle any preprocessing logic when doucmenting Subversion logs...
+
+    -->
+    <target  name = "keros-project.document.svn.postprocess"  description = "Override to handle any preprocessing logic when doucmenting Subversion logs"/>
+
+
+	<!--
+
+        Generates HTML for Subversion logs - including pre/post processing...
+
+	-->
+    <target  name = "keros-project.document.svn"  depends = "keros-project.document.svn.preprocess, keros-project.document.svn.process, keros-project.document.svn.postprocess"  unless = "keros-project.document.svn.SKIP"  description = "Create HTML for subversion log information."/>
+
+
+    <!--
+
+      ========================================================================
+                                      Java Targets
+      ========================================================================
+
+    -->
+
+    <!--
+
+        This target cleans up the build area...
+
+	-->
+	<target  name = "keros-project.java.clean"  description = "Clean up java build">
+		<delete  dir = "${keros-project.java.classes.HOME}"/>
+		<delete  dir = "${keros-project.java.test.classes.HOME}"/>
+	</target>
+
+
+	<!--
+
+        This target will create the appropriate directories...
+
+	-->
+	<target  name = "keros-project.java.create.build-dirs"  description = "Create java build directories">
+		<mkdir  dir = "${keros-project.java.classes.HOME}"/>
+        <mkdir  dir = "${keros-project.java.test.classes.HOME}"/>
+    </target>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to generate Java code...
+
+    -->
+    <target  name = "keros-project.java.generate"  description = "Override to handle any Java code generation"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+        
+        Override to handle any preprocessing logic when compiling Java src...
+
+    -->
+    <target  name = "keros-project.java.compile.preprocess"  description = "Override to handle any preprocessing logic when compiling Java src"/>
+
+
+    <!--
+
+        Provides default logic for compiling Java src...
+
+    -->
+    <target  name = "keros-project.java.compile.process"  if  = "keros-project.java.IS_JAVA_PROJECT"  description = "Called to generate">
+        <javac  srcdir = "${keros-project.java.src.PATH}"  sourcepath = "${keros-project.java.src.PATH}"  destdir = "${keros-project.java.classes.HOME}"  debug = "true">
+            <classpath    refid = "keros-project.java.CLASS_PATH_REF_ID"/>
+            <compilerarg  value = "-Xlint:unchecked"/>
+        </javac>
+    </target>
+
+
+    <!--
+        
+        Override to handle any postprocessing logic when compiling Java src...
+
+    -->
+    <target  name = "keros-project.java.compile.postprocess"  description = "Override to handle any postprocessing logic when compiling Java src"/>
+
+
+    <!--
+
+        Compile Java src - ensure pre/post processing as well as actual compilation.
+
+    -->
+    <target  name = "keros-project.java.compile"  depends = "keros-project.java.compile.preprocess, keros-project.java.compile.process, keros-project.java.compile.postprocess"  unless = "keros-project.java.compile.SKIP"  description = "Compile Java src"/>
+
+
+    <!-- ======================================================================== -->
+
+    <target  name = "keros-project.java.compile.test.preprocess"  description = "Compile java source"/>
+
+	<!--
+
+        This task will compile all java test source...
+
+	-->
+	<target  name = "keros-project.java.compile.test.process"  if = "keros-project.java.test.src.PATH"  description = "Compile java test source"> 
+        <javac  srcdir = "${keros-project.java.test.src.HOME}"  sourcepath = "${keros-project.java.test.src.PATH}"  destdir = "${keros-project.java.test.classes.HOME}"  debug = "true">
+            <classpath    refid = "keros-project.java.test.CLASS_PATH_REF_ID"/>
+            <compilerarg  value = "-Xlint:unchecked"/>
+        </javac>
+	</target>
+
+    <target  name = "keros-project.java.compile.test.postprocess"  description = "Compile java source"/>
+
+    <target  name = "keros-project.java.compile.test"  unless = "keros-project.java.compile.test.SKIP"  depends = "keros-project.java.compile.test.preprocess, keros-project.java.compile, keros-project.java.compile.test.process, keros-project.java.compile.test.postprocess"  description = "Compile java test source"/> 
+
+    <!-- ======================================================================== -->
+
+    <target  name = "keros-project.java.jar.preprocess"  description = "Override to handle any Java jar preprocessing"/>
+
+	<!--
+
+        This task will jar java...
+
+	-->
+    <target  name = "keros-project.java.jar.process"  if = "keros-project.java.IS_JAVA_PROJECT"  description = "Default processing to jar Java">
+        <mkdir  dir = "${keros-project.jar.FILE_HOME}"/>
+        <jar  destfile = "${keros-project.jar.FILE}"  basedir = "${keros-project.java.classes.HOME}"/>
+    </target>
+
+    <target  name = "keros-project.java.jar.postprocess"  description = "Override to handle any Java jar postprocessing"/>
+
+    <target  name = "keros-project.java.jar"  unless = "keros-project.java.jar.SKIP"  depends = "keros-project.java.jar.preprocess, keros-project.compile, keros-project.java.jar.process, keros-project.java.jar.postprocess"  description = "Compile java source"/>
+
+    <!-- ======================================================================== -->
+
+
+    <target  name = "keros-project.java.test.preprocess"  description = "Override to handle any Java test preprocessing"/>
+
+	<!--
+
+        This task will test Java...
+
+	-->
+    <target  name = "keros-project.java.test.process"  description = "Override to handle any Java test processing"/>
+
+    <target  name = "keros-project.java.test.postprocess"  description = "Override to handle any Java test postprocessing"/>
+
+    <target  name = "keros-project.java.test"  unless = "keros-project.java.test.SKIP"  depends = "keros-project.java.test.preprocess, keros-project.java.compile.test, keros-project.java.test.process, keros-project.java.test.postprocess"  description = "Test Java"/> 
+
+    <!-- ======================================================================== -->
+
+    <target  name = "keros-project.java.analyze.preprocess"  description = "Override to hande any Java analysis preprocessing"/>
+
+	<!--
+
+        This task will analyze java bugs...
+
+	-->
+    <target  name = "keros-project.java.analyze.process"  description = "Default process for Java analysis"/>
+
+    <target  name = "keros-project.java.analyze.postprocess"  description = "Override to hande any Java analysis postprocessing"/>
+
+    <target  name = "keros-project.java.analyze"  unless = "keros-project.java.analyze.SKIP"  depends = "keros-project.java.analyze.preprocess, keros-project.java.analyze.process, keros-project.java.analyze.postprocess"  description = "Analyzes java - code, etc"/> 
+
+    <!-- ======================================================================== -->
+
+    <target  name = "keros-project.java.document.preprocess"  description = "Document java source"/> 
+
+	<!--
+
+        This task will java document source...
+
+	-->
+    <target  name = "keros-project.java.document.process"  if = "keros-project.java.IS_JAVA_PROJECT" description = "Document java source"> 
+        <javadoc  sourcepath = "${keros-project.java.src.PATH}"  classpathref = "keros-project.java.CLASS_PATH_REF_ID"  destdir = "${keros-project.java.document.generated.HOME}"  packagenames = "${keros-project.java.document.PACKAGE_NAMES}"  author = "true" private = "true"  windowtitle = "${keros-project.java.project.NAME}"  overview = "${keros-project.java.document.OVERVIEW_FILE}"/>
+	</target>
+
+    <target  name = "keros-project.java.document.postprocess"  description = "Document java source"/> 
+
+    <target  name = "keros-project.java.document"  unless = "keros-project.java.document.SKIP"  depends = "keros-project.java.document.preprocess, keros-project.java.document.process, keros-project.java.document.postprocess"  description = "Document java source"/> 
+
+    <!--
+
+      ========================================================================
+                                      JavaCC Properties
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+        Source sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.javacc.src.DIR_NAME"  default = "javacc"/>
+    <keros:auto-property  property = "keros-project.javacc.src.HOME"      default = "${keros-project.dev.HOME}/${keros-project.javacc.src.DIR_NAME}"/>
+
+    <!--
+
+        Generated sub-directories...
+
+    -->
+    <keros:auto-property  property = "keros-project.javacc.generated.DIR_NAME"  default = "${keros-project.javacc.src.DIR_NAME}"/>
+    <keros:auto-property  property = "keros-project.javacc.generated.HOME"      default = "${keros-project.generated.HOME}/${keros-project.javacc.generated.DIR_NAME}"/>
+
+
+    <keros:if-dir-exists  dir = "${keros-project.javacc.src.HOME}">
+        <keros:then>
+            <keros:conditional-set-property  name = "keros-project.java.src.PATH"  property = "keros-project.java.src.PATH"  set = "${keros-project.java.src.PATH}:${keros-project.javacc.generated.HOME}"  unset = "${keros-project.java.src.HOME}"  is-warnable = "false"/>
+            <keros:set-property  property = "keros-project.java.IS_JAVA_PROJECT"      value = "true"  description = "We have JavaCC source to generate to Java - we will need to compile this"/>
+            <keros:set-property  property = "keros-project.javacc.IS_JAVACC_PROJECT"  value = "true"  description = "Java CC directory is set, so set our flag denoting this scenario"/>
+        </keros:then>
+    </keros:if-dir-exists>
+
+    <!--
+
+        Miscellaneous JavaCC properties...
+
+    -->
+    <keros:auto-property  property = "keros-project.javacc.STATIC"      default = "false"/>
+    <keros:auto-property  property = "keros-project.javacc.LISTFILES"   default = "true"/>
+
+
+    <!--
+
+        Override for any JavaCC preprocessing...
+
+    -->
+    <target  name = "keros-project.javacc.generate.preprocess"  description = "Override for any JavaCC preprocessing"/>
+
+
+    <!--
+
+        This will process generating Java for JavaCC...
+
+    -->
+    <target  name = "keros-project.javacc.generate.process"  if = "keros-project.javacc.IS_JAVACC_PROJECT"  description = "Generate Java files from JavaCC">
+        <keros:javacc2java  src-dir = "${keros-project.javacc.src.HOME}"  dest-dir = "${keros-project.javacc.generated.HOME}"  javacc-home = "${keros.dependency.HOME}"  static = "${keros-project.javacc.STATIC}"  listfiles = "${keros-project.javacc.LISTFILES}"  description = "Generated Java from JavaCC"/>
+    </target>
+
+
+    <!--
+
+        Override for any JavaCC postprocessing...
+
+    -->
+    <target  name = "keros-project.javacc.generate.postprocess"  description = "Override for any JavaCC postprocessing"/>
+
+
+    <!--
+
+        This will kick off JavaCC...
+
+    -->
+    <target  name = "keros-project.javacc.generate"  unless = "keros-project.javacc.generate.SKIP"  depends = "keros-project.javacc.generate.preprocess, keros-project.javacc.generate.process, keros-project.javacc.generate.postprocess"  description = "Generate Java files from JavaCC"/>
+
+
+    <!--
+
+      ========================================================================
+                                    Global Targets
+      ========================================================================
+
+    -->
+
+
+    <!--
+
+        This will clean the build area.
+
+    -->
+    <target  name = "keros-project.clean"  description = "Clean build environment">
+        <delete  dir="${keros-project.assembly.HOME}"/>
+    </target>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        This will clean the generated area.
+
+    -->
+    <target  name = "keros-project.generate.clean"  description = "Clean build environment">
+        <delete  dir="${keros-project.generated.HOME}"/>
+    </target>
+
+
+    <!--
+
+        Override to handle any preprocessing logic when generating...
+
+    -->
+    <target  name = "keros-project.generate.preprocess"  description = "Override to handle any preprocessing logic when generating"/>
+
+
+    <!--
+
+        Override to define what should occur to generate...
+
+    -->
+    <target  name = "keros-project.generate.process"  description = "Override to define what should occur to generate"/>
+
+
+    <!--
+
+        Override to handle any postprocessing logic when generating...
+
+    -->
+    <target  name = "keros-project.generate.postprocess"  description = "Override to handle any postprocessing logic when generating"/>
+
+
+    <!--
+
+        This will get all code generation to occur.
+
+    -->
+    <target  name = "keros-project.generate"  depends = "keros-project.generate.preprocess, keros-project.java.generate, keros-project.generate.process, keros-project.generate.postprocess"  unless = "keros-project.generate.SKIP"  description = "Generate files"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to handle any preprocessing logic when compiling code...
+    
+    -->
+    <target  name = "keros-project.compile.preprocess"  description = "Override to handle any preprocessing logic when compiling code"/>
+
+
+    <!--
+
+        Override to define what should occur when compiling code...
+    
+    -->
+    <target  name = "keros-project.compile.process"  description = "Override to define what should occur when compiling code"/>
+
+
+    <!--
+
+        Override to handle any postprocessing logic when compiling code...
+    
+    -->
+    <target  name = "keros-project.compile.postprocess"  description = "Override to handle any postprocessing logic when compiling code"/>
+
+
+    <!--
+
+        This will get all code generation to occur.
+
+    -->
+    <target  name = "keros-project.compile"   depends = "keros-project.compile.preprocess, keros-project.compile.process, keros-project.compile.postprocess"   unless = "keros-project.compile.SKIP"  description = "Perform compilation"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to handle any preprocessing logic when compiling test code...
+
+    -->
+    <target  name = "keros-project.compile.test.preprocess"  description = "Override to handle any preprocessing logic when compiling test code"/>
+
+
+    <!--
+
+        Override to define what should occur to compiling test code...
+
+    -->
+    <target  name = "keros-project.compile.test.process"  description = "Override to define what should occur to compile test code"/>
+
+
+    <!--
+
+        Override to handle any postprocessing logic when compiling test code...
+
+    -->
+    <target  name = "keros-project.compile.test.postprocess"  description = "Override to handle any postprocessing logic when compiling test code"/>
+
+
+    <!--
+
+        This will get all code generation to occur.
+
+    -->
+    <target  name = "keros-project.compile.test" depends = "keros-project.compile, keros-project.compile.test.preprocess, keros-project.compile.test.process, keros-project.compile.test.postprocess"  unless = "keros-project.compile.test.SKIP"  description = "Perform test compilation"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to handle any postprocess logic when testing...
+
+    -->
+    <target  name = "keros-project.test.preprocess"  description = "Override to handle any postprocess logic when testing"/>
+
+
+    <!--
+
+        Override to define what should occur for testing...
+
+    -->
+    <target  name = "keros-project.test.process"  description = "Override to define what should occur for testing"/>
+
+
+    <!--
+
+        Override to handle any postprocess logic when testing...
+
+    -->
+    <target  name = "keros-project.test.postprocess"  description = "Override to handle any postprocess logic when testing"/>
+
+
+    <!--
+
+        This will perform testing.
+
+    -->
+    <target  name = "keros-project.test" depends = "keros-project.test.preprocess, keros-project.test.process, keros-project.test.postprocess"  unless = "keros-project.test.SKIP"  description = "Perform Testing"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to handle any preprocessing logic when creating documentation...
+
+    -->
+    <target  name = "keros-project.document.preprocess"  description = "Override to handle any preprocessing logic when creating documentation"/>
+
+
+    <!--
+
+        Override to define what documention shoud occur...
+
+    -->
+    <target  name = "keros-project.document.process"  description = "Override to define what documention shoud occur"/>
+
+
+    <!--
+
+        Override to handle any postprocessing logic when creating documentation...
+
+    -->
+    <target  name = "keros-project.document.postprocess"  description = "Override to handle any postprocessing logic when creating documentation"/>
+
+
+    <!--
+
+        Used to document sounce.
+
+    -->
+    <target  name = "keros-project.document"  depends = "keros-project.document.preprocess, keros-project.document.process, keros-project.document.postprocess"  unless = "keros-project.document.SKIP"  description = "Create documentation"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        Override to handle any preprocessing logic when analyzing...
+
+    -->
+    <target  name = "keros-project.analyze.preprocess"  description = "Override to handle any preprocessing logic when analyzing"/>
+
+
+    <!--
+
+        Override to define what analysis should occur...
+
+    -->
+    <target  name = "keros-project.analyze.process"  description = "Override to define what analysis should occur"/>
+
+
+    <!--
+
+        Override to handle any postprocessing logic when analyzing...
+
+    -->
+    <target  name = "keros-project.analyze.postprocess"  description = "Override to handle any postprocessing logic when analyzing"/>
+
+
+    <!--
+
+        Ananlyze code - ensure pre/post processing as well as analyzing.
+
+    -->
+    <target  name = "keros-project.analyze"  depends = "keros-project.analyze.preprocess, keros-project.analyze.process, keros-project.analyze.postprocess"  unless = "keros-project.analyze.SKIP"  description = "Analyze a project"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+        
+        Override to handle any preprocessing logic when creating source releases...
+
+    -->
+    <target  name = "keros-project.release.source.preprocess"  description = "Called when pre generating"/>
+
+
+    <!--
+
+        Provides default logic for creating source releases...
+
+    -->
+    <target  name = "keros-project.release.source.process"  description = "Called to generate">
+        <keros:release  base-file = "${keros-project.release.src.FILE_NAME}"  base-dir = "${keros-project.src.release.BASE_DIR}"  dir = "${keros-project.src.release.generated.HOME}"  stage-dir = "${keros-project.release.HOME}">
+            <keros:release-fileset>
+                <path  refid = "${keros-project.release.source.PATH}"/>
+            </keros:release-fileset>
+        </keros:release>
+    </target>
+
+
+    <!--
+        
+        Override to handle any postprocessing logic when creating source releases...
+
+    -->
+    <target  name = "keros-project.release.source.postprocess"  description = "Called after generating"/>
+
+
+    <!--
+
+        Creates source releases - ensure pre/post processing as well as actual source release creation.
+
+        <p/>
+
+        Please note, to use a version number, set the property keros-project.release.NUMBER.
+
+    -->
+    <target  name = "keros-project.release.source"  depends = "keros-project.release.source.preprocess, keros-project.release.source.process, keros-project.release.source.postprocess"  unless = "keros-project.release.source.SKIP"  description = "Create a source release"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+        
+        Override to handle any preprocessing logic when creating document releases...
+
+    -->
+    <target  name = "keros-project.release.document.preprocess"  description = "Overrride to handle any preprocessing logic when creating document releases."/>
+
+
+    <!--
+
+        Provides default logic for creating document releases...
+
+    -->
+    <target  name = "keros-project.release.document.process"  description = "Default logic to create document releases">
+        <keros:release  dir = "${keros-project.document.release.generated.HOME}"  stage-dir = "${keros-project.release.HOME}"  base-file = "${keros-project.release.document.FILE_NAME}" base-dir="${keros-project.release.FILE_NAME}">
+
+            <keros:release-fileset>
+                <path  refid = "${keros-project.release.document.PATH}"/>
+            </keros:release-fileset>
+
+            <keros:post-stage-processing>
+                <keros:conditional-set-property  name = "keros-project.release.document.CREATE_DOCUMENT_RELEASE_VERSION"  property = "keros-project.release.VERSION"  set = "${keros-project.release.VERSION}"  unset = ""  is-warnable = "false"/>
+                <replace  dir = "${keros-project.document.release.generated.HOME}"  token = "@keros-project.release.VERSION@"  value = "${keros-project.release.document.CREATE_DOCUMENT_RELEASE_VERSION}"/>
+            </keros:post-stage-processing>
+        </keros:release>
+    </target>
+
+
+    <!--
+        
+        Override to handle any postprocessing logic when creating document releases...
+
+    -->
+    <target  name = "keros-project.release.document.postprocess"  description = "Override to handle any postprocess logic when creating document releases."/>
+
+
+    <!--
+
+        Creates document releases - ensure pre/post processing as well as actual document release creation.
+
+    -->
+    <target  name = "keros-project.release.document"  depends = "keros-project.release.document.preprocess, keros-project.release.document.process, keros-project.release.document.postprocess"  unless = "keros-project.release.document.SKIP"  description = "Create documentation release"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+        
+        Override to handle any preprocessing logic when creating application releases.
+
+    -->
+    <target  name = "keros-project.release.application.preprocess"  description = "Override to handle any preprocessing logic when creating application releases."/>
+
+
+    <!--
+        
+        Override to provide logic for creating application releases.  As there are so many
+        application types (for example Java applications), this is a no-op target.
+
+    -->
+    <target  name = "keros-project.release.application.process"  description = "Override to provide logic for creating an application release."/>
+
+
+    <!--
+        
+        Override to handle any postprocessing logic when creating application releases.
+
+    -->
+    <target  name = "keros-project.release.application.postprocess"  description = "Override to handle any postprocessing logic when creating application releases."/>
+
+
+    <!--
+
+        Creates application releases, ensuring pre/psot processing as well as actual application release creation.
+
+    -->
+    <target  name = "keros-project.release.application"  depends = "keros-project.release.application.preprocess, keros-project.release.application.process, keros-project.release.application.postprocess"  unless = "keros-project.release.application.SKIP"  description = "Create application release"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+        
+        Override to handle any preprocessing logic when processing sub-projects...
+
+    -->
+    <target  name = "keros-project.sub-projects.preprocess"  description = "Override to handle any preprocessing logic when processing sub-projects"/>
+
+
+    <!--
+
+        Provides default logic for processing sub-projects...
+
+    -->
+    <target  name = "keros-project.sub-projects.process"  description = "Called to generate">
+        <ivy:buildlist  reference = "keros-project.sub-projects.BUILD_LIST">
+            <fileset  dir = "${keros-project.sub-project.HOME}"  includes = "${keros-project.sub-project.INCLUDES}"  excludes = "build.xml"/>
+        </ivy:buildlist>
+
+        <subant  buildpathref = "keros-project.sub-projects.BUILD_LIST">
+            <!--
+                Let the main build file the imported keros-project.xml control
+                building sub-projetcs.
+            -->
+            <property  name = "keros-project.sub-projects.SKIP"  value = "true"/>
+        </subant>
+    </target>
+
+
+    <!--
+        
+        Override to handle any postprocessing logic when processing sub-projects...
+
+    -->
+    <target  name = "keros-project.sub-projects.postprocess"  description = "Override to handle any postprocessing logic when processing sub-projects"/>
+
+
+    <!--
+
+        Process sub-projects - ensure pre/post processing as well as actual sub-project processing.
+
+    -->
+    <target  name = "keros-project.sub-projects"  depends = "keros-project.sub-projects.preprocess, keros-project.sub-projects.process, keros-project.sub-projects.postprocess"  unless = "keros-project.sub-projects.SKIP"  description = "Process sub-projects"/>
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        This will clean the release area.
+
+    -->
+    <target  name = "keros-project.release.clean"  description = "Clean-up the release area">
+        <delete  dir="${keros-project.release.HOME}"/>
+    </target>
+
+
+    <!--
+
+        This will create a release.  By default a release is simply a code release.  It will be up
+        to project specific implementation to "do the right thing."
+
+    -->
+    <target  name = "keros-project.release" depends = "keros-project.clean, keros-project.sub-projects, keros-project.generate, keros-project.compile, keros-project.test, keros-project.analyze,  keros-project.release.source, keros-project.release.document, keros-project.release.application"  description = "Create a release">
+        <keros:release  dir = "${keros-project.app.release.generated.HOME}"  stage-dir = "${keros-project.release.HOME}"  base-file = "${keros-project.release.FILE_NAME}">
+            <keros:pre-processing>
+                <mkdir  dir = "${keros-project.app.release.generated.HOME}/lib"/>
+
+                <copy  todir = "${keros-project.app.release.generated.HOME}/lib">
+                    <fileset  file = "${keros-project.jar.FILE}"/>
+                </copy>
+
+                <keros:if-dir-exists  dir = "${keros-project.project.HOME}/${keros-project.lib.DIR_NAME}">
+                    <keros:then>
+                        <copy  todir = "${keros-project.app.release.generated.HOME}/lib">
+                            <fileset  dir  = "${keros-project.project.HOME}/${keros-project.lib.DIR_NAME}"  includes = "**"  excludes = "${keros-project.src.release.EXCLUDES}"/>
+                        </copy>
+                    </keros:then>
+                </keros:if-dir-exists>
+
+                <mkdir  dir = "${keros-project.app.release.generated.HOME}/doc"/>
+
+                <keros:if-dir-exists  dir = "${keros-project.document.release.generated.HOME}">
+                    <keros:then>
+                        <copy  todir = "${keros-project.app.release.generated.HOME}/doc">
+                            <fileset  dir = "${keros-project.document.release.generated.HOME}"  includes = "**"/>
+                        </copy>
+                    </keros:then>
+                </keros:if-dir-exists>
+            </keros:pre-processing>
+
+            <keros:release-fileset>
+                <fileset dir  = "${keros-project.app.release.generated.HOME}"  includes = "lib/**, doc/**"/>
+            </keros:release-fileset>
+
+            <keros:post-processing>
+                <copy  file = "${keros-project.jar.FILE}"  todir = "${keros-project.release.HOME}"/>
+            </keros:post-processing>
+        </keros:release>
+    </target>
+
+    <!--
+    <target  name = "keros-project.java.release"  unless = "keros-project.java.release.SKIP"  depends = "keros-project.java.release.preprocess, keros-project.release.clean, keros-project.sub-projects, keros-project.generate, keros-project.compile, keros-project.java.jar, keros-project.test, keros-project.java.test, keros-project.analyze, keros-project.java.analyze, keros-project.java.document.release, keros-project.java.release.process, keros-project.java.release.postprocess"  description = "Create java release"/>
+    -->
+
+
+
+    <!-- ======================================================================== -->
+
+
+    <!--
+
+        This will get all code generation to occur.
+
+    -->
+    <target  name = "keros-project.all" depends = "keros-project.release"  description = "Build everything"/>
+</project>

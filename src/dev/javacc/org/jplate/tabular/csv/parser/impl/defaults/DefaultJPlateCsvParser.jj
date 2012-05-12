@@ -1,0 +1,444 @@
+PARSER_BEGIN ( DefaultJPlateCsvParser )
+
+package org.jplate.tabular.csv.parser.impl.defaults;
+
+
+import java.io.StringReader;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.jplate.JPlateException;
+
+import org.jplate.foundation.parser.javacc.impl.AbstractJavaccParser;
+
+import org.jplate.tabular.csv.parser.CsvBuilderIfc;
+import org.jplate.tabular.csv.parser.CsvParserIfc;
+
+
+
+/**
+ 
+    This implementation of a CSV parser deviates from
+    <a  href = "http://www.rfc-editor.org/rfc/rfc4180.txt">RFC 4180</a> in that a
+    record may end with a comma as well as allow fields to be denoted as empty using
+    double commas or preceeding/postceeding commas.  For example:
+    
+    <p/>
+    
+    <ul>
+        <li> foo,bar, </li>
+        <li> ,foo,bar </li>
+        <li> ,foo,bar, </li>
+        <li> foo,,bar </li>
+        <li> ,foo,,bar, </li>
+    </ul>
+
+    <b>Please note:</b>  The above is the only deviation with RFC 4180.  For a
+    strict implementation, use the parser {@link DefaultRfc4180CsvParser} also
+    found in this package.
+
+    <b><i>Additionally:</i></b>  This class is <i>not</i> thread-safe.
+
+
+    <p/><a  name = "Examples"/>
+    The following are some examples on how to use this class.  Assume some
+    implemention of {@link org.jplate.tabular.csv.parser.CsvBuilderIfc}
+    exists.<br/>
+
+    <p/>
+
+    <ul>
+        <li>
+            Parsing from an {@link java.io.InputStream}:
+            <pre>
+final CsvBuilderIfc builder = // Some implementation...
+
+final CsvParserIfc parser = new DefaultJPlateCsvParser ();
+
+final InputStream inputStream = new FileInputStream ( "MyCsvFile.csv" );
+
+parser.parse ( inputStream, builder );
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.Reader}:
+            <pre>
+final CsvBuilderIfc builder = // Some implementation...
+
+final CsvParserIfc parser = new DefaultJPlateCsvParser ();
+
+final Reader reader = new FileReader ( "MyCsvFile.csv" );
+
+parser.parse ( reader, builder );            
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.lang.String}:
+            <pre>
+final CsvBuilderIfc builder = // Some implementation...
+
+final CsvParserIfc parser = new DefaultJPlateCsvParser ();
+
+final String string = // Contains CSV data in the form of a String.
+
+parser.parse ( string, builder );                
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.File}:
+            <pre>
+final CsvBuilderIfc builder = // Some implementation...
+
+final CsvParserIfc parser = new DefaultJPlateCsvParser ();
+
+final File file = new File ( "MyCsvFile.csv" );
+
+parser.parse ( file, builder );
+            </pre>
+        </li>
+    </ul>
+
+    <p/>
+
+    <pre>
+Modifications:
+    $Date: 2008-12-02 12:32:45 -0500 (Tue, 02 Dec 2008) $
+    $Revision: 479 $
+    $Author: sfloess $
+    $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/src/dev/javacc/org/jplate/tabular/csv/parser/impl/defaults/DefaultJPlateCsvParser.jj $
+    </pre>
+
+    @see DefaultRfc4180CsvParser
+
+
+*/
+public final class DefaultJPlateCsvParser <B extends CsvBuilderIfc <?>>
+    extends AbstractJavaccParser <B>
+        implements CsvParserIfc <B>
+{
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Static class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static methods follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * Used for logging.
+     *
+     */
+    private final transient Log _log =
+        LogFactory.getLog ( DefaultJPlateCsvParser.class );
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Constructor definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * Default constructor.
+     *
+     */
+    public DefaultJPlateCsvParser ()
+    {
+        this ( new StringReader ( "" ) );
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug ( "New DefaultJPlateCsvParser created" );
+        }
+    }
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance method definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+}
+
+PARSER_END ( DefaultJPlateCsvParser )
+
+TOKEN:
+{
+
+        <#CR:                ("\n")>
+        |
+        <#LF:                ("\r")>
+        |
+        <#DOUBLE_QUOTE:      ("\"")>
+        |
+        <#TWO_DOUBLE_QUOTES: (<DOUBLE_QUOTE> <DOUBLE_QUOTE>)>
+        |
+        <#TEXT:              (~["\"", "\n", "\r", ","])> 
+        |
+        <DELIMITER:          (",")>
+        |
+        <QUOTED_FIELD:       (([" ", "\t"])* <DOUBLE_QUOTE> ( [ " ", "!", "#" - "~", "\n", "\r", "\t" ] | <TWO_DOUBLE_QUOTES>)* <DOUBLE_QUOTE>)>
+        |
+        <NON_QUOTED_FIELD:   (<TEXT>)+>
+        |
+        <EOL:                (<CR> | <CR> <LF>)>
+}
+
+
+/**
+ *
+ * {@inheritDoc}
+ *
+ */
+protected void parse ( final B builder ) throws Exception:
+{
+    Token token;
+
+    boolean isNewRecord      = true;
+    boolean isLastTokenComma = true;
+    boolean isLastTokenEOL   = false;
+
+    if ( _log.isDebugEnabled () )
+    {
+        _log.debug ( "Parsing begins" );
+    }
+
+    builder.buildStart  ();
+}
+
+{
+    (
+        (
+            token = <DELIMITER>
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug
+                    (
+                        "Encountered comma @ [" + token.beginLine + ", " +
+                        token.beginColumn + "]"
+                    );
+                }
+
+                if ( isNewRecord )
+                {
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug ( "Building new record" );
+                    }
+
+                    builder.buildRecord ( token.beginLine );
+                }
+
+                if ( isLastTokenComma )
+                {
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug ( "Building omitted field" );
+                    }
+
+                    builder.buildOmittedField ( token.beginLine, token.beginColumn );
+                }
+
+                isLastTokenComma = true;
+            }
+
+            |
+
+            (
+                token = <NON_QUOTED_FIELD>
+                {
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug
+                        (
+                            "Encountered NON-quoted field [" + token.image + 
+                            " @ [" + token.beginLine + ", " + token.beginColumn +
+                            "]"
+                        );
+                    }
+
+                    if ( isNewRecord )
+                    {
+                        if ( _log.isDebugEnabled () )
+                        {
+                            _log.debug ( "Building new record" );
+                        }
+
+                        builder.buildRecord ( token.beginLine );
+                    }
+
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug ( "Building field" );
+                    }
+
+                    builder.buildField
+                    (
+                        token.image, token.beginLine, token.beginColumn
+                    );
+                }
+
+                |
+
+                token = <QUOTED_FIELD>
+                {
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug
+                        (
+                            "Encountered quoted field [" + token.image + 
+                            " @ [" + token.beginLine + ", " + token.beginColumn +
+                            "]"
+                        );
+                    }
+
+                    if ( isNewRecord )
+                    {
+                        if ( _log.isDebugEnabled () )
+                        {
+                            _log.debug ( "Building new record" );
+                        }
+
+                        builder.buildRecord ( token.beginLine );
+                    }
+
+                    if ( _log.isDebugEnabled () )
+                    {
+                        _log.debug ( "Building quoted field" );
+                    }
+
+                    builder.buildQuotedField
+                    (
+                        token.image, token.beginLine, token.beginColumn
+                    );
+
+                }
+            )
+            {
+                isLastTokenComma = false;
+            }
+        )
+        {
+            isNewRecord    = false;
+            isLastTokenEOL = false;
+        }
+
+        | 
+
+        token = <EOL>
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug
+                (
+                    "Encountered EOL @ [" + token.beginLine + ", " +
+                    token.beginColumn + "]"
+                );
+            }
+
+            if ( isNewRecord )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Building new record" );
+                }
+
+                builder.buildRecord ( token.beginLine );
+            }
+
+            if ( isLastTokenComma )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Building omitted field" );
+                }
+
+                builder.buildOmittedField ( token.beginLine, token.beginColumn );
+            }
+
+            isNewRecord      = true;
+            isLastTokenComma = true;
+            isLastTokenEOL   = true;
+        }
+    )*
+
+    token = <EOF>
+    {
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug
+            (
+                "Encountered EOF @ [" + token.beginLine + ", " +
+                token.beginColumn + "]"
+            );
+        }
+
+        if ( ! isLastTokenEOL && isLastTokenComma )
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug ( "Building omitted field" );
+            }
+
+            builder.buildOmittedField ( token.beginLine, token.beginColumn );
+        }
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug ( "Building end" );
+        }
+
+        builder.buildEnd ( token.beginLine, token.beginColumn );
+    }
+}

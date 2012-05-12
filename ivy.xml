@@ -1,0 +1,6 @@
+<ivy-module  version = "2.0">
+    <info  organisation = "JPlate"  module = "main"/>
+    <dependencies>
+        <dependency  org = "commons-logging"      name = "commons-logging"  rev = "1.1.1"/>
+    </dependencies>
+</ivy-module>

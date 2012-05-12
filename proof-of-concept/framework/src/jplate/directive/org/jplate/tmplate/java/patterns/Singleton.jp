@@ -1,0 +1,35 @@
+${Block trimPCDataWhiteSpace="true"}
+    ${RequiredValue className/}
+
+    ${DefaultValue accessType="public" packageName=""/}
+
+    ${Alias name="ClassName" trimPCDataWhiteSpace="true"}
+        ${GetValue className/}
+    ${/Alias}
+
+    ${Alias name="SingletonClassHolder" trimPCDataWhiteSpace="true"}
+        ${GetValue className/}Singleton
+    ${/Alias}
+
+    ${Alias name="AccessType" trimPCDataWhiteSpace="true"}
+        ${GetValue accessType/}
+    ${/Alias}
+    ${GetValue packageName/}
+${/Block}
+${AccessType/} final class ${ClassName/}
+{
+    private static final class ${SingletonClassHolder/}
+    {
+        static final ${ClassName/} _singleton = new ${ClassName/} ();
+    }
+
+    private ${ClassName/} ()
+    {
+    }
+
+    public static ${ClassName/} getSingleton ()
+    {
+        return ${SingletonClassHolder/}._singleton;
+    }
+    ${GetContent/}
+}

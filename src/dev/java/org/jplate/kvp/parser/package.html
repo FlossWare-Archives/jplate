@@ -1,0 +1,48 @@
+<body>
+    Contains definitions for KVP (key/value pair) parsers.
+
+    <p/>
+
+    Key/value paired data is represented as follows:
+    
+    <pre>
+key1 = value1
+key2 = value2
+...
+keyN = valueN
+    </pre>
+
+    Where:
+    
+    <ul>
+        <li>
+            <b>key</b> can contain any character - except newlines or equals.
+            To include an equals, one must escape the equals like so:
+            <code>some\=key = some value</code>
+        </li>
+
+        <li>
+            <b>value</b> can contain any character - including newlines  or equals.
+            To include an equals, one must escape the equals like so:
+            <code>some\=key = some value</code>.  Likewise, to include a newline,
+            one must end the line with a backslash like so:
+            <pre>
+some key 1 = foo\
+bar
+            </pre>
+
+            The value will contain <code>foo<code> a backslash, a new line
+            and <code>bar</code>.
+        </li>
+    </ul>
+
+    <p/>
+
+    <pre>
+Modifications:
+    $Date: 2008-12-02 12:32:45 -0500 (Tue, 02 Dec 2008) $
+    $Revision: 479 $
+    $Author: sfloess $
+    $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/src/dev/java/org/jplate/kvp/parser/package.html $
+    </pre>
+</body>

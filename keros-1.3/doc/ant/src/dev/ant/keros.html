@@ -1,0 +1,3665 @@
+<html xmlns:keros="http://keros.sourceforge.net" xmlns:ant-contrib="http://ant-contrib.sourceforge.net">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>keros 1.3</title>
+</head>
+<body>
+<center>
+<h1>keros 1.3</h1>
+</center>
+<h3>Table Of Contents</h3>
+<ul>
+<li>
+<a href="#summary">Summary</a>
+</li>
+<li>
+<a href="#details">Details</a>
+</li>
+<li>
+<a href="#property_declarations">Property Declarations</a>
+</li>
+<li>
+<a href="#depends_list">Depends List</a>
+</li>
+</ul>
+<a name="summary"></a>
+<center>
+<h2>Summary</h2>
+</center>
+<h3>Task Definition Summary</h3>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Task Definitions</th>
+</tr>
+<tr>
+<th valign="center">Resource</th><th valign="center">Description</th><th valign="center">Comment</th>
+</tr>
+<tr>
+<td valign="top">net/sf/antcontrib/antlib.xml</td><td valign="top">Needed to use ant-contrib.</td><td valign="top">
+        Ant Contrib definition...
+    </td>
+</tr>
+<tr>
+<td valign="top">org/apache/ivy/ant/antlib.xml</td><td valign="top">Needed to use ivy.</td><td valign="top">
+        Ivy definition...
+    </td>
+</tr>
+</table>
+<h3>Macro Definition Summary</h3>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Macro Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">URI</th>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-dir-exists">assert-dir-exists</a></td><td valign="top">Determines if <code>@{dir}</code> exists and if not, fails with <code>@{error-msg}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-equal">assert-equal</a></td><td valign="top">Determines if <code>@{str1}</code> is equal to <code>@{str2}</code>.  If the two are not equal, message defined in <code>@{error-msg}</code> is displayed.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-file-exists">assert-file-exists</a></td><td valign="top">Determines if <code>@{file}</code> exists and if not, fails with <code>@{error-msg}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-is-number">assert-is-number</a></td><td valign="top">Determines if <code>@{number}</code> is a number.  If <code>@{number}</code> is not a number, <code>@{error-msg}</code> will be displayed.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-not-equal">assert-not-equal</a></td><td valign="top">Determines if <code>@{str1}</code> is not equal to <code>@{str2}</code>.  If the two are equal, message defined in <code>@{error-msg}</code> is displayed.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#assert-ref-id">assert-ref-id</a></td><td valign="top">Determines if <code>@{ref-id}</code> is a ref id and if not fails with an error message defined in <code>@{error-msg}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#auto-property">auto-property</a></td><td valign="top">Define setting properties using either environment variables or default values.  The property entitled <code>@{property}</code> will not be re-set if it is currently defined (set).</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#base-name">base-name</a></td><td valign="top">Same as Ant's stock basename task - however, this allows the property to be reset.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-branch">compute-branch</a></td><td valign="top">Compute the branch based upon a root dir, <code>@{root}</code>, and full path, <code>@{full-path}</code>.  The branch represents the full path minus the root dir.  <i>Please note:</i>  if <code>@{root}</code> does not exist in <code>@{full-path}</code>, <code>@{property}</code> will be set with an empty value.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-class-branch">compute-class-branch</a></td><td valign="top">Compute the class' branch information converting dots to OS file separator.  By branch the meaning is to convey the branch in the CLASSPATH.  The path representation of <code>@{class-name}</code> is stored in property <code>@{property}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-class-info">compute-class-info</a></td><td valign="top">Compute information about a class - namely its parent dir and file name (less the .class).</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-file-extension">compute-file-extension</a></td><td valign="top">Computes the extension of <code>@{file}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-number-left-trim">compute-number-left-trim</a></td><td valign="top">Trim preceeding 0's from <code>@{number}</code> and store in the property entitled <code>@{property}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-number-right-trim">compute-number-right-trim</a></td><td valign="top">Trim ppostceeding 0's from <code>@{number}</code> after decimal and store in the property entitled <code>@{property}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-number-trim">compute-number-trim</a></td><td valign="top">Trim ppostceeding 0's from <code>@{number}</code> after decimal and store in the property entitled <code>@{property}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-replacement">compute-replacement</a></td><td valign="top">Replace characters from <code>@{str}</code>.  The characters to be replaced are contained in <code>@{to-replace}</code>.  The replacement characters are contained in <code>@{replacement}</code>.  The replaced data is stored in property <code>@{property}</code>.  Please note if <code>@{str}</code> does not contain any data in <code>@{to-replace}</code> the value of <code>@{property}</code> will be <code>@{str}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-timestamp">compute-timestamp</a></td><td valign="top">Compute the current time stamp in YYYY-MM-DD_HH-MM-SS.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#conditional-set-property">conditional-set-property</a></td><td valign="top">This will conditionally set a property whether.  If <code>@{property}</code> is set it will use <code>@{set}</code> otherwise <code>@{unset}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#console-input">console-input</a></td><td valign="top">Will prompt for input if property not set (or if the <code>@{always}</code> attribute is true).  If <code>@{always}</code> is true and <code>@{property}</code> is set and <code>@{default}</code> is empty, the value of <code>@{property}</code> becomes the <code>@{default}</code> value.  If the attribute <code>@{required}</code> is true and no value is set for <code>@{property}</code>, this macro will cause a fail to be invoked.  Please note that if <code>@{default}</code> is set and input is prompted but the user does not enter anything, the value of <code>@{default}</code> will be used to set the property!</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#copy">copy</a></td><td valign="top">This will copy from <code>@{src}</code> to <code>@{dest-dir}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#copy-dir">copy-dir</a></td><td valign="top">This will copy the contents of a directory from <code>@{src-dir}</code> to <code>@{dest-dir}</code>.  <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#copy-ref-id">copy-ref-id</a></td><td valign="top">This will copy from <code>@{src-ref-id}</code> to <code>@{dest-dir}</code>.  <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#delete-file">delete-file</a></td><td valign="top">Deletes <code>@{file}</code> if <code>@{is-deletable}</code> is yes or true.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#dirname">dirname</a></td><td valign="top">Same as Ant's stock dirname task - however, this allows the property to be reset.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#equality-set-property">equality-set-property</a></td><td valign="top">This will set the value of the property entitled <code>@{name}</code> based upon a comparison to the value contained by the property ${property}</code>.  If <code>@{property}</code> equals <code>@{value}</code>, <code>@{name}</code> will be set to <code>@{equal}</code>, otherwise it will be set to <code>@{unequal}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#execute-java-app">execute-java-app</a></td><td valign="top">Execute a java class whose class name is <code>@{class-property}</code>.  If this property is not set, the user will be prompted for the class name.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#for">for</a></td><td valign="top">This implements a for loop with starting and ending values for the loop.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlAnchor">HtmlAnchor</a></td><td valign="top">Generates an HTML anchor</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlAttribute">HtmlAttribute</a></td><td valign="top">Generates an HTML attribute</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlBreak">HtmlBreak</a></td><td valign="top">Generates n HTML break</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlDiv">HtmlDiv</a></td><td valign="top">Generates an HTML unordered list</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlDocument">HtmlDocument</a></td><td valign="top">Generates an HTML document</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlElement">HtmlElement</a></td><td valign="top">Generates an HTML element</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlFrame">HtmlFrame</a></td><td valign="top">Generates an HTML frame</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlFrameSet">HtmlFrameSet</a></td><td valign="top">Generates an HTML frameset</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlHeader">HtmlHeader</a></td><td valign="top">Generates an HTML header</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlLeafElement">HtmlLeafElement</a></td><td valign="top">Generates an HTML element</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlLink">HtmlLink</a></td><td valign="top">Generates an HTML anchor</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlText">HtmlText</a></td><td valign="top">Generates and HTML text value</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#HtmlUnorderedList">HtmlUnorderedList</a></td><td valign="top">Generates an HTML unordered list</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#if-dir-exists">if-dir-exists</a></td><td valign="top">Determines if <code>@{dir}</code> exists and will act accordingly.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#if-file-exists">if-file-exists</a></td><td valign="top">Determines if <code>@{file}</code> exists and will act accordingly.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#install-tar-bz2">install-tar-bz2</a></td><td valign="top">Download and install a tar.bz2</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#install-tar-gz">install-tar-gz</a></td><td valign="top">Download and install a tar.gz</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#lib-install-file">lib-install-file</a></td><td valign="top">Install a library jar</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#lib-install-tar-bz2">lib-install-tar-bz2</a></td><td valign="top">Install a library from an application</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#lib-install-tar-gz">lib-install-tar-gz</a></td><td valign="top">Install a library from an application</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#lib-install-zip">lib-install-zip</a></td><td valign="top">Install a library from an application</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#load-file">load-file</a></td><td valign="top">This will load a file into a property.  If <code>@{property}</code> was already set, it will be overridden.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#NavDef">NavDef</a></td><td valign="top">Define a navigation HTML window</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#NavItem">NavItem</a></td><td valign="top">An item that is navigatable</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#NavItemIndent">NavItemIndent</a></td><td valign="top">An item that is navigatable</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#number-compare">number-compare</a></td><td valign="top">Implements a simplistic switch/case for comparing two numbers - less than, greater than, equal to or not equal.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#print-ref-id">print-ref-id</a></td><td valign="top">Print the contents of <code>@{ref-id}</code> to the console.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#process-list">process-list</a></td><td valign="top">Allows one to iterate over a list/files and for each element in the list know the previous, current and next values.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#property-default">property-default</a></td><td valign="top">Give a property a default value if not set</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#release">release</a></td><td valign="top">Create a release.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#set-property">set-property</a></td><td valign="top">This will set a property whether its set or not.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#truncate-file-extension">truncate-file-extension</a></td><td valign="top">Truncates the extension of <code>@{file}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#unpack">unpack</a></td><td valign="top">Will untar tar.bz2/tar.gz files as well as unzip zip files</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#unpack-bz2">unpack-bz2</a></td><td valign="top">Will bunzip2/untar tar.bz2 files</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#unpack-gz">unpack-gz</a></td><td valign="top">Will gunzipz/untar tar.gz files</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#unpack-tar">unpack-tar</a></td><td valign="top">Will untar tar files</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#unpack-zip">unpack-zip</a></td><td valign="top">Will gunzipz/untar tar.gz files</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+</table>
+<h3>Script Definition Summary</h3>
+<table border="true">
+<tr>
+<th colspan="4" align="center">Script Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Language</th><th valign="center">Description</th><th valign="center">URI</th>
+</tr>
+<tr>
+<td valign="top"><a href="#basename">basename</a></td><td valign="top">beanshell</td><td valign="top"><I>Not Defined</I></td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-file-modification-date">compute-file-modification-date</a></td><td valign="top">beanshell</td><td valign="top">Store the file modification date in <code>@{property}</code>.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#compute-locale">compute-locale</a></td><td valign="top">beanshell</td><td valign="top">Sets the locale of the current JVM.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#replace-url">replace-url</a></td><td valign="top">beanshell</td><td valign="top">Converts static text URL to an HTML a-href.</td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+<tr>
+<td valign="top"><a href="#sort-files">sort-files</a></td><td valign="top">beanshell</td><td valign="top"><I>Not Defined</I></td><td valign="top">http://keros.sourceforge.net</td>
+</tr>
+</table>
+<h3>Target Summary</h3>
+<table border="true">
+<tr>
+<th colspan="4" align="center">Target Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Depends</th><th valign="center">Unless</th><th valign="center">Description</th>
+</tr>
+<tr>
+<td valign="top"><a href="#keros.print-properties">keros.print-properties</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td><I>Not Defined</I></td>
+</tr>
+</table>
+<a name="details"></a>
+<center>
+<h2>Details</h2>
+</center>
+<h3>Macro Definition Details</h3>
+<h3>
+<a name="assert-dir-exists">assert-dir-exists</a>
+</h3>Determines if <code>@{dir}</code> exists and if not, fails with <code>@{error-msg}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top">The name of the directory that should exist.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{dir}</code> does not exist.</td><td valign="top">${keros.assert-dir-exists.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{dir}</code> exists and if not, fails with <code>@{error-msg}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{dir}</code>         = the name of the directory that should exist.
+
+            <br/> <code>@{error-msg}</code>   = the message to display if <code>@{dir}</code> does not exist.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="assert-equal">assert-equal</a>
+</h3>Determines if <code>@{str1}</code> is equal to <code>@{str2}</code>.  If the two are not equal, message defined in <code>@{error-msg}</code> is displayed.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">str1</td><td valign="top">Compared to <code>@{str2}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">str2</td><td valign="top">Compared to <code>@{str1}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{str1}</code> not equal to <code>@{str2}</code>.</td><td valign="top">${keros.assert-equal.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{str1}</code> is equal to <code>@{str2}</code>.  If the two are not equal,
+        message defined in <code>@{error-msg}</code> is displayed.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{str1}</code>        = compared to <code>@{str2}</code>.
+
+            <br/> <code>@{str2}</code>        = compared to <code>@{str1}</code>.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{str1}</code> not equal to <code>@{str2}</code>, the message when failing will be displayed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="assert-file-exists">assert-file-exists</a>
+</h3>Determines if <code>@{file}</code> exists and if not, fails with <code>@{error-msg}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The name of the file that should exist.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{file}</code> does not exist.</td><td valign="top">${keros.assert-file-exists.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{file}</code> exists and if not, fails with <code>@{error-msg}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file that should exist.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{dir}</code> does not exist, the message to display.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="assert-is-number">assert-is-number</a>
+</h3>Determines if <code>@{number}</code> is a number.  If <code>@{number}</code> is not a number, <code>@{error-msg}</code> will be displayed.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">number</td><td valign="top">Used to determine if a number or not.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{number}</code> is not a number.</td><td valign="top">${keros.assert-is-number.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{number}</code> is a number.  If <code>@{number}</code> is not a number,
+        <code>@{error-msg}</code> is displayed.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{number}</code>      = used to determine if a number.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{number}</code> is not a number, the message to be displayed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="assert-not-equal">assert-not-equal</a>
+</h3>Determines if <code>@{str1}</code> is not equal to <code>@{str2}</code>.  If the two are equal, message defined in <code>@{error-msg}</code> is displayed.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">str1</td><td valign="top">Compared to <code>@{str2}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">str2</td><td valign="top">Compared to <code>@{str1}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{str1}</code> equals <code>@{str2}</code>.</td><td valign="top">${keros.assert-not-equal.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{str1}</code> is not equal to <code>@{str2}</code>.  If the two are equal,
+        message defined in <code>@{error-msg}</code> is displayed.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{str1}</code>        = compared to <code>@{str2}</code>.
+
+            <br/> <code>@{str2}</code>        = compared to <code>@{str1}</code>.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{str1}</code> equal to <code>@{str2}</code>, the message when failing will be displayed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="assert-ref-id">assert-ref-id</a>
+</h3>Determines if <code>@{ref-id}</code> is a ref id and if not fails with an error message defined in <code>@{error-msg}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">ref-id</td><td valign="top">The name of the ref id that should be a ref id.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">The message to display if <code>@{ref-id}</code> is not a ref id.</td><td valign="top">${keros.assert-ref-id.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Determines if <code>@{ref-id}</code> is a ref id and if not fails with an error
+        message defined in <code>@{error-msg}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{ref-id}</code>      = the name of the ref id that "should" be a ref id.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{property}</code> is not set, the message when failing will be displayed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="auto-property">auto-property</a>
+</h3>Define setting properties using either environment variables or default values.  The property entitled <code>@{property}</code> will not be re-set if it is currently defined (set).<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">default</td><td valign="top">The default value to use if the property named, <code>@{property}</code>, is not set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Define setting properties using either environment variables or
+        default values.  The property entitled <code>@{property}</code> will not be re-set
+        if it is currently defined (set).
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{default}</code>     = default value to use if the property named <code>@{property}</code> is not set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="base-name">base-name</a>
+</h3>Same as Ant's stock basename task - however, this allows the property to be reset.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The path to take the basename of.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">suffix</td><td valign="top">The suffix to remove from the resulting basename (specified either with or without the .).</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">prepend</td><td valign="top">Information to prepend to property's value.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">append</td><td valign="top">Information to append to property's value.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Same as Ant's stock basename task - however, this allows the property to be reset.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the path to take the basename of.
+
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{suffix}</code>      = the suffix to remove from the resulting basename (specified either with or without the ".").
+
+            <br/> <code>@{prepend}</code>     = information to prepend to property's value.
+
+            <br/> <code>@{append}</code>      = information to append to property's value.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="compute-branch">compute-branch</a>
+</h3>Compute the branch based upon a root dir, <code>@{root}</code>, and full path, <code>@{full-path}</code>.  The branch represents the full path minus the root dir.  <i>Please note:</i>  if <code>@{root}</code> does not exist in <code>@{full-path}</code>, <code>@{property}</code> will be set with an empty value.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">root</td><td valign="top">The root of the path defined in <code>@{full-path}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">full-path</td><td valign="top">The absolute path for which <code>@{root}</code> is the root of the path and the branch computed is this path minus the root.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The property to set with the branch.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Compute the branch based upon a root dir, <code>@{root}</code>, and full path, <code>@{full-path}</code>.  The
+        branch represents the full path minus the root dir.  <i>Please note:</i>  if <code>@{root}</code> does not
+        exist in <code>@{full-path}</code>, <code>@{property}</code> will be set with an empty value.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{root}</code>        = the root of the path defined in <code>@{full-path}</code>.
+
+            <br/> <code>@{full-path}</code>   = the absolute path for which <code>@{root}</code> is the root of the path and
+                                         the branch computed is this path minus the root.
+
+            <br/> <code>@{property}</code>    = the property to set with the branch.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Example</b>
+            <br/> <code>@{root}</code>      = /foo/bar/alpha
+
+            <br/> <code>@{full-path}</code> = /foo/bar/alpha/beta/theta/zeta
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code>  = beta/theta/zeta.
+
+        <p/><b>Example</b>
+            <br/> <code>@{root}</code>      = /hello/world
+
+            <br/> <code>@{full-path}</code> = /foo/bar/alpha/beta/theta/zeta
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code>  = 
+
+    </ul>
+<h3>
+<a name="compute-class-branch">compute-class-branch</a>
+</h3>Compute the class' branch information converting dots to OS file separator.  By branch the meaning is to convey the branch in the CLASSPATH.  The path representation of <code>@{class-name}</code> is stored in property <code>@{property}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">class-name</td><td valign="top">The fully qualified class name.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The property to set when <code>@{class-name}</code> is converted to path notation.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Compute the class' branch information converting dots to OS file separator.
+        By "branch" the meaning is to convey the branch in the CLASSPATH.  The path
+        representation of <code>@{class-name}</code> is stored in property <code>@{property}</code>
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{class-name}</code>  = the fully qualified class name to convert.
+
+            <br/> <code>@{property}</code>    = the property to store the class branch information.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{class-name}</code> = com.foo.bar.Alpha
+
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code> = com/foo/bar/Alpha
+
+    </ul>
+<h3>
+<a name="compute-class-info">compute-class-info</a>
+</h3>Compute information about a class - namely its parent dir and file name (less the .class).<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">class-name</td><td valign="top">The fully qualified class name for which a directory and file name are sought.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dir-property</td><td valign="top">The name of the property that will hold the directory of <code>@{class-name}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">file-property</td><td valign="top">The name of the property that will hold the file name of <code>@{class-name}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Compute information about a class - namely its parent dir and file name (less the .class).
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{class-name}</code>    = the fully qualified name of a class for which the directory name and file name are sought.
+
+            <br/> <code>@{dir-property}</code>  = the name of the property that will hold the directory of <code>@{class-name}</code>.
+
+            <br/> <code>@{file-property}</code> = the name of the property to store the file name of <code>@{class-name}</code>.
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{class-name}</code> = com.foo.bar.Alpha
+
+
+        <p/><b>Result</b>
+            <br/> <code>@{dir-property}</code>  = com/foo/bar
+
+            <br/> <code>@{file-property}</code> = Alpha
+
+      </ul>
+<h3>
+<a name="compute-file-extension">compute-file-extension</a>
+</h3>Computes the extension of <code>@{file}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The name of the file for whom we wish to compute the extension.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Compute the extension of a file and store in <code>@{property}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the name of the file for whom we wish to compute the extension.
+
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="compute-number-left-trim">compute-number-left-trim</a>
+</h3>Trim preceeding 0's from <code>@{number}</code> and store in the property entitled <code>@{property}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to store the results of triming preceeding 0's from <code>@{number}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">number</td><td valign="top">The number who will have preceeding 0's trimmed.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Trim preceeding 0's from <code>@{number}</code> and store in the property 
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property to store the results of triming preceeding 0's from <code>@{number}</code>.
+
+            <br/> <code>@{number}</code>      = the number who will have preceeding 0's trimmed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Example</b>
+            <br/> <code>@{number}</code>   = 0030006
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code> = 30006
+
+    </ul>
+<h3>
+<a name="compute-number-right-trim">compute-number-right-trim</a>
+</h3>Trim ppostceeding 0's from <code>@{number}</code> after decimal and store in the property entitled <code>@{property}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to store the results of triming postceeing 0's from decimal point from <code>@{number}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">number</td><td valign="top">The number who will have preceeding 0's trimmed.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Trim postceeding 0's from <code>@{number}</code> after decimal and store in the property 
+        entitled <code>@{property}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property to store the results of triming postceeding 0's from <code>@{number}</code>.
+
+            <br/> <code>@{number}</code>      = the number who will have preceeding 0's trimmed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+         <p/><b>Example</b>
+             <br/> <code>@{number}</code>   = 30006.123980192830000
+
+         <p/><b>Result</b>
+             <br/> <code>@{property}</code> = 30006.12398019283
+
+    </ul>
+<h3>
+<a name="compute-number-trim">compute-number-trim</a>
+</h3>Trim ppostceeding 0's from <code>@{number}</code> after decimal and store in the property entitled <code>@{property}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to store the results of triming postceeing 0's from decimal point from <code>@{number}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">number</td><td valign="top">The number who will have preceeding 0's trimmed.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Trim preceeding 0's/postceeding 0's from <code>@{number}</code> after decimal and store in the property 
+        entitled <code>@{property}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property to store the results of triming postceeding 0's from <code>@{number}</code>.
+
+            <br/> <code>@{number}</code>      = the number who will have preceeding 0's trimmed.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Example</b>
+            <br/> <code>@{number}</code>   = 000030006.123980192830000
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code> = 30006.12398019283
+
+    </ul>
+<h3>
+<a name="compute-replacement">compute-replacement</a>
+</h3>Replace characters from <code>@{str}</code>.  The characters to be replaced are contained in <code>@{to-replace}</code>.  The replacement characters are contained in <code>@{replacement}</code>.  The replaced data is stored in property <code>@{property}</code>.  Please note if <code>@{str}</code> does not contain any data in <code>@{to-replace}</code> the value of <code>@{property}</code> will be <code>@{str}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">str</td><td valign="top">The string containing characters to be replaced.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">to-replace</td><td valign="top">The characters to replace in <code>@{str}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">replacement</td><td valign="top">The replacement characters that will replace <code>@{to-replace}</code> in <code>@{str}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to hold the replaced characters.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Replace characters from <code>@{str}</code>.  The characters to be replaced are contained in
+        <code>@{to-replace}</code>.  The replacement characters are contained in <code>@{replacement}</code>.  The
+        replaced data is stored in property <code>@{property}</code>.  <i>Please note:</i>  if <code>@{str}</code> does not
+        contain any data in <code>@{to-replace}</code> the value of <code>@{property}</code> will be <code>@{str}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{str}</code>         = the string containing characters to be replaced.
+
+            <br/> <code>@{to-replace}</code>  = the characters to replace in <code>@{str}</code>.
+
+            <br/> <code>@{replacement}</code> = replacement characters that will replace <code>@{to-replace}</code> in <code>@{str}</code>.
+
+            <br/> <code>@{property}</code>    = the property to store the class branch information.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Example</b>
+            <br/> <code>@{str}</code>         = Hello World
+
+            <br/> <code>@{to-replace}</code>  = lo Wo
+            
+            <br/> <code>@{replacement}</code> = YES
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code>    = HelYESrld
+
+    </ul>
+<h3>
+<a name="compute-timestamp">compute-timestamp</a>
+</h3>Compute the current time stamp in YYYY-MM-DD_HH-MM-SS.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The property to set with the current time stamp.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">prefix</td><td valign="top">The prefix for property when time stamp is computed and stored in <code>@{property}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">suffix</td><td valign="top">The suffix for property when time stamp is computed and stored in <code>@{property}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Compute the current time stamp in YYYY-MM-DD_HH-MM-SS
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the property to set with the current time stamp.
+
+            <br/> <code>@{prefix}</code>      = the prefix for property when time stamp is computed and stored in <code>@{property}</code>.
+
+            <br/> <code>@{suffix}</code>      = the suffix for property when time stamp is computed and stored in <code>@{property}</code>.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Example</b>
+            <br/> <code>@{prefix}</code>    = foo_
+
+            <br/> <code>@{suffix}</code>    = _bar
+
+            <br/> current time = February 10, 2005  11:05:30 am 
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code>   = foo_2005-02-10_11-05-30_bar
+
+    </ul>
+<h3>
+<a name="conditional-set-property">conditional-set-property</a>
+</h3>This will conditionally set a property whether.  If <code>@{property}</code> is set it will use <code>@{set}</code> otherwise <code>@{unset}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to examine to see if set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">set</td><td valign="top">The value to use if <code>@{property}</code> is set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">unset</td><td valign="top">The value to use if <code>@{property}</code> is not set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">is-warnable</td><td valign="top">A flag, if true states a warning should be displayed - anything else no warning is outputted.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">warning-msg</td><td valign="top">if set to anything and the property named, name, is set, will echo the value of this param.  Please note, the property will still be set.</td><td valign="top">${keros.conditional-set-property.warning-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Sets a value for a property named <code>@{name}</code>.  If <code>@{property}</code> is set, then the
+        value of <code>@{set}</code> is used, otherwise the value of <code>@{unset}</code> is used.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{name}</code>        = the name of the property to set.
+
+            <br/> <code>@{property}</code>    = the name of the property to examine to see if set.
+
+            <br/> <code>@{set}</code>         = the value to use if <code>@{property}</code> is set.
+
+            <br/> <code>@{unset}</code>       = the value to use if <code>@{property}</code> is not set.
+
+            <br/> <code>@{is-warnable}</code> = a flag, if true implies a warning should be displayed (if <code>@{property}</code>
+                                         is currently set), or false no warning message.
+
+            <br/> <code>@{warning-msg}</code> = if set to anything and the property named, name, is set, will
+                                         echo the value of this param.  Please note, the property will
+                                         still be set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="console-input">console-input</a>
+</h3>Will prompt for input if property not set (or if the <code>@{always}</code> attribute is true).  If <code>@{always}</code> is true and <code>@{property}</code> is set and <code>@{default}</code> is empty, the value of <code>@{property}</code> becomes the <code>@{default}</code> value.  If the attribute <code>@{required}</code> is true and no value is set for <code>@{property}</code>, this macro will cause a fail to be invoked.  Please note that if <code>@{default}</code> is set and input is prompted but the user does not enter anything, the value of <code>@{default}</code> will be used to set the property!<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">prompt</td><td valign="top">When requesting input, the message to display.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">default</td><td valign="top">The default value to use if upon input, nothing entered.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">always</td><td valign="top">If true will prompt for input regardless if property has been set.</td><td valign="top">false</td>
+</tr>
+<tr>
+<td valign="top">required</td><td valign="top">If true, after input the property must be set or failure will occur.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">If <code>@{property}</code> is required and no value set, the error message to display.</td><td valign="top">${keros.console-input.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Will prompt for input if property not set (or if the <code>@{always}</code> attribute is true).  If <code>@{always}</code> is true
+        and <code>@{property}</code> is set and <code>@{default}</code> is empty, the value of <code>@{property}</code> becomes the <code>@{default}</code> value.
+        If the attribute <code>@{required}</code> is true and no value is set for <code>@{property}</code>, this macro will cause a fail
+        to be invoked.  Please note that if <code>@{default}</code> is set and input is prompted but the user does not enter
+        anything, the value of <code>@{default}</code> will be used to set the property!
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{prompt}</code>      = when requesting input, the message to display.
+
+            <br/> <code>@{property}</code>    = the property to set.
+
+            <br/> <code>@{default}</code>     = the default value to use if upon input, nothing entered.
+
+            <br/> <code>@{always}</code>      = if true will prompt for input regardless if property has been set.
+
+            <br/> <code>@{required}</code>    = if true, after input the property must be set or failure will occur.
+
+            <br/> <code>@{error-msg}</code>   = if <code>@{property}</code> is required and no value set, the error message to display.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+	</ul>
+<h3>
+<a name="copy">copy</a>
+</h3>This will copy from <code>@{src}</code> to <code>@{dest-dir}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">src</td><td valign="top">The source to copy from - be it a file, dir or ref id.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dest-dir</td><td valign="top">The directory to copy to.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">Error message to display if <code>@{src}</code> does not exist or is not a file, dir or ref id.</td><td valign="top">${keros.copy.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This will copy from <code>@{src}</code> to <code>@{dest-dir}</code>.
+
+        If <code>@{src}</code> represents:
+            <ul>
+                <li>
+                    a file, the file will be copied.
+                </li>
+                
+                <li>
+                    a directory, the directory's contents will be copied.
+                </li>
+
+                <li>
+                    a path ref, the contents of each element will be copied 
+                    (meaning a file will copy the file, a directory will copy
+                    the contents of the directory, etc).
+                </li>
+            </ul>
+
+            <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{src}</code>         = the source to copy from - be it a file dir or ref id.
+
+            <br/> <code>@{dest-dir}</code>    = the directory to copy files to.
+
+            <br/> <code>@{error-msg}</code>   = the error message to display if <code>@{src}</code> does not exist or
+                                         is not a file, dir or ref id.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="copy-dir">copy-dir</a>
+</h3>This will copy the contents of a directory from <code>@{src-dir}</code> to <code>@{dest-dir}</code>.  <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">src-dir</td><td valign="top">The source dir copy from.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dest-dir</td><td valign="top">The directory to copy to.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">Error message to display if <code>@{src-dir}</code> does not exist.</td><td valign="top">${keros.copy-dir-set-property.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This will copy the directory <code>@{src-dir}</code> to <code>@{dest-dir}</code>.
+        <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{src-dir}</code>     = the directory to copy.
+
+            <br/> <code>@{dest-dir}</code>    = the directory to copy files to.
+
+            <br/> <code>@{error-msg}</code>   = the error message to display if <code>@{src-dir}</code> does not exist.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="copy-ref-id">copy-ref-id</a>
+</h3>This will copy from <code>@{src-ref-id}</code> to <code>@{dest-dir}</code>.  <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">src-ref-id</td><td valign="top">The source to copy from - be it a file, dir or ref id.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dest-dir</td><td valign="top">The directory to copy to.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">Error message to display if <code>@{src-ref-id}</code> is not a ref id.</td><td valign="top">${keros.copy-ref-id.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This will copy from <code>@{src-ref-id}</code> to <code>@{dest-dir}</code>.
+        <i>Please note:</i>  if <code>@{dest-dir}</code> does not exist, it will be created.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{src-ref-id}</code>  = the source ref id to copy from.
+
+            <br/> <code>@{dest-dir}</code>    = the directory to copy files to.
+
+            <br/> <code>@{error-msg}</code>   = the error message to display if <code>@{src-ref-id}</code> is not a ref-id.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="delete-file">delete-file</a>
+</h3>Deletes <code>@{file}</code> if <code>@{is-deletable}</code> is yes or true.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">A file to delete if <code>@{is-deletable}</code> is true or yes.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">is-deletable</td><td valign="top">If yes or true, <code>@{file}</code> will be removed.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Deletes <code>@{file}</code> if <code>@{is-deletable}</code> is yes or true.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>         = the file to be deleted.
+
+            <br/> <code>@{is-deletable}</code> = flag, if true/yes (case insensitive) <code>@{file}</code> will be deleted.
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="dirname">dirname</a>
+</h3>Same as Ant's stock dirname task - however, this allows the property to be reset.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The path to take the directory name of.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">prepend</td><td valign="top">Information to prepend to property's value.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">append</td><td valign="top">Information to append to property's value.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Same as Ant's stock dirname task - however, this allows the property to be reset.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the path to take the dirname of.
+
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{prepend}</code>     = information to prepend to property's value.
+
+            <br/> <code>@{append}</code>      = information to append to property's value.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="equality-set-property">equality-set-property</a>
+</h3>This will set the value of the property entitled <code>@{name}</code> based upon a comparison to the value contained by the property ${property}</code>.  If <code>@{property}</code> equals <code>@{value}</code>, <code>@{name}</code> will be set to <code>@{equal}</code>, otherwise it will be set to <code>@{unequal}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to examine for equality/inequality.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">value</td><td valign="top">The value to compare against <code>@{property}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">equal</td><td valign="top">the value to use if <code>@{property}</code> equals <code>@{value}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">unequal</td><td valign="top">The value to use if <code>@{property}</code> not equal to <code>@{value}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">is-warnable</td><td valign="top">A flag, if true states a warning should be displayed - anything else no warning is outputted.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">warning-msg</td><td valign="top">The message to emit if <code>@{name}</code> is currently set.</td><td valign="top">${keros.equality-set-property.warning-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Sets the value of the property entitled <code>@{name}</code> based upon a comparison to the value contained
+        by the property ${property}</code>.  If <code>@{property}</code> equals <code>@{value}</code>, <code>@{name}</code> will be set to <code>@{equal}</code>,
+        otherwise it will be set to <code>@{unequal}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{name}</code>        = the name of the property to set.
+
+            <br/> <code>@{property}</code>    = the name of the property to examine to see if set.
+
+            <br/> <code>@{value}</code>       = the value to compare <code>@{property}</code> to.
+
+            <br/> <code>@{equal}</code>       = the value to use if <code>@{property}</code> equals <code>@{value}</code>.
+
+            <br/> <code>@{unequal}</code>     = the value to use if <code>@{property}</code> is not equal to <code>@{value}</code>.
+
+            <br/> <code>@{is-warnable}</code> = a flag, if true states a warning should be displayed - anything
+                                         else no warning is outputted.
+
+            <br/> <code>@{warning-msg}</code> = The message to emit if <code>@{name}</code> is currently set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="execute-java-app">execute-java-app</a>
+</h3>Execute a java class whose class name is <code>@{class-property}</code>.  If this property is not set, the user will be prompted for the class name.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">class-property</td><td valign="top">The name of the property who has the fully qualified class name to execute.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">class-path-ref</td><td valign="top">The class path for executing the java app.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">args-property</td><td valign="top">The name of the property who has the arguments to pass to the class.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">class-prompt-msg</td><td valign="top">The message to use if the property defined by class-property name has not been set.</td><td valign="top">${keros.execute-java-app.class-prompt-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">args-prompt-msg</td><td valign="top">The message to use if the property defined by args-property name has not been set.</td><td valign="top">${keros.execute-java-app.args-prompt-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Execute a java class whose class name is <code>@{class-property}</code>.  If this property
+        is not set, the user will be prompted for the class name.
+
+        <p/><b>Attributes</b>
+
+            <br/> class-property   = the name of the property who has the fully qualified class name to execute.
+
+            <br/> class-path-ref   = the class path for executing the java app.
+
+            <br/> args-property    = the name of the property who has the arguments to pass to the class.
+
+            <br/> class-prompt-msg = the message to use if the property defined by class-property name has not been set.
+
+            <br/> args-prompt-msg  = the message to use if the property defined by args-property name has not been set.
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+	</ul>
+<h3>
+<a name="for">for</a>
+</h3>This implements a for loop with starting and ending values for the loop.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property that will contain the current value of the loop.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">start</td><td valign="top">The start value of the loop.</td><td valign="top">1</td>
+</tr>
+<tr>
+<td valign="top">end</td><td valign="top">The end value of the loop</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">inc</td><td valign="top">The value to increment (or decrement) when looping.</td><td valign="top">1</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This implements a for loop with starting and ending values for the loop.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property that will contain the current value of the loop.
+
+            <br/> <code>@{start}</code>       = the start value of the loop.
+
+            <br/> <code>@{end}</code>         = the end value of the loop.
+
+            <br/> <code>@{inc}</code>         = value to increment (or decrement) while looping.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{loop}</code>  = the children will be executed for each iteration of the loop.
+
+    </ul>
+<h3>
+<a name="HtmlAnchor">HtmlAnchor</a>
+</h3>Generates an HTML anchor<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the anchor to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">charset</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">coords</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">href</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">hreflang</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">rel</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">rev</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">shape</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">target</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">type</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">text</td><td valign="top">The text of the anchor</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML anchor to <code>@{file}</code>.  Please see the attributes for real HTML
+        anchor for a description of attributes charset - type.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the anchor to.
+
+            <br/> <code>@{text}</code>        = the text for the anchor
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="HtmlAttribute">HtmlAttribute</a>
+</h3>Generates an HTML attribute<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the attribute and value to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The literal attribute name</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">value</td><td valign="top">The literable attribute value</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macrodef</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML attribute name and value to file <code>@{file}</code>.  If value is empty ("") nothing
+        is emitted to <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the attribute to.
+
+            <br/> <code>@{name}</code>        = the name of the attribute.
+
+            <br/> <code>@{value}</code>       = the value of the attribute.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+            <br/> <code>@{name}</code>  = theta
+
+            <br/> <code>@{value}</code> = beta
+
+
+        <p/><b>Result</b>
+            <br/> /foo/bar.html will now contain theta="beta"
+
+
+    </ul>
+<h3>
+<a name="HtmlBreak">HtmlBreak</a>
+</h3>Generates n HTML break<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">File to write the HTML break to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML break to file <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the break to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+
+        <p/><b>Result</b>
+
+            <br/> /foo/bar.html will now contain &lt;br&gt;&lt;/br&gt;
+
+    </ul>
+<h3>
+<a name="HtmlDiv">HtmlDiv</a>
+</h3>Generates an HTML unordered list<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the anchor to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">class</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">id</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">style</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">title</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lang</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">accesskey</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">tabindex</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML div to <code>@{file}</code>.  Please see the attributes for real HTML
+        div for a description of attributes charset - type.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the div to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="HtmlDocument">HtmlDocument</a>
+</h3>Generates an HTML document<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the html element to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML html element to <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the html element to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Elements</b>
+            <br/> <code>@{HtmlDocumentBody}</code> = the body of the HTML dcoument element.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+            <br/> <code>@{name}</code>  = Theta
+
+
+        <p/><b>Result</b>
+
+            <br/> /foo/bar.html will now contain &lt;html&gt;[whatever is contained in HtmlDocumentBody]&lt;/html&gt;
+
+    </ul>
+<h3>
+<a name="HtmlElement">HtmlElement</a>
+</h3>Generates an HTML element<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the HTML element to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The literal name of the element</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macrodef</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML element to file <code>@{file}</code>.  Please note, this macrodef will not generate leaf nodes
+        like: &lt;Foo/&gt; as it has no way of knowing if there are any elements (via the <code>@{HtmlElementBody}</code>
+        subelement).  So, this macrodef will always generate opening and closing leafs like
+        &lt;Foo&gt; &lt;/Foo&gt;
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the attribute to.
+
+            <br/> <code>@{name}</code>        = the name of the element.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Elements</b>
+            <br/> <code>@{HtmlAttributes}</code>  = if defined, should contain HtmlAttribute elements.
+
+            <br/> <code>@{HtmlElementBody}</code> = the body of the HTML element.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+            <br/> <code>@{name}</code>  = Theta
+
+
+        <p/><b>Result</b>
+        <br/> /foo/bar.html will now contain &lt;[value of <code>@{name}</code>] [whatever contained in HtmlAttributes]&gt;[whatever is contained in HtmlElementBody]&lt;/[value of <code>@{name}</code>]&gt;
+
+    </ul>
+<h3>
+<a name="HtmlFrame">HtmlFrame</a>
+</h3>Generates an HTML frame<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the frame to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">frameborder</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">longdesc</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">marginheight</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">marginwidth</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">noresize</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">scrolling</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">src</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML frame to <code>@{file}</code>.  Please see the attributes for real HTML
+        frame for a description of attributes frameborder - src.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the frame to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="HtmlFrameSet">HtmlFrameSet</a>
+</h3>Generates an HTML frameset<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the frame set to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">cols</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">rows</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML frame set to <code>@{file}</code>.  Please see the attributes for real HTML
+        frame set for a description of attributes cols - rows.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the frame set to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Elements</b>
+            <br/> <code>@{FrameSetBody}</code> = The contents of the frame set.
+
+    </ul>
+<h3>
+<a name="HtmlHeader">HtmlHeader</a>
+</h3>Generates an HTML header<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the HTML header to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">number</td><td valign="top">The header number - for example H1</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">text</td><td valign="top">The text of the header</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML header to file <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the header to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>   = /foo/bar.html
+
+            <br/> <code>@{number}</code> = 1
+
+            <br/> <code>@{text}</code>   = Hello World
+
+
+        <p/><b>Result</b>
+
+            <br/> /foo/bar.html will now contain &lt;h1&gt;Hello World&lt;/h1&gt;
+
+    </ul>
+<h3>
+<a name="HtmlLeafElement">HtmlLeafElement</a>
+</h3>Generates an HTML element<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the HTML element to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The literal name of the element</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macrodef</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML leaf element (meaning no children) to file <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the attribute to.
+
+            <br/> <code>@{name}</code>        = the name of the element.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Elements</b>
+            <br/> <code>@{HtmlAttributes}</code>  = if defined, should contain HtmlAttribute elements.
+
+            <br/> <code>@{HtmlElementBody}</code> = the body of the HTML element.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+            <br/> <code>@{name}</code>  = Theta
+
+
+        <p/><b>Result</b>
+        <br/> /foo/bar.html will now contain &lt;[value of <code>@{name}</code>] [whatever contained in HtmlAttributes]&gt;[whatever is contained in HtmlElementBody]&lt;/[value of <code>@{name}</code>]&gt;
+
+    </ul>
+<h3>
+<a name="HtmlLink">HtmlLink</a>
+</h3>Generates an HTML anchor<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the anchor to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">charset</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">href</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">hreflang</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">media</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">rel</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">rev</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">target</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">type</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML link to <code>@{file}</code>.  Please see the attributes for real HTML
+        links for a description of attributes charset - type.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the link to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="HtmlText">HtmlText</a>
+</h3>Generates and HTML text value<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the value of <code>@{text}</code> to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">text</td><td valign="top">The literal text to write to <code>@{file}</code></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits text to file <code>@{file}</code>.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the text to.
+
+            <br/> <code>@{text}</code>        = the text to emit to <code>@{file}</code>.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{file}</code>  = /foo/bar.html
+
+            <br/> <code>@{text}</code>  = Theta
+
+
+        <p/><b>Result</b>
+
+            <br/> /foo/bar.html will now contain Theta
+
+
+    </ul>
+<h3>
+<a name="HtmlUnorderedList">HtmlUnorderedList</a>
+</h3>Generates an HTML unordered list<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to write the anchor to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">class</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">id</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">style</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">title</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lang</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">accesskey</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">tabindex</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML unordered list to <code>@{file}</code>.  Please see the attributes for real HTML
+        unordered list for a description of attributes class - tabindex.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the file to write the unordered to.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="if-dir-exists">if-dir-exists</a>
+</h3>Determines if <code>@{dir}</code> exists and will act accordingly.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top">The name of the directory to check for existance.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Can determine if a directory exists, and act accordingly.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{dir}</code>         = the to directory examine for its existance.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{then}</code> = the block of code to execute if <code>@{dir}</code> exists.
+            
+            <br/> <code>@{else}</code> = the block of code to execute if <code>@{dir}</code> does not exist.
+
+    </ul>
+<h3>
+<a name="if-file-exists">if-file-exists</a>
+</h3>Determines if <code>@{file}</code> exists and will act accordingly.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The name of the file that should exist.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Can determine if a file exists, and act accordingly.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the to file examine for its existance.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{then}</code> = the block of code to execute if <code>@{file}</code> exists.
+            
+            <br/> <code>@{else}</code> = the block of code to execute if <code>@{file}</code> does not exist.
+
+    </ul>
+<h3>
+<a name="install-tar-bz2">install-tar-bz2</a>
+</h3>Download and install a tar.bz2<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.bz2 file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-dir</td><td valign="top">Directory to perform download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">install-dir</td><td valign="top">Installation directory</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Downloads and unpacks a tar.bz2.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{install-dir}</code>   = installation directory
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="install-tar-gz">install-tar-gz</a>
+</h3>Download and install a tar.gz<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.gz file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-dir</td><td valign="top">Directory to perform download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">install-dir</td><td valign="top">Installation directory</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Downloads and unpacks a tar.gz.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{install-dir}</code>   = installation directory
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="lib-install-file">lib-install-file</a>
+</h3>Install a library jar<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.bz2 file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lib-dir</td><td valign="top">Library directory where <code>@{includes}</code> will be copied</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Install a library file from an application.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{lib-dir}</code>       = library directory where <code>@{includes}</code> will be copied
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="lib-install-tar-bz2">lib-install-tar-bz2</a>
+</h3>Install a library from an application<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.bz2 file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-dir</td><td valign="top">Directory to perform download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">install-dir</td><td valign="top">Installation directory</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lib-dir</td><td valign="top">Library directory where <code>@{includes}</code> will be copied</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Install a library from an application.  Library is in tar.bz2 format.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{install-dir}</code>   = installation directory
+
+            <br/> <code>@{lib-dir}</code>       = library directory where <code>@{includes}</code> will be copied
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{includes}</code>        = Resource collection from <code>@{install-dir}</code> that will be copied to !{lib-dir}</code>.
+
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="lib-install-tar-gz">lib-install-tar-gz</a>
+</h3>Install a library from an application<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.bz2 file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-dir</td><td valign="top">Directory to perform download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">install-dir</td><td valign="top">Installation directory</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lib-dir</td><td valign="top">Library directory where <code>@{includes}</code> will be copied</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Install a library from an application.  Library is in tar.gz format.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{install-dir}</code>   = installation directory
+
+            <br/> <code>@{lib-dir}</code>       = library directory where <code>@{includes}</code> will be copied
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{includes}</code>        = Resource collection from <code>@{install-dir}</code> that will be copied to !{lib-dir}</code>.
+
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="lib-install-zip">lib-install-zip</a>
+</h3>Install a library from an application<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">url</td><td valign="top">The URL containing a tar.bz2 file for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-dir</td><td valign="top">Directory to perform download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">download-file</td><td valign="top">File name of <code>@{url}</code> for download</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">install-dir</td><td valign="top">Installation directory</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">lib-dir</td><td valign="top">Library directory where <code>@{includes}</code> will be copied</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Install a library from an application.  Library is in zip format.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{url}</code>           = the name of the directory that should exist.
+
+            <br/> <code>@{download-dir}</code>  = directory to perform download
+
+            <br/> <code>@{download-file}</code> = file name of <code>@{url}</code> for download
+
+            <br/> <code>@{install-dir}</code>   = installation directory
+
+            <br/> <code>@{lib-dir}</code>       = library directory where <code>@{includes}</code> will be copied
+
+            <br/> <code>@{description}</code>   = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{includes}</code>        = Resource collection from <code>@{install-dir}</code> that will be copied to !{lib-dir}</code>.
+
+            <br/> <code>@{depends}</code>         = All dependency work should be placed within this element.
+            
+    </ul>
+<h3>
+<a name="load-file">load-file</a>
+</h3>This will load a file into a property.  If <code>@{property}</code> was already set, it will be overridden.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">src-file</td><td valign="top">The location of the file to load and store in <code>@{property}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The property to hold <code>@{src-file}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This will load a file into a property.  If <code>@{property}</code> was already set,
+        it will be overridden.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{src-file}</code>    = the location of the file to load and store in <code>@{property}</code>.
+
+            <br/> <code>@{property}</code>    = the property to hold <code>@{src-file}</code>.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="NavDef">NavDef</a>
+</h3>Define a navigation HTML window<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">main-file</td><td valign="top">The main file containing the frameset</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">cols</td><td valign="top">Columns attribute of the frameset</td><td valign="top">25%,75%</td>
+</tr>
+<tr>
+<td valign="top">toc-file</td><td valign="top">The table of contents file</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">toc-title</td><td valign="top">The title for the table of contents</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">toc-name</td><td valign="top">The frame name of the table of contents</td><td valign="top">toc-frame</td>
+</tr>
+<tr>
+<td valign="top">content-name</td><td valign="top">The frame name for the content</td><td valign="top">content-frame</td>
+</tr>
+<tr>
+<td valign="top">default-content</td><td valign="top">The default page to display in the content frame</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits two HTML files - one containing a table of contents, the other containing
+        a frameset that holds both contents and a table of contents (left pane).
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{main-file}</code>    = the main file containing the frameset.
+
+            <br/> <code>@{cols}</code>         = the cols attribute of the frameset.
+
+            <br/> <code>@{toc-file}</code>     = the table of contents file.
+
+            <br/> <code>@{toc-title}</code>    = the header (title) for the table of contents.
+
+            <br/> <code>@{toc-name}</code>     = the name of the frame that holds the table of contents.
+
+            <br/> <code>@{content-name}</code> = the name of the frame that holds the contents.
+
+            <br/> <code>@{description}</code>  = information about calling this macrodef.
+
+
+        <p/><b>Elements</b>
+            <br/> <code>@{NavDefBody}</code> = contents of the navdef.
+
+    </ul>
+<h3>
+<a name="NavItem">NavItem</a>
+</h3>An item that is navigatable<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">toc-file</td><td valign="top">Table of contents file to write anchor and break to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">text</td><td valign="top">Text of the HTML anchor</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">href</td><td valign="top">Link for the HTML anchor</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">target</td><td valign="top">Target of the HTML anchor</td><td valign="top">content-frame</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML anchor and break to <code>@{toc-file}</code>.  Should be used in conjunction
+        with NavDef.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{toc-file}</code>    = the file to write the anchor and break to.
+
+            <br/> <code>@{text}</code>        = text of the HTML anchor.
+
+            <br/> <code>@{href}</code>        = link for the HTML anchor.
+
+            <br/> <code>@{target}</code>      = target of the HTML anchor.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="NavItemIndent">NavItemIndent</a>
+</h3>An item that is navigatable<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">toc-file</td><td valign="top">Table of contents file to write anchor and break to</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">text</td><td valign="top">Text of the HTML anchor</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">href</td><td valign="top">Link for the HTML anchor</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">target</td><td valign="top">Target of the HTML anchor</td><td valign="top">content-frame</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Emits an HTML anchor and break to <code>@{toc-file}</code>.  Should be used in conjunction
+        with NavDef.
+
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{toc-file}</code>    = the file to write the anchor and break to.
+
+            <br/> <code>@{text}</code>        = text of the HTML anchor.
+
+            <br/> <code>@{href}</code>        = link for the HTML anchor.
+
+            <br/> <code>@{target}</code>      = target of the HTML anchor.
+
+            <br/> <code>@{description}</code> = information about calling this macrodef.
+
+    </ul>
+<h3>
+<a name="number-compare">number-compare</a>
+</h3>Implements a simplistic switch/case for comparing two numbers - less than, greater than, equal to or not equal.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">arg1</td><td valign="top">Compared against <code>@{arg2}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">arg2</td><td valign="top">Compared against <code>@{arg1}</code>.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This implements a simplistic switch/case for comparing two numbers - less than,
+        greater than or equal to.  Execution will occur based on the comparison.  For
+        instance, if the two args are equal and an equal child element is defined, execution
+        will happen for that block.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{arg1}</code>        = compared against <code>@{arg2}</code>.
+
+            <br/> <code>@{arg2}</code>        = compared against <code>@{arg1}</code>.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{equal}</code>     = the block of code to execute if <code>@{arg1}</code> = <code>@{arg2}</code>.
+
+            <br/> <code>@{not-equal}</code> = the block of code to execute if <code>@{arg1}</code> != <code>@{arg2}</code>.
+
+            <br/> <code>@{less}</code>      = the block of code to execute if <code>@{arg1}</code> < <code>@{arg2}</code>.
+
+            <br/> <code>@{greater}</code>   = the block of code to execute if <code>@{arg1}</code> > <code>@{arg2}</code>.
+
+    </ul>
+<h3>
+<a name="print-ref-id">print-ref-id</a>
+</h3>Print the contents of <code>@{ref-id}</code> to the console.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">ref-id</td><td valign="top">The name of the ref id to display.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">indent</td><td valign="top">String to use for indenting the contents of refid.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">error-msg</td><td valign="top">When printing <code>@{ref-id}</code>, if a directory does not exist and ant raises an error, this value will be displayed instead.</td><td valign="top">${keros.print-ref-id.error-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+         Print the contents of <code>@{ref-id}</code> to the console.
+
+         <p/><b>Attributes</b>
+             <br/> <code>@{refid}</code>      = the name of the ref id to display.
+
+             <br/> <code>@{indent}</code>     = string to use for indenting the contents of refid.
+
+             <br/> <code>@{error-msg}</code>  = when printing <code>@{ref-id}</code>, if a directory does not exist,
+                                         an error is raised by Ant.  Instead of that error being
+                                         displayed, the value of <code>@{error-msg}</code> is displayed instead.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+     </ul>
+<h3>
+<a name="process-list">process-list</a>
+</h3>Allows one to iterate over a list/files and for each element in the list know the previous, current and next values.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">list</td><td valign="top">The list to process.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">delimiter</td><td valign="top">The delimiter for <code>@{list}</code>.</td><td valign="top">,</td>
+</tr>
+<tr>
+<td valign="top">previous</td><td valign="top">Name of property to hold previous value in list.</td><td valign="top">keros.PREVIOUS</td>
+</tr>
+<tr>
+<td valign="top">current</td><td valign="top">Name of property to hold current value in list.</td><td valign="top">keros.CURRENT</td>
+</tr>
+<tr>
+<td valign="top">next</td><td valign="top">Name of property to hold next value in list.</td><td valign="top">keros.NEXT</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This allows one to iterate over a list/files and for each element in the list, have
+        the previous, current and next elements set in the properties named in <code>@{previous}</code>,
+        <code>@{current}</code> and <code>@{next}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{list}</code>        = list to process.
+
+            <br/> <code>@{delimiter}</code>   = separator for elements in <code>@{list}</code>.
+
+            <br/> <code>@{previous}</code>    = name of property that will hold the previous element.
+
+            <br/> <code>@{current}</code>     = name of property that will hold the current element.
+
+            <br/> <code>@{next}</code>        = name of property that will hold the next element.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+        <p/><b>Elements</b>
+            <br/> <code>@{path}</code>    = should hold a file list to process.
+
+            <br/> <code>@{process}</code> = called for each iteration of elements in the list.  The various
+                                   elements can be accessed via the properties named in <code>@{previous}</code>,
+                                   <code>@{current}</code> and <code>@{next}</code>.
+
+    </ul>
+<h3>
+<a name="property-default">property-default</a>
+</h3>Give a property a default value if not set<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">name</td><td valign="top">The name of the property for which a default value may be set</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">default-value</td><td valign="top">If <code>@{property}</code> is not set, this is the valeu that it will have as a default</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about calling this macro</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Give the property <code>@{property}</code> the value <code>@{value}</code> if <code>@{property}</code> has not been set.  This macrodef
+        is library agnostic - it requires no third party libraries.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{dir}</code>         = the name of the directory that should exist.
+
+            <br/> <code>@{error-msg}</code>   = the message to display if <code>@{dir}</code> does not exist.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="release">release</a>
+</h3>Create a release.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top">The directory to create the release files.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">stage-dir</td><td valign="top">The staging directory where the created release files will be copied when completed.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">base-file</td><td valign="top">The base name of the tar, zip, bzip and gzip files.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">base-dir</td><td valign="top">Directory name where the release when unpacked will reside.</td><td valign="top"><code>@{base-file}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        This will create a release that will have a tar, zip, bzip and gzip files.
+
+
+        <p/><b>Attributes</b>
+
+            <br/> <code>@{dir}</code>         = the directory to create the release files.
+
+            <br/> <code>@{stage-dir}</code>   = the staging directory where the created release files will be copied when completed.
+
+            <br/> <code>@{base-file}</code>   = the base name of the tar, zip, bzip and gzip files.
+
+            <br/> <code>@{base-dir}</code>    = Directory name where the release when unpacked will reside.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+
+        <p/><b>Elements</b>
+
+            <br/>  <code>@{pre-processing}</code>        = will perform any pre-processing before the release is created.
+
+            <br/>  <code>@{pre-stage-processing}</code>  = will perform an pre-stage processing before copying files.
+
+            <br/>  <code>@{release-fileset}</code>       = should contain a fileset that will include all release files.
+
+            <br/>  <code>@{post-stage-processing}</code> = will perform an post-stage processing before tar'ing/gzip/bzip/zip work.
+
+            <br/>  <code>@{post-processing}</code>       = will perform any post-processing after the release is created.
+
+    </ul>
+<h3>
+<a name="set-property">set-property</a>
+</h3>This will set a property whether its set or not.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">value</td><td valign="top">The value to set the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">is-warnable</td><td valign="top">A flag, if true states a warning should be displayed - anything else no warning is outputted.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">warning-msg</td><td valign="top">if set to anything and the property named, property, is set, will echo the value of this param.  Please note, the property will still be set.</td><td valign="top">${keros.set-property.warning-msg}</code></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Forces a property to be set regardless if it currently is set.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{value}</code>       = the value to set the property to set.
+
+            <br/> <code>@{is-warnable}</code> = a flag, if true states a warning should be displayed - anything else no warning is outputted.
+
+            <br/> <code>@{warning-msg}</code> = if set to anything and the property named, property, is set, will
+                                         echo the value of this param.  Please note, the property will
+                                         still be set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="truncate-file-extension">truncate-file-extension</a>
+</h3>Truncates the extension of <code>@{file}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The name of the file for whom we wish to truncate the extension.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top">The name of the property to set.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+    Truncates the file extension from <code>@{file}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the name of the file whose extension will be truncated.
+
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="unpack">unpack</a>
+</h3>Will untar tar.bz2/tar.gz files as well as unzip zip files<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top">The file to unpack.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">uncompress-dir</td><td valign="top">Directory where <code>@{file}</code> may uncompress before unpacking.</td><td valign="top">${keros.tar.HOME}</code></td>
+</tr>
+<tr>
+<td valign="top">unpack-dir</td><td valign="top">The root directory where directories/files contained within <code>@{file}</code> will be unpacked.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">clean-up</td><td valign="top">If yes or true (case insensitive), any intermediary files will be removed (for example tar files).</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Unpacks tar.bz2, tar.gz and zip files - all in one convenient macrodef.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>           = the file to unpack.
+
+            <br/> <code>@{uncompress-dir}</code> = the directory where <code>@{file}</code> may uncompress before unpacking.
+
+            <br/> <code>@{unpack-dir}</code>     = the directory where the unpacked file will be expanded.
+
+            <br/> <code>@{clean-up}</code>       = if yes or true (case insensitive), any intermediary
+                                            files will be removed (for example tar files).
+
+            <br/> <code>@{description}</code>    = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="unpack-bz2">unpack-bz2</a>
+</h3>Will bunzip2/untar tar.bz2 files<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">bz2-file</td><td valign="top">The bz2 file to unpack.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">bunzip-dir</td><td valign="top">The directory where <code>@{bz2-file}</code> will be unpacked containing as a tar file.</td><td valign="top">${keros.tar.HOME}</code></td>
+</tr>
+<tr>
+<td valign="top">untar-dir</td><td valign="top">The directory where <code>@{bz2-file}</code>'s tar file will be unpacked.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">clean-up</td><td valign="top">If yes or true, the tar file will be removed.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Unpacks tar.bz2 files.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{bz2-file}</code>    = the file to unpack.
+
+            <br/> <code>@{bunzip-dir}</code>  = the directory where <code>@{bz2-file}</code> will be unpacked containing as a tar file.
+
+            <br/> <code>@{untar-dir}</code>   = the directory where <code>@{bz2-file}</code>'s tar file will be unpacked.
+
+            <br/> <code>@{clean-up}</code>    = if yes or true (case insensitive) will remove the gz and tar file.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="unpack-gz">unpack-gz</a>
+</h3>Will gunzipz/untar tar.gz files<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">gz-file</td><td valign="top">The gz file to unpack.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">gunzip-dir</td><td valign="top">The directory where <code>@{gz-file}</code> will be unpacked containing as a tar file.</td><td valign="top">${keros.tar.HOME}</code></td>
+</tr>
+<tr>
+<td valign="top">untar-dir</td><td valign="top">The directory where <code>@{gz-file}</code>'s tar file will be unpacked.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">clean-up</td><td valign="top">If yes or true, the tar file will be removed.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Unpacks tar.gz files.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{gz-file}</code>     = the file to unpack.
+
+            <br/> <code>@{gunzip-dir}</code>  = the directory where <code>@{gz-file}</code> will be unpacked containing as a tar file.
+
+            <br/> <code>@{untar-dir}</code>   = the directory where <code>@{gz-file}</code>'s tar file will be unpacked.
+
+            <br/> <code>@{clean-up}</code>    = if yes or true (case insensitive) will remove the bz2 and tar file.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="unpack-tar">unpack-tar</a>
+</h3>Will untar tar files<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">tar-file</td><td valign="top">The tar file to unpack.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">untar-dir</td><td valign="top">The directory where <code>@{tar-file}</code> will be untar'd.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">clean-up</td><td valign="top">If yes or true, the tar file will be removed.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Unpacks tar files.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{tar-file}</code>    = the file to untar.
+
+            <br/> <code>@{untar-dir}</code>   = the directory where <code>@{tar-file}</code>'s file will be untar'd.
+
+            <br/> <code>@{clean-up}</code>    = if yes or true (case insensitive) will remove the tar file.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="unpack-zip">unpack-zip</a>
+</h3>Will gunzipz/untar tar.gz files<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">zip-file</td><td valign="top">The zip file to unpack.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">unzip-dir</td><td valign="top">The directory where <code>@{gz-file}</code> will be unpacked containing as a tar file.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">clean-up</td><td valign="top">If yes or true, the tar file will be removed.</td><td valign="top">true</td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top">Information about this macro call.</td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Unpacks zip files.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{zip-file}</code>    = the file to unpack.
+
+            <br/> <code>@{unzip-dir}</code>   = the directory where <code>@{zip-file}</code> will be unpacked.
+
+            <br/> <code>@{clean-up}</code>    = if yes or true (case insensitive) will remove the zip file.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>Script Definition Details</h3>
+<h3>
+<a name="basename">basename</a>
+</h3>
+<I>Description unavailable</I>
+<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">suffix</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">prepend</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">append</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Same as Ant's stock basename task - however, this allows the property to be reset.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>        = the path to take the basename of.
+
+            <br/> <code>@{property}</code>    = the name of the property to set.
+
+            <br/> <code>@{suffix}</code>      = the suffix to remove from the resulting basename (specified either with or without the ".").
+
+            <br/> <code>@{prepend}</code>     = information to prepend to property's value.
+
+            <br/> <code>@{append}</code>      = information to append to property's value.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+    </ul>
+<h3>
+<a name="compute-file-modification-date">compute-file-modification-date</a>
+</h3>Store the file modification date in <code>@{property}</code>.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">format</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Computes the modification date of <code>@{file}</code> and stores in the property denoted as <code>@{property}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code>     = the name of the file for which the modification date is desired.`
+
+            <br/> <code>@{property}</code> = the name of the property to store the modification date or empty if <code>@{file}</code>
+                                      does not exist.
+
+    </ul>
+<h3>
+<a name="compute-locale">compute-locale</a>
+</h3>Sets the locale of the current JVM.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Computes the locale of the current JVM to the property define as <code>@{property}</code>.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{property}</code> = the name of the property to set to the locale of the current JVM.
+
+    </ul>
+<h3>
+<a name="replace-url">replace-url</a>
+</h3>Converts static text URL to an HTML a-href.<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">file</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Replaces all ftp and http URL's to actual links.  So, if a file contains
+        no HTML "a" href's (meaning just inline static text), this script will
+        convert that to an actual "a" href.
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{file}</code> = fully qualified file name of a file containing non "a" ref URL's.
+
+    </ul>
+<h3>
+<a name="sort-files">sort-files</a>
+</h3>
+<I>Description unavailable</I>
+<p></p>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Attribute Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Description</th><th valign="center">Default</th>
+</tr>
+<tr>
+<td valign="top">dir</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">property</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">padding</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">delimiter</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top">description</td><td valign="top"><I>Description unavailable</I></td><td valign="top"><I>Not Defined</I></td>
+</tr>
+</table>
+<p></p>
+<ul>
+
+        Sort the files contained in a directory "naturally." 
+
+        The result is:
+            1.sql, 2.sql, 10.sql, 11.sql
+
+        <p/><b>Attributes</b>
+            <br/> <code>@{dir}</code>         = the name of the directory containing files to sort.
+
+            <br/> <code>@{padding}</code>     = the padding to use when making all file names the same length.  Defaults to spaces.
+
+            <br/> <code>@{property}</code>    = name of the property to set that will contain the sorted list.
+
+            <br/> <code>@{delimeter}</code>   = the delimiter used between file names.  Defaults to comma.
+
+            <br/> <code>@{description}</code> = information about calling this macro.
+
+
+        <p/><b>Example</b>
+            <br/> <code>@{dir}</code> contains the following file:  1.sql 10.sql 11.sql 2.sql
+
+
+        <p/><b>Result</b>
+            <br/> <code>@{property}</code> = 1.sql,2.sql,10.sql,11.sql
+
+    </ul>
+<h3>Target Detail</h3>
+<h3>
+<a name="keros.print-properties">keros.print-properties</a>
+</h3>
+<I>Description unavailable</I>
+<p></p>
+<p></p>
+        
+        This target will output defined properties to the console...
+
+    <a name="property_declarations"></a>
+<center>
+<h2>
+                Property Declarations
+            </h2>
+</center>
+
+        This section highlights all properties set by scope.  For example, properties may
+        be set at the project level, macrodef level or target level.  This section
+        <i>only</i> lists the property names - not their values.
+
+        <ul>
+            Project Level
+
+            <ul></ul>
+<ul>keros.build.HOME</ul>
+<ul>keros.project.HOME</ul>
+<ul>keros.properties.FILE</ul>
+<ul></ul>
+<ul>keros.ant.HOME</ul>
+<ul>keros.HOME</ul>
+<ul>keros.resources.DIR_NAME</ul>
+<ul>keros.resources.HOME</ul>
+<ul>keros.properties.DIR_NAME</ul>
+<ul>keros.properties.HOME</ul>
+<ul></ul>
+<ul>keros.VERSION</ul>
+<ul>keros.state.HOME</ul>
+<ul>keros.version.HOME</ul>
+<ul>keros.lib.DIR_NAME</ul>
+<ul>keros.dependency.HOME</ul>
+<ul>keros.lib.HOME</ul>
+<ul>keros.lib.HOME</ul>
+<ul>keros.lib.HOME</ul>
+<ul>keros.lib.HOME</ul>
+<ul>keros.doc.HOME</ul>
+<ul>keros.xsl.HOME</ul>
+<ul>keros.ivy.HOME</ul>
+<ul>keros.LOCALE</ul>
+<ul>keros.locale.HOME</ul>
+<ul></ul>
+</ul>
+<ul>
+            Macrodef(s)
+
+            <ul>property-default<ul>
+<ul><code>@{name}</code></ul>
+</ul>
+</ul>
+<ul>install-tar-bz2<ul></ul>
+</ul>
+<ul>install-tar-gz<ul></ul>
+</ul>
+<ul>lib-install-file<ul></ul>
+</ul>
+<ul>lib-install-tar-bz2<ul></ul>
+</ul>
+<ul>lib-install-tar-gz<ul></ul>
+</ul>
+<ul>lib-install-zip<ul></ul>
+</ul>
+<ul>compute-class-branch<ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-class-info<ul>
+<ul><code>@{dir-property}</code></ul>
+<ul><code>@{file-property}</code></ul>
+<ul>keros.compute-class-info.COMPUTE_CLASS_INFO</ul>
+<ul>keros.compute-class-info.COMPUTE_CLASS_INFO_DIR</ul>
+<ul><code>@{file-property}</code></ul>
+<ul><code>@{dir-property}</code></ul>
+</ul>
+</ul>
+<ul>release<ul></ul>
+</ul>
+<ul>assert-dir-exists<ul></ul>
+</ul>
+<ul>assert-file-exists<ul></ul>
+</ul>
+<ul>compute-branch<ul>
+<ul>keros.compute-branch.COMPUTE_BRANCH</ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>auto-property<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>set-property<ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>conditional-set-property<ul>
+<ul><code>@{name}</code></ul>
+<ul><code>@{name}</code></ul>
+</ul>
+</ul>
+<ul>equality-set-property<ul>
+<ul><code>@{name}</code></ul>
+<ul><code>@{name}</code></ul>
+</ul>
+</ul>
+<ul>for<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>copy-dir<ul>
+<ul>keros.copy-dir.DIR_NAME</ul>
+<ul>keros.copy-dir.BASE_NAME</ul>
+</ul>
+</ul>
+<ul>copy-ref-id<ul></ul>
+</ul>
+<ul>copy<ul></ul>
+</ul>
+<ul>load-file<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>console-input<ul>
+<ul>keros.console-input.PROMPT_MSG</ul>
+<ul>keros.console-input.DEFAULT_VALUE</ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>execute-java-app<ul>
+<ul>keros.execute-java-app.CLASS_PROPERTY_ERROR_MSG</ul>
+<ul><code>@{class-property}</code></ul>
+<ul><code>@{args-property}</code></ul>
+</ul>
+</ul>
+<ul>print-ref-id<ul></ul>
+</ul>
+<ul>if-dir-exists<ul></ul>
+</ul>
+<ul>if-file-exists<ul></ul>
+</ul>
+<ul>dirname<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>base-name<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-file-extension<ul>
+<ul>keros.compute-file-extension.<code>@{property}</code></ul>
+<ul>keros.compute-file-extension.<code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>truncate-file-extension<ul>
+<ul>keros.truncate-file-extension.<code>@{property}</code></ul>
+<ul>keros.truncate-file-extension.<code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>delete-file<ul></ul>
+</ul>
+<ul>unpack-tar<ul></ul>
+</ul>
+<ul>unpack-bz2<ul>
+<ul>keros.unpack-bz2.TAR_FILE_NAME</ul>
+</ul>
+</ul>
+<ul>unpack-gz<ul>
+<ul>keros.unpack-gz.TAR_FILE_NAME</ul>
+</ul>
+</ul>
+<ul>unpack-zip<ul></ul>
+</ul>
+<ul>unpack<ul>
+<ul>keros.unpack.UNPACK_EXTENSION</ul>
+</ul>
+</ul>
+<ul>assert-equal<ul></ul>
+</ul>
+<ul>assert-not-equal<ul></ul>
+</ul>
+<ul>assert-is-number<ul>
+<ul>keros.assert-is-number.ASSERT_IS_NUMBER</ul>
+</ul>
+</ul>
+<ul>assert-ref-id<ul></ul>
+</ul>
+<ul>compute-number-left-trim<ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-number-right-trim<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-number-trim<ul>
+<ul><code>@{property}</code></ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-timestamp<ul>
+<ul>keros.compute-timestamp.COMPUTE_TIMESTAMP</ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>compute-replacement<ul>
+<ul>keros.compute-replacement.REPLACE_CHARS_REGEX</ul>
+<ul><code>@{property}</code></ul>
+</ul>
+</ul>
+<ul>number-compare<ul></ul>
+</ul>
+<ul>process-list<ul>
+<ul><code>@{previous}</code></ul>
+<ul><code>@{current}</code></ul>
+<ul><code>@{next}</code></ul>
+<ul><code>@{current}</code></ul>
+<ul><code>@{next}</code></ul>
+<ul><code>@{previous}</code></ul>
+<ul><code>@{current}</code></ul>
+<ul><code>@{next}</code></ul>
+</ul>
+</ul>
+<ul>HtmlAttribute<ul></ul>
+</ul>
+<ul>HtmlElement<ul></ul>
+</ul>
+<ul>HtmlLeafElement<ul></ul>
+</ul>
+<ul>HtmlText<ul></ul>
+</ul>
+<ul>HtmlDocument<ul></ul>
+</ul>
+<ul>HtmlBreak<ul></ul>
+</ul>
+<ul>HtmlHeader<ul></ul>
+</ul>
+<ul>HtmlAnchor<ul></ul>
+</ul>
+<ul>HtmlUnorderedList<ul></ul>
+</ul>
+<ul>HtmlDiv<ul></ul>
+</ul>
+<ul>HtmlLink<ul></ul>
+</ul>
+<ul>HtmlFrame<ul></ul>
+</ul>
+<ul>HtmlFrameSet<ul></ul>
+</ul>
+<ul>NavItem<ul></ul>
+</ul>
+<ul>NavItemIndent<ul></ul>
+</ul>
+<ul>NavDef<ul></ul>
+</ul>
+</ul>
+<ul>
+            Target(s)
+
+            <ul>keros.print-properties<ul></ul>
+</ul>
+</ul>
+<a name="depends_list"></a>
+<center>
+<h2>
+                Depends List
+            </h2>
+</center>
+
+        This section lists all the dependencies for targets in a hierarchical structure.
+
+        </body>
+</html>

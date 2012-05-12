@@ -1,0 +1,118 @@
+<body>
+Provides property functionality that is class based or similar to System - but
+is read-only in nature and not synchronized.
+
+<p>
+<b>Why not use <code>java.util.Properties</code>?</b>
+
+<p>
+Utilizing <code>java.util.Properties</code> has the following disadvantages:
+
+<ul>
+    <p>
+    <li><b>Over synchronization:</b>  all methods are synchronized.</li>
+
+    <p>
+    <li><b><code>java.util.Hashtable</code> subclass:</b>  All the methods
+    defined in <code>java.util.Hashtable</code> are accessible which means
+    arbitrary data can be placed where name/value pairs are the only
+    <i>appropriate</i> content.</li>
+</ul>
+
+<p>
+<b>Why use this package?</b>
+
+<ul>
+    <li><b>System properties:</b>  Are stored a class load time, in a
+    non-synchronized <code>java.util.Map</code>.  Retrieval is extremely fast.
+    </li>
+
+    <p>
+    <li><b>Class based properties:</b>  Built to define properties on a
+    per-class basis.  There are typically two ways of defining properties for a
+    class:   a property file per class or using one property with
+    <i>"creative"</i> property names to distinguish between classes.</li>
+
+    <p>
+    <li><b>Default property:</b>  Any class can have an optional default
+    property.</li>
+
+    <p>
+    <li><b>Can determine which classes have properties:</b>  Functionality has
+    been defined to return all classes that have properties assigned to them.
+    </li>
+
+    <p>
+    <li><b>Well defined XML for properties:</b>  The XML file that defines the
+    properties is well defined and is just about as easy to use a straight
+    property file.  However, all the properties can be defined in a concise
+    hierarchical fashion.</li>
+</ul>
+
+<p><p>
+<b>Useage</b>
+
+<p>
+To get a property manager, do the following:
+
+<pre>
+    PropertyMgrIfc propertyMgr = PropertyMgr.getSingleton ();
+</pre>
+
+To retrieve a property <code>bar</code> for class <code>Foo</code>, do the
+following (assume the above):
+
+<pre>
+    final String barValue = propertyMgr.getProperty ( Foo.class, "bar" );
+</pre>
+
+To retrieve all properties for a class, Foo, do the following:
+
+<pre>
+    final Map fooProps = propertyMgr.getProperties ( Foo.class );
+</pre>
+
+One can get the default property for a class.  To get the default property for
+a class Foo, do the following:
+
+<pre>
+    final String defaultProperty = propertyMgr.getDefaultProperty ( Foo.class );
+</pre>
+
+To see all classes who have properties assigned, do the following:
+
+<pre>
+   final Class definedClasses[] = propertyMgr.getClassesAssignedProperties (); 
+</pre>
+
+<p><p>
+<b>XML file format</b>
+
+<p>
+Currently the XML file contains the DTD (please see note below).  The XML
+structure follows:
+
+<pre>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE property-mgr SYSTEM "org.jplate.util.propertymgr.PropertyMgr.dtd"&gt;
+
+&lt;property-mgr&gt;
+    &lt;properties class="fully qualified class name"&gt;
+        &lt;property name="property name"&gt;property value&lt;/property&gt;
+
+        ...
+
+        &lt;default&gt;default value&lt;default&gt;
+    &lt;properties&gt;
+
+    ...
+
+&lt;/property-mgr&gt;
+</pre>
+
+<p>
+<b> You may define as many classes/properties as needed in the XML file...</b>
+
+<p>
+@see org.jplate.util.resourcemgr
+</body>

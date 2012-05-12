@@ -1,0 +1,363 @@
+PARSER_BEGIN ( DefaultCdvParser )
+
+package org.jplate.tabular.cdv.parser.impl.defaults;
+
+
+import java.io.StringReader;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.jplate.JPlateException;
+
+import org.jplate.foundation.parser.javacc.impl.AbstractJavaccParser;
+
+import org.jplate.tabular.cdv.parser.CdvBuilderIfc;
+import org.jplate.tabular.cdv.parser.CdvParserIfc;
+
+
+
+/**
+ 
+    Default implementation of a CDV (colon delimited value) parser.
+
+    <p/>
+
+    An example of CDV data follows:
+
+    <ul>
+        <li> field 1-1:field 1-2:field 1-3 </li>
+        <li> field 2-1:field 2-2:field 2-3 </li>
+        <li> field 3-1:field 3-2:field 3-3 </li>
+    </ul>
+
+    <p/><a  name = "Examples"/>
+    The following are some examples on how to use this class.  Assume some
+    implemention of {@link org.jplate.tabular.cdv.parser.CdvBuilderIfc}
+    exists.<br/>
+
+    <p/>
+
+    <ul>
+        <li>
+            Parsing from an {@link java.io.InputStream}:
+            <pre>
+final B builder = // Some implementation...
+
+final DefaultCdvParserIfc parser = new DefaultCdvParser ();
+
+final InputStream inputStream = new FileInputStream ( "MyCdvFile.cdv" );
+
+parser.parse ( inputStream, builder );
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.Reader}:
+            <pre>
+final CdvBuilderIfc builder = // Some implementation...
+
+final DefaultCdvParserIfc parser = new DefaultCdvParser ();
+
+final Reader reader = new FileReader ( "MyCdvFile.cdv" );
+
+parser.parse ( reader, builder );            
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.lang.String}:
+            <pre>
+final CdvBuilderIfc builder = // Some implementation...
+
+final DefaultCdvParserIfc parser = new DefaultCdvParser ();
+
+final String string = // Contains TDV data in the form of a String.
+
+parser.parse ( string, builder );                
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.File}:
+            <pre>
+final CdvBuilderIfc builder = // Some implementation...
+
+final DefaultCdvParserIfc parser = new DefaultCdvParser ();
+
+final File file = new File ( "MyCdvFile.cdv" );
+
+parser.parse ( file, builder );
+            </pre>
+        </li>
+    </ul>
+
+    <b><i>Please note:</i></b>  This class is <i>not</i> thread-safe.
+
+    <p/>
+
+    <pre>
+Modifications:
+    $Date: 2008-12-02 12:32:45 -0500 (Tue, 02 Dec 2008) $
+    $Revision: 479 $
+    $Author: sfloess $
+    $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/src/dev/javacc/org/jplate/tabular/cdv/parser/impl/defaults/DefaultCdvParser.jj $
+    </pre>
+
+
+*/
+public final class DefaultCdvParser <B extends CdvBuilderIfc <?>>
+    extends AbstractJavaccParser <B>
+        implements CdvParserIfc <B>
+{
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Static class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static methods follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * Used for logging.
+     *
+     */
+    private final transient Log _log =
+        LogFactory.getLog ( DefaultCdvParser.class );
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Constructor definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * Default constructor.
+     *
+     */
+    public DefaultCdvParser ()
+    {
+        this ( new StringReader ( "" ) );
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug ( "New DefaultCdvParser created" );
+        }
+    }
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance method definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+}
+
+PARSER_END ( DefaultCdvParser )
+
+TOKEN:
+{
+
+        <#CR:                ("\n")>
+        |
+        <#LF:                ("\r")>
+        |
+        <DELIMITER:          (":")>
+        |
+        <ESCAPED_DELIMITER:  ("\\" <DELIMITER>)>
+        |
+        <FIELD:              ((<ESCAPED_DELIMITER> | ~[":", "\n", "\r"])+)> 
+        |
+        <EOL:                (<CR> | <CR> <LF>)>
+}
+
+
+/**
+ *
+ * {@inheritDoc}
+ *
+ */
+protected void parse ( final B builder ) throws Exception:
+{
+    Token token;
+
+    boolean isNewRecord    = true;
+    boolean isLastTokenTab = true;
+    boolean isLastTokenEOL = false;
+
+    if ( _log.isDebugEnabled () )
+    {
+        _log.debug ( "Parsing begins" );
+    }
+
+    builder.buildStart ();
+}
+
+{
+    (
+        token = <DELIMITER>
+        {
+            if ( isNewRecord )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Building new record" );
+                }
+
+                builder.buildRecord ( token.beginLine );
+            }
+
+            if ( isLastTokenTab )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Last token was tab - building an omitted field" );
+                }
+
+                builder.buildOmittedField ( token.beginLine, token.beginColumn );
+            }
+
+            isNewRecord    = false;
+            isLastTokenTab = true;
+        }
+
+        |
+
+        token = <FIELD>
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug
+                (
+                    "Encountered field [" + token.image + "] @ [" +
+                    token.beginLine + ", " + token.beginColumn + "]"
+                );
+            }
+
+            if ( isNewRecord )
+            {
+                builder.buildRecord ( token.beginLine );
+            }
+
+            builder.buildField ( token.image, token.beginLine, token.beginColumn );
+
+            isNewRecord    = false;
+            isLastTokenTab = false;
+            isLastTokenEOL = false;
+        }
+
+        | 
+
+        token = <EOL>
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug
+                (
+                    "End of line found @ [" + token.beginLine + ", " +
+                    token.beginColumn + "]"
+                );
+            }
+
+            if ( isNewRecord )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Building new record" );
+                }
+
+                builder.buildRecord ( token.beginLine );
+            }
+
+            if ( isLastTokenTab )
+            {
+                if ( _log.isDebugEnabled () )
+                {
+                    _log.debug ( "Building ommited field" );
+                }
+
+                builder.buildOmittedField ( token.beginLine, token.beginColumn );
+            }
+
+            isNewRecord    = true;
+            isLastTokenTab = true;
+            isLastTokenEOL = true;
+        }
+    )*
+
+    token = <EOF>
+    {
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug
+            (
+                "EOF encountered at [" + token.beginLine + ", " + 
+                token.beginColumn + "]"
+            );
+        }
+
+        if ( ! isLastTokenEOL && isLastTokenTab )
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug ( "Building omitted field" );
+            }
+
+            builder.buildOmittedField ( token.beginLine, token.beginColumn );
+        }
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug ( "Building end" );
+        }
+
+        builder.buildEnd ( token.beginLine, token.beginColumn );
+    }
+}

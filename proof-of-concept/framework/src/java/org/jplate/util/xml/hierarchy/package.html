@@ -1,0 +1,86 @@
+<body>
+This package simplifies manipulating <code>org.w3c.dom.Document</code> objects.
+
+The hierarchy family of classes assumes a less generic (specific) approach to
+document management.  Specifically, a hierarchy consists of:
+
+<ul>
+    <li>
+        <b>Name:</b>  This is the name of the node and is represented by a
+        <code>java.lang.String</code>.
+    </li>
+
+    <p>
+
+    <li>
+        <b>Value:</b>  This is the optional CDATA section of a node and is
+        represented by a <code>java.lang.String</code>.
+    </li>
+
+    <p>
+
+    <li>
+        <b>Attributes:</b>  This is the optional attributes of a node and is
+        represented by an array of
+        <code>org.jplate.util.xml.hierarchy.AttributeIfc</code>.  
+        <b>Please note:</b>  If there are no attributes, this will be an array
+        of size 0.
+    </li>
+
+    <p>
+
+    <li>
+        <b>Children:</b>  This is the optional children of a node represented by
+        an array of <code>org.jplate.util.xml.hierarchy.HierarchyIfc</code>.  
+        <b>Please note:</b>  If no children exist, this will be an array of size
+        0.
+    </li>
+</ul>
+
+<p>
+
+Based upon the aforementioned, assume the following XML:
+
+<p>
+<pre>
+&lt;foo&gt;
+    &lt;bar att1="val1" att2="val2"&gt;
+        My bar description
+        &lt;zeta/&gt;
+    &lt;/bar&gt;
+&lt;/foo&gt;
+</pre>
+
+The hierarchies are:
+
+<pre>
+    name = "Foo", value = "", AttributeIfc [ 0 ], Children:
+    
+        name = "bar", value = "My bar description",
+        attributes = [ name = "attr1"/val = "val1", name = "att2"/val = "val2 ],
+        Children:
+
+            name = "zeta", value = "", AttributeIfc [ 0 ],
+            HierarchyIfc [ 0 ]
+</pre>
+
+Essentially, hierarchies are concerned with names, values, attributes and
+children.  All other portions of XML are not considered - such as comments, etc.
+
+<p>
+<b>Useage</b>
+
+<p>
+To create a hierarchy, perform the following (assume an
+<code>org.w3c.dom.Document</code>, document, has been created):
+
+<pre>
+final HierarchyFactoryIfc hierarchyFactory =
+    HierarchyFactory.getSingleton ();
+
+final HierarchyIfc hierarchy =
+    hierarchyFactory.createHierarchyFromDocument ( document );
+
+// Perform operations on hierarchy...
+<pre>
+</body>

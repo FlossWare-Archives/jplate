@@ -1,0 +1,33 @@
+<body>
+    This package provides the implementation of directive caches as well as
+    functionality to create instances.  A directive cache acts as a repository
+    of named/pcdata (parsed character) directives
+        
+    <p>
+    <b>Usage</b>
+
+    <p>
+    To create an instance of
+    <code>org.jplate.tmplate.directive.DirectiveCacheIfc</code>, please do
+    the following (assume klass has been instantiated):
+
+<pre>
+    //
+    // Assume klass instantiated before this point...
+    //
+    final DirectiveCacheFactoryMgrIfc factoryMgr =
+        DirectiveCacheFactoryMgrIfc.getSingleton ();
+
+    final DirectiveCacheFactoryIfc factory =
+        factoryMgr.getFactory ( klass );
+
+    final DirectiveCacheIfc directiveCache =
+        factory.createDirectiveCache ();
+</pre>
+
+    <b>Please note:</b>  One can create a pre-populated cache by utilizing
+    the <code>DirectiveCacheFactoryIfc.createDirectiveCache ( NamedDirectiveDefIfc namedDirectives[] )</code> method.
+
+    @see org.jplate.tmplate.directive.DirectiveCacheIfc
+    @see org.jplate.tmplate.directive.NamedDirectiveDefIfc
+</body>

@@ -1,0 +1,297 @@
+<html xmlns:keros="http://keros.sourceforge.net" xmlns:ant-contrib="http://ant-contrib.sourceforge.net">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>keros-base-project 1.3</title>
+</head>
+<body>
+<center>
+<h1>keros-base-project 1.3</h1>
+</center>
+<h3>Keros common re-usable build functionality</h3>
+<h3>Table Of Contents</h3>
+<ul>
+<li>
+<a href="#summary">Summary</a>
+</li>
+<li>
+<a href="#details">Details</a>
+</li>
+<li>
+<a href="#property_declarations">Property Declarations</a>
+</li>
+<li>
+<a href="#depends_list">Depends List</a>
+</li>
+</ul>
+<a name="summary"></a>
+<center>
+<h2>Summary</h2>
+</center>
+<h3>Import Summary</h3>
+<table border="true">
+<tr>
+<th colspan="3" align="center">Import Definitions</th>
+</tr>
+<tr>
+<th valign="center">File</th><th valign="center">Description</th><th valign="center">Comment</th>
+</tr>
+<tr>
+<td valign="top">keros.xml</td><td valign="top">Contains Keros functionality.</td><td valign="top">
+
+        Imports...
+
+    </td>
+</tr>
+</table>
+<h3>Target Summary</h3>
+<table border="true">
+<tr>
+<th colspan="4" align="center">Target Definitions</th>
+</tr>
+<tr>
+<th valign="center">Name</th><th valign="center">Depends</th><th valign="center">Unless</th><th valign="center">Description</th>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.all">keros-base-project.all</a></td><td valign="top">keros-base-project.clean, keros-base-project.generate, keros-base-project.compile, keros-base-project.test, keros-base-project.document, keros-base-project.analyze, keros-base-project.sub-projects, keros-base-project.release</td><td valign="top"><I>Not Defined</I></td><td><I>Not Defined</I></td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.analyze">keros-base-project.analyze</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Analyze a project</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.clean">keros-base-project.clean</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Clean build environment</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.compile">keros-base-project.compile</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Perform compilation</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.document">keros-base-project.document</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Create documentation</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.generate">keros-base-project.generate</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Generate files</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.generate.clean">keros-base-project.generate.clean</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Clean build environment</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.print.properties">keros-base-project.print.properties</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Converts Ant scripts to HTML</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.release">keros-base-project.release</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Create a release</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.release.clean">keros-base-project.release.clean</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Clean-up the release area</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.sub-projects">keros-base-project.sub-projects</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Process sub-projects</td>
+</tr>
+<tr>
+<td valign="top"><a href="#keros-base-project.test">keros-base-project.test</a></td><td valign="top"><I>Not Defined</I></td><td valign="top"><I>Not Defined</I></td><td>Perform Testing</td>
+</tr>
+</table>
+<a name="details"></a>
+<center>
+<h2>Details</h2>
+</center>
+<h3>Target Detail</h3>
+<h3>
+<a name="keros-base-project.all">keros-base-project.all</a>
+</h3>
+<I>Description unavailable</I>
+<p></p>
+<p></p> ======================================================================== <h3>
+<a name="keros-base-project.analyze">keros-base-project.analyze</a>
+</h3>Analyze a project<p></p>
+<p></p>
+
+        Ananlyze code - ensure pre/post processing as well as analyzing.
+
+    <h3>
+<a name="keros-base-project.clean">keros-base-project.clean</a>
+</h3>Clean build environment<p></p>
+<p></p>
+
+        This will clean the build area.
+
+    <h3>
+<a name="keros-base-project.compile">keros-base-project.compile</a>
+</h3>Perform compilation<p></p>
+<p></p>
+
+        This will get all code generation to occur.
+
+    <h3>
+<a name="keros-base-project.document">keros-base-project.document</a>
+</h3>Create documentation<p></p>
+<p></p>
+
+        Used to document sounce.
+
+    <h3>
+<a name="keros-base-project.generate">keros-base-project.generate</a>
+</h3>Generate files<p></p>
+<p></p>
+
+        This will get all code generation to occur.
+
+    <h3>
+<a name="keros-base-project.generate.clean">keros-base-project.generate.clean</a>
+</h3>Clean build environment<p></p>
+<p></p>
+
+        This will clean the generated area.
+
+    <h3>
+<a name="keros-base-project.print.properties">keros-base-project.print.properties</a>
+</h3>Converts Ant scripts to HTML<p></p>
+<p></p>
+
+        Will print all properties to the console.
+
+    <h3>
+<a name="keros-base-project.release">keros-base-project.release</a>
+</h3>Create a release<p></p>
+<p></p>
+
+        This will clean the release area.
+
+    <h3>
+<a name="keros-base-project.release.clean">keros-base-project.release.clean</a>
+</h3>Clean-up the release area<p></p>
+<p></p>
+
+        This will clean the release area.
+
+    <h3>
+<a name="keros-base-project.sub-projects">keros-base-project.sub-projects</a>
+</h3>Process sub-projects<p></p>
+<p></p>
+
+        Process sub-projects - ensure pre/post processing as well as actual sub-project processing.
+
+    <h3>
+<a name="keros-base-project.test">keros-base-project.test</a>
+</h3>Perform Testing<p></p>
+<p></p>
+
+        This will perform testing.
+
+    <a name="property_declarations"></a>
+<center>
+<h2>
+                Property Declarations
+            </h2>
+</center>
+
+        This section highlights all properties set by scope.  For example, properties may
+        be set at the project level, macrodef level or target level.  This section
+        <i>only</i> lists the property names - not their values.
+
+        <ul>
+            Project Level
+
+            <ul></ul>
+<ul>keros-base-project.ant.HOME</ul>
+<ul>keros-base-project.ant.source.HOME</ul>
+<ul>keros-base-project.state.HOME</ul>
+<ul>keros-base-project.HOME</ul>
+<ul>keros-base-project.sub-project.HOME</ul>
+<ul>keros-base-project.sub-project.INCLUDES</ul>
+<ul>keros-base-project.DIR_NAME</ul>
+<ul>keros-base-project.property.FILE_NAME</ul>
+<ul>keros-base-project.property.FILE</ul>
+<ul></ul>
+<ul>keros-base-project.assembly.DIR_NAME</ul>
+<ul>keros-base-project.assembly.HOME</ul>
+<ul>keros-base-project.lib.DIR_NAME</ul>
+<ul>keros-base-project.lib.HOME</ul>
+<ul>keros-base-project.resources.DIR_NAME</ul>
+<ul>keros-base-project.resources.HOME</ul>
+<ul>keros-base-project.source.DIR_NAME</ul>
+<ul>keros-base-project.source.HOME</ul>
+<ul>keros-base-project.dev.DIR_NAME</ul>
+<ul>keros-base-project.dev.HOME</ul>
+<ul>keros-base-project.test.DIR_NAME</ul>
+<ul>keros-base-project.test.HOME</ul>
+<ul>keros-base-project.deploy.DIR_NAME</ul>
+<ul>keros-base-project.deploy.HOME</ul>
+<ul>keros-base-project.generated.DIR_NAME</ul>
+<ul>keros-base-project.generated.HOME</ul>
+<ul>keros-base-project.release.DIR_NAME</ul>
+<ul>keros-base-project.release.HOME</ul>
+<ul>keros-base-project.lib.generated.DIR_NAME</ul>
+<ul>keros-base-project.lib.generated.HOME</ul>
+<ul>keros-base-project.release.generated.DIR_NAME</ul>
+<ul>keros-base-project.release.generated.HOME</ul>
+<ul>keros-base-project.test.generated.DIR_NAME</ul>
+<ul>keros-base-project.test.generated.HOME</ul>
+<ul>keros-base-project.release.FILE_NAME</ul>
+<ul>keros-base-project.release.FILE_NAME</ul>
+<ul>keros-base-project.release.FILE_NAME</ul>
+<ul>keros-base-project.resources.source.DIR_NAME</ul>
+<ul>keros-base-project.resources.source.HOME</ul>
+<ul>keros-base-project.lib.INCLUDES</ul>
+<ul>keros-base-project.document.INDEX</ul>
+<ul>keros-base-project.release.EXCLUDES</ul>
+</ul>
+<ul>
+            Macrodef(s)
+
+            </ul>
+<ul>
+            Target(s)
+
+            <ul>keros-base-project.clean<ul></ul>
+</ul>
+<ul>keros-base-project.generate.clean<ul></ul>
+</ul>
+<ul>keros-base-project.generate<ul></ul>
+</ul>
+<ul>keros-base-project.compile<ul></ul>
+</ul>
+<ul>keros-base-project.test<ul></ul>
+</ul>
+<ul>keros-base-project.document<ul></ul>
+</ul>
+<ul>keros-base-project.analyze<ul></ul>
+</ul>
+<ul>keros-base-project.sub-projects<ul></ul>
+</ul>
+<ul>keros-base-project.release.clean<ul></ul>
+</ul>
+<ul>keros-base-project.release<ul></ul>
+</ul>
+<ul>keros-base-project.all<ul></ul>
+</ul>
+<ul>keros-base-project.print.properties<ul></ul>
+</ul>
+</ul>
+<a name="depends_list"></a>
+<center>
+<h2>
+                Depends List
+            </h2>
+</center>
+
+        This section lists all the dependencies for targets in a hierarchical structure.
+
+        <ul>keros-base-project.all<ul>
+<ul>keros-base-project.clean<ul></ul>
+</ul>
+<ul>keros-base-project.generate<ul></ul>
+</ul>
+<ul>keros-base-project.compile<ul></ul>
+</ul>
+<ul>keros-base-project.test<ul></ul>
+</ul>
+<ul>keros-base-project.document<ul></ul>
+</ul>
+<ul>keros-base-project.analyze<ul></ul>
+</ul>
+<ul>keros-base-project.sub-projects<ul></ul>
+</ul>
+<ul>keros-base-project.release<ul></ul>
+</ul>
+</ul>
+</ul>
+</body>
+</html>

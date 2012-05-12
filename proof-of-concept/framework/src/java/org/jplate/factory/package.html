@@ -1,0 +1,49 @@
+<body>
+    This package defines marker interfaces for factories and factory managers.
+    Although the interfaces contain no API, by implementing them it denotes
+    their intended implementation.
+
+    <p>
+    <b>Definitions</b>
+
+    <ul>
+        <li>
+            Factory:  a factory is used to create objects. 
+        </li>
+
+        <li>
+            Factory Manager:  a factory manager "manages" instances of factories
+            based upon a context (class).  There is also a "default" factory
+            that a factory manager will return if using a context that is not
+            defined.  
+        </li>
+    </ul>
+
+    <p>
+    The reasons for defining these marker interfaces follows:
+
+    <ul>
+        <li>
+            Factories:  factories do not create the same type of object, nor do
+            they use the same data to construct said objects.  For instance, one
+            factory may require a Bar to create a Foo whereas another factory
+            may require nothing to create a Zeta.
+        </li>
+
+        <li>
+            Factory managers:  factory managers do not manage the same type of
+            factory.
+        </li>
+    </ul>
+
+    <p>
+    It can be argued that <code>FactoryMgrIfc</code> contain methods to return
+    <code>FactoryIfc</code>.  However, ideally, one will typically not operate
+    upon an implementation of <code>FactoryMgrIfc</code> generically because,
+    once a <code>FactoryIfc</code> is retrieved one will still be required to
+    know the exact subclassed interface.  As mentioned above, not all factories
+    create objects in the same fashion.  Therefore there is no generic way to
+    request a factory create an object.
+
+    @see org.jplate.util.factorycontext
+</body>

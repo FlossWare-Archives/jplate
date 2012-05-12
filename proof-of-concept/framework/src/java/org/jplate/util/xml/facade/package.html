@@ -1,0 +1,46 @@
+<body>
+    This package provides a unified interface to build a hierarchy for a
+    document defined as a resource name.  This family of classes simplifies
+    building a hierarchy from a resource - assuming the resource is an XML file.
+
+    <p>
+    <b>Please note:</b>  One may assume the resource is a validating or non-
+    validating document depending on the <code>create()</code> methods defined
+    below (assume resource <code>foo.xml</code> is the resource):
+
+    <ul>
+        <li>
+            <b>Create a hierarchy whose XML is considered validating</b>
+
+            <pre>
+                final HierarchyFacadeIfc hierarchyFacade =
+                    HierarchyFacade.getSingleton ();
+
+                final HiearchyIfc hierarchy =
+                    hierarchyFacade.createValidatingHierarchy ( "foo.xml" );
+            </pre>
+        </li>
+
+        <li>
+            <b>Create a hierarchy whose XML is non-validating</b>
+
+            <pre>
+                final HierarchyFacadeIfc hierarchyFacade =
+                    HierarchyFacade.getSingleton ();
+
+                final HiearchyIfc hierarchy =
+                    hierarchyFacade.createHierarchy ( "foo.xml" );
+            </pre>
+        </li>
+    </ul>
+
+    <b>Please note:</b>  this package relies upon classes from both
+    <code>org.jplate.util.xml.document</code> and
+    <code>org.jplate.util.xml.hierarchy</code> packages.  Loading
+    of resources follows the same rules as those defined by
+    <code>org.jplate.util.xml.document</code> classes.
+
+    @see org.jplate.util.resourcemgr
+    @see org.jplate.util.xml.document
+    @see org.jplate.util.xml.hierarchy
+</body>

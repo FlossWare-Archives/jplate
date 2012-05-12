@@ -1,0 +1,41 @@
+<body>
+    Contains all JPlate parser related functionality.  This project defines the
+    following concepts:
+
+    <ul>
+        <li>
+            A parser:  parses streams, files, strings, etc.  Utilizes a builder to
+            create items when "choice" points are encountered during parsing.
+        </li>
+
+        <li>
+            A builder:  creates items on behalf of a parser.
+        </li>
+
+        <li>
+            Factories:  for creating instances of parsers and/or builders.
+        </li>
+    </ul>
+
+    Delegating parsing and building as described above keeps parsers fairly static
+    by varying builder implementations based upon problem domain.
+
+    <p/>
+
+    For example, consider the case where one uses tabbed delimited files for
+    insertion into a database but decides to temporarily display the fields as found
+    in the file (perhaps due to some errors in the data).  The tabbed delimited
+    parser can remain the same - it simply parses tabbed delimited streams.  Two
+    builder implementations can be written:  one for database import, another for
+    outputting the values found to the console.
+
+    <p/>
+
+    <pre>
+Modifications:
+    $Date: 2008-12-02 12:32:45 -0500 (Tue, 02 Dec 2008) $
+    $Revision: 479 $
+    $Author: sfloess $
+    $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/src/dev/java/org/jplate/foundation/parser/package.html $
+    </pre>
+</body>

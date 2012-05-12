@@ -1,0 +1,102 @@
+-----------------------------------------------------
+Build a vanilla template
+-----------------------------------------------------
+
+${Required foo bar foobar/}
+
+package org.somecompany.${value bar/}
+
+${long_directive foo bar}
+    ${short_directive_no_value/}
+    ${short_directive/}
+
+    if ( x < 5 && y > 10 )
+    {
+    }
+	
+${/long_directive}
+
+-----------------------------------------------------
+Define a directive as a vanilla template
+-----------------------------------------------------
+
+// Singleton.jp
+
+${Required className/}
+${Default accessType public/}
+
+${Value accessType/} final class ${Value className/}
+{
+    private static final class Singleton
+    {
+        static final ${Value className/} _singleton = new ${value className/};
+    }
+
+    private ${Value className/}
+    {
+    }
+
+    ${Contents/}
+}
+
+// List.jp
+
+${Required className dataType/}
+${Default accessType public/}
+
+${Value accessType/} final class ${Value className/}
+{
+    public void add ( final ${Value dataType/} dt )
+    {
+    }
+
+    public void remove ( final ${Value dataType/} dt )
+    {
+    }
+}
+
+-----------------------------------------------------
+Build a template using external template
+-----------------------------------------------------
+
+${Required foo bar foobar className/}
+
+${Import org.jplate.templates.Singleton Singleton/}
+
+${Singleton className}
+    private ${Value foo/} _foo;
+    private ${Value bar/} _bar;
+
+    public ${Value foo/} getFoo ()
+    {
+        return _foo;
+    }
+
+    public ${Value bar/} getBar ()
+    {
+        return _bar;
+    }
+${/Singleton>
+
+-----------------------------------------------------
+Use a template in a class for a data member
+-----------------------------------------------------
+
+${Import org.jplate.templates.List  List/}
+${Import org.jplate.Singleton       Singleton/}
+
+public class Foo
+{
+    ${List accessType="private" className="MyFooList"/}
+
+    private MyFooList _list;
+}
+
+-----------------------------------------------------
+Define a directive that is an implementation of
+DirectiveIfc or define one with a strategy
+-----------------------------------------------------
+
+${ImportDirectiveClass org.jplate.templates.MyDirectiveImpl/}
+${ImportDirectiveByStrategy org.mycompany.jp.Dir foo.bar.Strategy/}
+

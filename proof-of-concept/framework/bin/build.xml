@@ -1,0 +1,429 @@
+<project name="jplate" default="all">
+    
+    <!--
+      -
+      - This target sets all our properties...
+      -
+      -->
+    <target name="set-properties">
+        <!--
+          -
+          - Denote the time.
+          -
+          -->
+        <tstamp>
+            <format property="JPLATE_BUILD_YEAR"   pattern="yyyy"/>
+            <format property="JPLATE_BUILD_MONTH"  pattern="MM"/>
+            <format property="JPLATE_BUILD_DAY"    pattern="dd"/>
+            <format property="JPLATE_BUILD_HOUR"   pattern="HH"/>
+            <format property="JPLATE_BUILD_MINUTE" pattern="mm"/>
+            <format property="JPLATE_BUILD_SECOND" pattern="ss"/>
+        </tstamp>
+
+        <!--
+          -
+          - Set-up the environment varialble...
+          -
+          -->
+        <property environment="ENV"/>
+
+        <!--
+          -
+          - We want to get "our" bearings as to where the build file
+          - is.  When we have this directory, we can go up one directory
+          - for our project "home."
+          -
+          -->
+        <dirname property="ANT_BUILD_FILE_HOME" file="${ant.file}"/>
+        <dirname property="PROJECT_HOME"        file="${ANT_BUILD_FILE_HOME}"/>
+        <dirname property="JPLATE_HOME"         file="${PROJECT_HOME}"/>
+        <dirname property="HOME"                file="${JPLATE_HOME}"/>
+
+        <property name="JPLATE_DIR_NAME"    value="jplate"/>
+        <property name="FRAMEWORK_DIR_NAME" value="framework"/>
+        <property name="BIN_DIR_NAME"       value="bin"/>
+        <property name="BUILD_DIR_NAME"     value="build"/>
+        <property name="SRC_DIR_NAME"       value="src"/>
+
+        <property name="BIN_HOME"       value="${PROJECT_HOME}/${BIN_DIR_NAME}"/>
+
+        <property name="USER_HOME"      value="${user.home}"/>
+
+        <!--
+          -
+          - JPlate framework properties...
+          -
+          -->
+        <property name="PROJECT_PROPERTY_FILE_NAME" value="jplate-framework.properties"/>
+        <property name="PROJECT_PROPERTY_FILE_HOME" value="${USER_HOME}/jplate"/>
+        <property name="PROJECT_PROPERTY_FILE"      value="${PROJECT_PROPERTY_FILE_HOME}/${PROJECT_PROPERTY_FILE_NAME}"/>
+     
+        <!--
+          -
+          - Give developer a chance to define his/her own properties...
+          -
+          -->
+        <property file="${PROJECT_PROPERTY_FILE}"/>
+
+        <!--
+          -
+          - Directory names - these are constant...
+          -
+          -->
+        <property name="DATA_SRC_DIR_NAME"      value="data"/>
+        <property name="DB_SRC_DIR_NAME"        value="db"/>
+        <property name="DOC_SRC_DIR_NAME"       value="doc"/>
+        <property name="JAVA_SRC_DIR_NAME"      value="java"/>
+        <property name="JAVACC_SRC_DIR_NAME"    value="javacc"/>
+        <property name="JPLATE_SRC_DIR_NAME"    value="jplate"/>
+        <property name="RESOURCES_SRC_DIR_NAME" value="resources"/>
+
+        <!--
+          -
+          - All subdirectories are relative to the project home.
+          -
+          -->
+
+        <!--
+          -
+          - Define all framework properties...
+          -
+          -->
+        <property name="BUILD_HOME"                   value="${PROJECT_HOME}/${BUILD_DIR_NAME}"/>
+        <property name="SRC_HOME"                     value="${PROJECT_HOME}/${SRC_DIR_NAME}"/>
+
+        <property name="DATA_SRC_HOME"                value="${SRC_HOME}/${DATA_SRC_DIR_NAME}"/>
+        <property name="DB_SRC_HOME"                  value="${SRC_HOME}/${DB_SRC_DIR_NAME}"/>
+        <property name="DOC_SRC_HOME"                 value="${SRC_HOME}/${DOC_SRC_DIR_NAME}"/>
+        <property name="JAVA_SRC_HOME"                value="${SRC_HOME}/${JAVA_SRC_DIR_NAME}"/>
+        <property name="JAVACC_SRC_HOME"              value="${SRC_HOME}/${JAVACC_SRC_DIR_NAME}"/>
+        <property name="JPLATE_SRC_HOME"              value="${SRC_HOME}/${JPLATE_SRC_DIR_NAME}"/>
+        <property name="RESOURCES_SRC_HOME"           value="${SRC_HOME}/${RESOURCES_SRC_DIR_NAME}"/>
+
+        <property name="JPLATE_CLASS_SRC_HOME"        value="${JPLATE_SRC_HOME}/class"/>
+        <property name="JPLATE_DIRECTIVE_SRC_HOME"    value="${JPLATE_SRC_HOME}/directive"/>
+
+        <property name="GENERATED_HOME"               value="${BUILD_HOME}/generated"/>
+        <property name="DEPLOY_HOME"                  value="${BUILD_HOME}/deploy"/>
+
+        <property name="JAVA_DOC_GENERATED_HOME"      value="${GENERATED_HOME}/javadoc"/>
+        <property name="JAVA_GENERATED_HOME"          value="${GENERATED_HOME}/classes"/>
+        <property name="JAVACC_GENERATED_HOME"        value="${GENERATED_HOME}/javacc"/>
+        <property name="JPLATE_GENERATED_HOME"        value="${GENERATED_HOME}/jplate"/>
+
+        <property name="JAVA_SRC_PATH"                value="${JAVA_SRC_HOME}:${JAVACC_GENERATED_HOME}"/>
+
+        <property name="JPLATE_JAVACC_BRANCH"         value="org/jplate/tmplate/parser"/>
+        <property name="JPLATE_JAVACC_SRC_HOME"       value="${JAVACC_SRC_HOME}/${JPLATE_JAVACC_BRANCH}"/>
+        <property name="JPLATE_JAVACC_SRC_FILE_NAME"  value="JPlateParser.jj"/>
+        <property name="JPLATE_JAVACC_SRC_FILE"       value="${JPLATE_JAVACC_SRC_HOME}/JPlateParser.jj"/>
+        <property name="JPLATE_JAVACC_GENERATED_HOME" value="${JAVACC_GENERATED_HOME}/${JPLATE_JAVACC_BRANCH}"/>
+
+        <property name="JAVA_DOC_OVERVIEW_FILE_NAME"  value="overview.html"/>
+        <property name="JAVA_DOC_OVERVIEW_HOME"       value="${JAVA_SRC_HOME}"/>
+        <property name="JAVA_DOC_OVERVIEW_FILE"       value="${JAVA_DOC_OVERVIEW_HOME}/${JAVA_DOC_OVERVIEW_FILE_NAME}"/>
+
+        <!--
+          -
+          - Deployment properties...
+          -
+          -->
+        <property name="JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME" value="jplate-framework-${JPLATE_FRAMEWORK_VERSION}"/>
+
+        <property name="JPLATE_FRAMEWORK_DEPLOY_FILE_NAME"      value="${JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME}.jar"/>
+        <property name="JPLATE_FRAMEWORK_DEPLOY_FILE"           value="${DEPLOY_HOME}/${JPLATE_FRAMEWORK_DEPLOY_FILE_NAME}"/>
+
+        <property name="JPLATE_FRAMEWORK_DEPLOY_SRC_FILE_NAME"  value="${JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME}-src.tar.bz2"/>
+        <property name="JPLATE_FRAMEWORK_DEPLOY_SRC_FILE"       value="${DEPLOY_HOME}/${JPLATE_FRAMEWORK_DEPLOY_SRC_FILE_NAME}"/>
+
+        <property name="JPLATE_FRAMEWORK_DEPLOY_DOC_FILE_NAME"  value="${JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME}-java-doc.tar.bz2"/>
+        <property name="JPLATE_FRAMEWORK_DEPLOY_DOC_FILE"       value="${DEPLOY_HOME}/${JPLATE_FRAMEWORK_DEPLOY_DOC_FILE_NAME}"/>
+    </target>
+
+    <!--
+      -
+      - This target ensures JPLATE_FRAMEWORK_VERSION is set...
+      -
+      -->
+    <target name="check-jplate-version" depends="set-properties" unless="JPLATE_FRAMEWORK_VERSION">
+        <fail>
+        
+            Version has not been set.  Please ensure that the property
+            JPLATE_FRAMEWORK_VERSION has been set.
+            
+        </fail>
+    </target>
+
+    <!--
+      -
+      - This target ensures javacchome is set...
+      -
+      -->
+    <target name="check-javacc" depends="set-properties" unless="JAVACC_HOME">
+        <fail>
+        
+            Please define the variable JAVACC_HOME!!!
+            
+        </fail>
+    </target>
+
+    <!--
+      -
+      - This target initializes the framework so we can build...
+      -
+      -->
+    <target name="init" depends="set-properties">
+        <mkdir dir="${GENERATED_HOME}"/>
+        <mkdir dir="${JAVA_DOC_GENERATED_HOME}"/>
+        <mkdir dir="${JAVA_GENERATED_HOME}"/>
+        <mkdir dir="${JAVACC_GENERATED_HOME}"/>
+        <mkdir dir="${JPLATE_GENERATED_HOME}"/>
+        <mkdir dir="${JPLATE_JAVACC_GENERATED_HOME}"/>
+        <mkdir dir="${JAVA_DOC_GENERATED_HOME}"/>
+        <mkdir dir="${JPLATE_GENERATED_HOME}"/>
+        <mkdir dir="${DEPLOY_HOME}"/>
+    </target>
+
+    <!--
+      -
+      - This target will generate all framework javacc source files...
+      -
+      -->
+    <target name="generate-javacc" depends="check-javacc, init" description="Generate all framework javacc source">
+        <javacc target="${JPLATE_JAVACC_SRC_FILE}" javacchome="${JAVACC_HOME}" outputdirectory="${JPLATE_JAVACC_GENERATED_HOME}" static="false"/>
+    </target>
+
+    <!--
+      -
+      - This target will generate all source...
+      -
+      -->
+    <target name="generate-src" depends="generate-javacc" description="Generate all framework source."/>
+    
+    <!--
+      -
+      - This target compiles our java framework source...
+      -
+      -->
+    <target name="compile" depends="generate-src" description="Compile the framework source.">
+        <javac srcdir="${JAVA_SRC_PATH}" destdir="${JAVA_GENERATED_HOME}" listfiles="true"/>
+    </target>
+
+    <!--
+      - 
+      - This target jar's all class files...
+      -
+      -->
+    <target name="jar" depends="check-jplate-version, compile" description="Jar the framework class files.">
+        <jar destfile="${JPLATE_FRAMEWORK_DEPLOY_FILE}">
+            <fileset dir="${JAVA_GENERATED_HOME}"/>
+            <fileset dir="${SRC_HOME}">
+                <include name="${RESOURCES_SRC_DIR_NAME}/*"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!--
+      -
+      - This target gets java documentation generated.
+      -
+      -->
+    <target name="java-doc" depends="compile" description="Generate java framework documentation.">
+        <javadoc sourcepath="${JAVA_SRC_HOME}" classpath="${JAVA_GENERATED_HOME}" destdir="${JAVA_DOC_GENERATED_HOME}" packagenames="org.*" author="true" private="true" windowtitle="JPlate - The Java Template/Framework Library" overview="${JAVA_DOC_OVERVIEW_FILE}"/>
+    </target>
+
+    <!--
+      -
+      - This target gets all documentation generated.
+      -
+      -->
+    <target name="doc" depends="java-doc" description="Generate all documentation."/>
+
+    <!--
+      -
+      - This target will tar source...
+      -
+      -->
+    <target name="tar-src" depends="init" description="Tar source.">
+        <tar destfile="${JPLATE_FRAMEWORK_DEPLOY_SRC_FILE}" longfile="gnu" compression="bzip2">
+            <tarfileset dir="${HOME}">
+                <include name="${JPLATE_DIR_NAME}/${FRAMEWORK_DIR_NAME}/${BIN_DIR_NAME}/**"/>
+                <include name="${JPLATE_DIR_NAME}/${FRAMEWORK_DIR_NAME}/${SRC_DIR_NAME}/**"/>
+            </tarfileset>
+        </tar>
+    </target>
+
+    <!--
+      -
+      - This target will tar java documentation...
+      -
+      -->
+    <target name="tar-java-doc" depends="doc" description="Tar java documentation.">
+        <tar destfile="${JPLATE_FRAMEWORK_DEPLOY_DOC_FILE}" basedir="${JAVA_DOC_GENERATED_HOME}" longfile="gnu" compression="bzip2"/>
+    </target>
+
+    <!--
+      -
+      - This target will tar documentation...
+      -
+      -->
+    <target name="tar-doc" depends="tar-java-doc" description="Tar documentation."/>
+
+    <!--
+      -
+      - This target will tar-up everything.
+      -
+      -->
+    <target name="tar" depends="tar-doc, tar-src" description="Tar-up documentation and source."/>
+
+    <!--
+      -
+      - This target is our default target and will build everything...
+      -
+      -->
+    <target name="all" depends="jar, tar" description="Build everything."/>
+
+    <!--
+      -
+      - This target will clean our build environment...
+      -
+      -->
+    <target name="clean" depends="set-properties" description="Clean-up build environment making it pristine.">
+        <echo>
+            Removing files from:
+                ${BUILD_HOME}
+        </echo>
+
+        <delete dir="${BUILD_HOME}"/>
+    </target>
+
+    <!--
+      -
+      - This will null string properties who are not set.
+      -
+      -->
+    <target name="blank-properties">
+    </target>
+
+    <!--
+      -
+      - This target will dump all our environment varialbles...
+      -
+      -->
+    <target name="print-env" depends="set-properties,blank-properties" description="Display all environment variables.">
+        <echo>
+            Main Build Environment
+
+                HOME                   = ${HOME}
+                JPLATE_HOME            = ${JPLATE_HOME}
+                PROJECT_HOME           = ${PROJECT_HOME}
+                BIN_HOME               = ${BIN_HOME}
+
+                DATA_SRC_DIR_NAME      = ${DATA_SRC_DIR_NAME}
+                DB_SRC_DIR_NAME        = ${DB_SRC_DIR_NAME}
+                DOC_SRC_DIR_NAME       = ${DOC_SRC_DIR_NAME}
+                JAVA_SRC_DIR_NAME      = ${JAVA_SRC_DIR_NAME}
+                JAVACC_SRC_DIR_NAME    = ${JAVACC_SRC_DIR_NAME}
+                JPLATE_SRC_DIR_NAME    = ${JPLATE_SRC_DIR_NAME}
+                RESOURCES_SRC_DIR_NAME = ${RESOURCES_SRC_DIR_NAME}
+
+            Framework properties:
+
+                BUILD_HOME                   = ${BUILD_HOME}
+                SRC_HOME                     = ${SRC_HOME}
+
+                DATA_SRC_HOME                = ${DATA_SRC_HOME}
+                DB_SRC_HOME                  = ${DB_SRC_HOME}
+                DOC_SRC_HOME                 = ${DOC_SRC_HOME}
+                JAVA_SRC_HOME                = ${JAVA_SRC_HOME}
+                JAVACC_SRC_HOME              = ${JAVACC_SRC_HOME}
+                JPLATE_SRC_HOME              = ${JPLATE_SRC_HOME}
+                RESOURCES_SRC_HOME           = ${RESOURCES_SRC_HOME}
+
+                JPLATE_CLASS_SRC_HOME        = ${JPLATE_CLASS_SRC_HOME}
+                JPLATE_DIRECTIVE_SRC_HOME    = ${JPLATE_DIRECTIVE_SRC_HOME}
+
+                GENERATED_HOME               = ${GENERATED_HOME}
+                DEPLOY_HOME                  = ${DEPLOY_HOME}
+                JAVA_DOC_GENERATED_HOME      = ${JAVA_DOC_GENERATED_HOME}
+                JAVA_GENERATED_HOME          = ${JAVA_GENERATED_HOME}
+                JAVACC_GENERATED_HOME        = ${JAVACC_GENERATED_HOME}
+                JPLATE_GENERATED_HOME        = ${JPLATE_GENERATED_HOME}
+
+                JAVA_SRC_PATH                = ${JAVA_SRC_PATH}
+
+                JPLATE_JAVACC_BRANCH         = ${JPLATE_JAVACC_BRANCH}
+                JPLATE_JAVACC_SRC_HOME       = ${JPLATE_JAVACC_SRC_HOME}
+                JPLATE_JAVACC_SRC_FILE_NAME  = ${JPLATE_JAVACC_SRC_FILE_NAME}
+                JPLATE_JAVACC_SRC_FILE       = ${JPLATE_JAVACC_SRC_FILE}
+                JPLATE_JAVACC_GENERATED_HOME = ${JPLATE_JAVACC_GENERATED_HOME}
+
+                JAVA_DOC_OVERVIEW_FILE_NAME  = ${JAVA_DOC_OVERVIEW_FILE_NAME}
+                JAVA_DOC_OVERVIEW_HOME       = ${JAVA_DOC_OVERVIEW_HOME}
+                JAVA_DOC_OVERVIEW_FILE       = ${JAVA_DOC_OVERVIEW_FILE}
+
+
+                JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME    = ${JPLATE_FRAMEWORK_DEPLOY_BASE_FILE_NAME}
+
+                JPLATE_FRAMEWORK_DEPLOY_JAR_FILE_NAME     = ${JPLATE_FRAMEWORK_DEPLOY_FILE_NAME}
+                JPLATE_FRAMEWORK_DEPLOY_JAR_FILE          = ${JPLATE_FRAMEWORK_DEPLOY_FILE}
+
+                JPLATE_FRAMEWORK_DEPLOY_SRC_TAR_FILE_NAME = ${JPLATE_FRAMEWORK_DEPLOY_SRC_FILE_NAME}
+                JPLATE_FRAMEWORK_DEPLOY_SRC_TAR_FILE      = ${JPLATE_FRAMEWORK_DEPLOY_SRC_FILE}
+
+                JPLATE_FRAMEWORK_DEPLOY_DOC_TAR_FILE_NAME = ${JPLATE_FRAMEWORK_DEPLOY_DOC_FILE_NAME}
+                JPLATE_FRAMEWORK_DEPLOY_DOC_TAR_FILE      = ${JPLATE_FRAMEWORK_DEPLOY_DOC_FILE}
+
+            Project properties:
+
+                USER_HOME                         = ${USER_HOME}
+
+                PROJECT_PROPERTY_FILE_NAME        = ${PROJECT_PROPERTY_FILE_NAME}
+                PROJECT_PROPERTY_FILE             = ${PROJECT_PROPERTY_FILE}
+
+                JPLATE_FRAMEWORK_VERSION          = ${JPLATE_FRAMEWORK_VERSION}
+
+                JPLATE_BUILD_YEAR                 = ${JPLATE_BUILD_YEAR}
+                JPLATE_BUILD_MONTH                = ${JPLATE_BUILD_MONTH}
+                JPLATE_BUILD_DAY                  = ${JPLATE_BUILD_DAY}
+                JPLATE_BUILD_HOUR                 = ${JPLATE_BUILD_HOUR}
+                JPLATE_BUILD_MINUTE               = ${JPLATE_BUILD_MINUTE}
+                JPLATE_BUILD_SECOND               = ${JPLATE_BUILD_SECOND}
+
+                ANT_HOME                          = ${ENV.ANT_HOME}
+                JAVA_HOME                         = ${ENV.JAVA_HOME}
+
+                JAVACC_HOME                       = ${JAVACC_HOME}
+
+                ant.file                          = ${ant.file}
+                ant.version                       = ${ant.version}
+                ant.java.version                  = ${ant.java.version}
+        </echo>
+    </target>
+
+    <!--
+      -
+      - This target display help...
+      -
+      -->
+    <target name="help" depends="set-properties" description="Displays help.">
+        <echo>
+            This is the main build script that builds the framework.
+
+            If you wish to define any properties, please do the following:
+                - create a directory, jplate, in your home directory.
+                - create a file called jplate-framework.properties in the
+                  aforementioned directory.
+
+            Please note:   you MUST define the property, JAVACC_HOME in order to
+            build.
+
+
+            An example jplate-framework.properties follows:
+
+            build.compiler           = jikes
+            JAVACC_HOME              = /home/tools/javacc/LATEST
+            JPLATE_FRAMEWORK_VERSION = 0.8
+        </echo>
+    </target>
+</project>

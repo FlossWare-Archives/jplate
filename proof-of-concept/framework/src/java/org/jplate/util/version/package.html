@@ -1,0 +1,42 @@
+<body>
+Provides the capability to define a version file for things like builds.
+Specifically, one can create a version definition in the following manner:
+
+<ul>
+    <li>
+        To a file:  A file will be created containing the current date/time and
+        a version number.
+
+        <p>
+        To create version <code>1.0</code> using file
+        <code>/foo/bar/FooBld.vers</code> perform the following:
+
+        <pre>
+            final VersionFactoryIfc versionFactory =
+                VersionFactory.getSingleton ();
+
+            final Version version =
+                versionFactory.createVersion ( "/foo/bar/FooBld.vers", "1.0" );
+        </pre>
+     </li>
+
+    <p>
+    <li>
+        From a resource:  A resource representing an input stream containing
+        the date/time of the version was created as the version number.
+
+        <p>
+        To retrieve a version whose resource is represented by
+        <code>/foo/bar/FooBld.vers</code>, perform the following:
+
+        <pre>
+            final VersionFactoryIfc versionFactory =
+                VersionFactory.getSingleton ();
+
+            final Version version =
+                versionFactory.createVersion ( "/foo/bar/FooBld.vers" );
+        </pre>
+    </li>
+</ul>
+
+</body>

@@ -1,0 +1,355 @@
+PARSER_BEGIN ( DefaultKvpParser )
+
+package org.jplate.kvp.parser.impl.defaults;
+
+
+import java.io.StringReader;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.jplate.JPlateException;
+
+import org.jplate.foundation.parser.javacc.impl.AbstractJavaccParser;
+
+import org.jplate.kvp.parser.KvpBuilderIfc;
+import org.jplate.kvp.parser.KvpParseContextIfc;
+import org.jplate.kvp.parser.KvpParserIfc;
+
+import org.jplate.kvp.parser.impl.defaults.DefaultKvpParseContext;
+
+
+
+/**
+ 
+    Default implementation of a KVP (key value pair) parser.
+
+    <p/>
+
+    An example of KVP data follows:
+
+    <ul>
+        <li> some key 1 = some value 1 </li>
+        <li> some key 2 = some value 2 </li>
+        <li> some key 3 = some value 3 </li>
+    </ul>
+
+    <b>Please note:</b>  values may span multiple lines by ending the line with
+    the backslash character.  For example:
+
+    <pre>
+some key 0 = This is a multi\
+   line example of a value
+some key 1 = Some single line value
+some key 2 = Yet another example of \
+   a multi line value
+   </pre>
+
+    <p/><a  name = "Examples"/>
+    The following are some examples on how to use this class.  Assume some
+    implemention of {@link org.jplate.kvp.parser.KvpBuilderIfc}
+    exists.<br/>
+
+    <p/>
+
+    <ul>
+        <li>
+            Parsing from an {@link java.io.InputStream}:
+            <pre>
+final KvpBuilderIfc builder = // Some implementation...
+
+final KvpParserIfc &lt;KvpBuilderIfc&gt; parser =
+    new DefaultKvpParser ();
+
+final InputStream inputStream = new FileInputStream ( "MyKvpFile.kvp" );
+
+parser.parse ( inputStream, builder );
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.Reader}:
+            <pre>
+final KvpBuilderIfc builder = // Some implementation...
+
+final KvpParserIfc &lt;KvpBuilderIfc&gt; parser =
+    new DefaultKvpParser ();
+
+final Reader reader = new FileReader ( "MyKvpFile.kvp" );
+
+parser.parse ( reader, builder );            
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.lang.String}:
+            <pre>
+final KvpBuilderIfc builder = // Some implementation...
+
+final KvpParserIfc &lt;KvpBuilderIfc&gt; parser =
+    new DefaultKvpParser ();
+
+final String string = // Contains TDV data in the form of a String.
+
+parser.parse ( string, builder );                
+            </pre>
+        </li>
+
+        <li>
+            Parsing from a {@link java.io.File}:
+            <pre>
+final KvpBuilderIfc builder = // Some implementation...
+
+final KvpParserIfc &lt;KvpBuilderIfc&gt; parser =
+    new DefaultKvpParser ();
+
+final File file = new File ( "MyKvpFile.kvp" );
+
+parser.parse ( file, builder );
+            </pre>
+        </li>
+    </ul>
+
+    <b><i>Please note:</i></b>  This class is <i>not</i> thread-safe.
+
+    <p/>
+
+    <pre>
+Modifications:
+    $Date: 2008-12-02 12:32:45 -0500 (Tue, 02 Dec 2008) $
+    $Revision: 479 $
+    $Author: sfloess $
+    $HeadURL: https://jplate.svn.sourceforge.net/svnroot/jplate/trunk/src/dev/javacc/org/jplate/kvp/parser/impl/defaults/DefaultKvpParser.jj $
+    </pre>
+
+    @param <B>  The builder who will be called to build objects as they are
+                parsed.
+
+*/
+public final class DefaultKvpParser <B extends KvpBuilderIfc <?>>
+    extends AbstractJavaccParser <B>
+        implements KvpParserIfc <B>
+{
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Interface definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+    
+    // ----------------------------------------------------------------------
+    //
+    // Static class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Static methods follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance class definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance member definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * Used for logging.
+     *
+     */
+    private final transient Log _log =
+        LogFactory.getLog ( DefaultKvpParser.class );
+
+
+    /**
+     *
+     * Used to hold parsed key/value pair data.
+     *
+     */
+    private KvpParseContextIfc <?> _parseContext = new DefaultKvpParseContext ();
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Constructor definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+    /**
+     *
+     * This constructor sets the parse context to use when parsing.
+     *
+     * @param parseContext Holds key/value parsing data.
+     *
+     */
+    public DefaultKvpParser ( final KvpParseContextIfc <?> parseContext )
+    {
+        this ( new StringReader ( "" ) );
+
+        _parseContext = parseContext.createInstance ();
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug
+            (
+                "New DefaultKvpParser created:  _parseContext = [" + _parseContext
+                + "]"
+            );
+        }
+    }
+
+
+    /**
+     *
+     * Default constructor not allowed.
+     *
+     */
+    public DefaultKvpParser ()
+    {
+        this ( new StringReader ( "" ) );
+    }
+
+
+    // ----------------------------------------------------------------------
+    //
+    // Instance method definitions follow...
+    //
+    // ----------------------------------------------------------------------
+
+
+}
+
+PARSER_END ( DefaultKvpParser )
+
+SKIP:
+{
+    " " | "\t" | "\n"
+}
+
+TOKEN:
+{
+        <#WHITE_SPACE:     ( "\t" | " " )>
+        |
+        <#ESCAPED_EQUALS:  ( "\\=" )>
+        |
+        <#DATA:            ( ~[ "\n", "\r", "=" ] | <ESCAPED_EQUALS> )+>
+        |
+        <EQUALS:           ( ["="] )> : VALUE_TOKEN
+        |
+        <EOL:              ("\n" | "\r\n")>
+        |
+        <ESCAPED_EOL:      ( "\\" <EOL> )>
+        |
+        <KEY:              ( <DATA> )>
+}
+
+<VALUE_TOKEN> SKIP:
+{
+    " " | "\t" | "\n"
+}
+
+<VALUE_TOKEN> TOKEN:
+{
+        <VALUE:           ( <DATA> | <ESCAPED_EOL> <DATA> )+> : DEFAULT
+}
+
+
+
+/**
+ *
+ * {@inheritDoc}
+ *
+ */
+protected void parse ( final B builder ) throws Exception:
+{
+    Token  keyToken;
+    Token  valueToken;
+    Token  endToken;
+
+    String value;
+
+    builder.buildStart  ();
+
+    if ( _log.isDebugEnabled () )
+    {
+        _log.debug ( "Starting to parse" );
+    }
+}
+
+{
+    (
+        keyToken   = <KEY> 
+        <EQUALS>
+        valueToken = <VALUE>
+
+        (
+            <EOL>
+        )?
+        {
+            if ( _log.isDebugEnabled () )
+            {
+                _log.debug
+                (
+                    "Key = [" + keyToken.image + "@" + keyToken.beginLine + ", " +
+                    keyToken.beginColumn + "]  Value = [" + valueToken.image + "@" +
+                    valueToken.beginLine + ", " + valueToken.beginColumn + "]"
+                );
+            }
+
+            _parseContext.setKey
+            (
+                keyToken.image, keyToken.beginLine, keyToken.beginColumn
+            );
+            
+            _parseContext.setValue
+            (
+                valueToken.image, valueToken.beginLine, valueToken.beginColumn
+            );
+
+            builder.buildKeyValuePair ( _parseContext );
+        }
+
+    )+
+
+    endToken = <EOF>
+    {
+        builder.buildEnd ( endToken.beginLine, endToken.beginColumn );
+
+        if ( _log.isDebugEnabled () )
+        {
+            _log.debug
+            (
+                "Parsing completed @ [" + endToken.beginLine + "," +
+                endToken.beginColumn + "]"
+            );
+        }
+    }
+}

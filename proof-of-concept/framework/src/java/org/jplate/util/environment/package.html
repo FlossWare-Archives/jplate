@@ -1,0 +1,61 @@
+<body>
+This package defines the concept of an environment which is nothing more than
+a container for name/value and/or key/data pairs.
+
+<p>
+To create an environment, do the following:
+
+<pre>
+    EnvironmentFactoryMgrIfc envFactoryMgr =
+        EnvironmentFactoryMgr.getSingleton ();
+
+    EnvironmentFactoryIfc envFactory = envFactoryMgr.getFactory ( getClass () );
+
+    EnvironmentIfc env = envFactory.createEnvironment ();
+</pre>
+
+To set/retrieve values on <code>env</code> above, do the following:
+
+<pre>
+    //
+    // Set a string named, foo, whose value is foovalue...
+    //
+    env.setValue ( "foo", "foovalue" );
+
+    //
+    // Get foo's value...
+    //
+    String fooVal = env.getValue ( "foo" );
+
+    //
+    // Set arbitrary data...
+    //
+    Foo f = new Foo ();
+    Bar b = new Bar ();
+
+    env.setData ( f, b );
+
+    //
+    // Get arbitrary data...
+    //
+    Bar b1 = ( Bar ) env.getData ( f );
+
+    //
+    // Get the names of all names defined...
+    //
+    String names[] = env.getNames ();
+
+    //
+    // Find a required value, zeta...
+    //
+    String zetaValue = env.getRequiredValue ( "zeta" );
+
+    //
+    // Find required data for "f"...
+    //
+    Object requiredData = env.getRequiredData ( f );
+</pre>
+</body>
+
+@see EnvironmentIfc
+@see org.jplate.util.factorycontext
